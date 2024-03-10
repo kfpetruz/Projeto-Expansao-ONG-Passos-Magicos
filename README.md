@@ -1,1 +1,1 @@
-# Projeto-Expansao-ONG-Passos-Magicos
+# Projeto de Expansão da ONG Passos Magicos
