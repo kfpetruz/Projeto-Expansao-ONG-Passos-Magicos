@@ -9,6 +9,29 @@ st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= 
 # Título da página
 st.title('Projeto ONG Passos Mágicos 🤝')
 
+## VISUALIZAÇÃO NO STREAMLIT
+aba1, aba2, aba3 = st.tabs(['Sobre a ONG', 'Fatores de sucesso', 'Impacto Social'])
+with aba1:
+    col1, col2 = st.columns(2)
+    with col1: #utilizando a cláusula with, mas poderíamos escrever apenas "col1." antes da métrica
+        st.title('Sobre a ONG')
+    with col2:
+        st.title('Coluna 2')
+
+with aba2:
+    col1, col2 = st.columns(2)
+    with col1: 
+        st.title('Fatores chave de sucesso')
+    with col2:
+        st.title('Coluna 2')
+
+with aba3:
+    col1, col2 = st.columns(2)
+    with col1: 
+        st.title('Impacto social')
+    with col2:
+        st.title('Coluna 2')
+
 # 1ª aba - Análise Dados Históricos
 # 2ª aba - Resultado das ações na cidade - Fatores-Chave de Sucesso
 # 3ª aba - Desempenho dos alnos - Análise do Impacto Emocional e Social
