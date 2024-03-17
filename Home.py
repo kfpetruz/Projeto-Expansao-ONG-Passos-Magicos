@@ -12,6 +12,28 @@ st.title('Projeto ONG Passos Mágicos 🤝')
 cor_estilizada = 'color: #0145AC;'
 fonte_negrito = 'font-weight: bold;'
 
+dados = [(2016, 70), (2017, 300), (2018, 550), (2019, 812), (2020, 841), (2021, 824), (2022, 940)]
+
+# Criar um DataFrame a partir da lista de tuplas
+linha_do_tempo_ong = pd.DataFrame(dados, columns=['Ano', 'Quantidade de alunos'])
+
+dados_estimados = pd.read_csv('Base de dados\\populacao_estimativa_2001_2021.csv',sep = ';', encoding='utf-8-sig')
+novos_nomes = dados_estimados.iloc[2]
+dados_estimados = dados_estimados.rename(columns=novos_nomes)
+dados_estimados.columns = [str(col).replace('.0', '') for col in dados_estimados.columns]
+dados_estimados['Município'].fillna('', inplace=True)
+dados_estimados = dados_estimados[dados_estimados['Município'].str.contains('(SP)')]
+dados_estimados.reset_index(drop=True, inplace=True)
+dados_estimados['Município'] = dados_estimados['Município'].str.replace('(', '')
+dados_estimados['Município'] = dados_estimados['Município'].str.replace(')', '')
+dados_estimados['Município'] = dados_estimados['Município'].str.replace('SP', '')
+dados_estimados['Município'] = dados_estimados['Município'].str.strip()
+dados_estimados= dados_estimados[dados_estimados['Município']=='Embu-Guaçu']
+dados_2022 = pd.read_excel('tb_populacao_economia_idade_distancia.xlsx')
+dados_2022 =  dados_2022[dados_2022['Município']=='Embu-Guaçu']
+dados_estimados['2022'] = dados_2022['População no último censo'].values
+
+
 ## VISUALIZAÇÃO NO STREAMLIT
 aba1, aba2, aba3 = st.tabs(['Sobre a ONG', 'Fatores de sucesso', 'Impacto Social'])
 with aba1:
