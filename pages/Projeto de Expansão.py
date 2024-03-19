@@ -16,7 +16,7 @@ aba1, aba2= st.tabs(['Modelo', 'Propostas'])
 with aba1:
     st.markdown('<p style="text-align: justify;"> Para auxiliar a ONG em seu desejo de expandir as atividades, ampliando a capacidade para que ela possa atender e mudar a vida de centenas de crianças e adolescentes como vem fazendo há anos na cidade de Embu-Guaçu, foram criados dois modelos levando em consideração dados econômicos, de população, educacionais e de distância da cidade sede.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify;"> Em ambos os modelos foram listadas as 645 cidades do estado de São Paulo e atribuídos pesos aos seus indicadores econômicos, populacionais e educacionais por ordem de prioridade:.</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;"> Em ambos os modelos foram consideradas as 645 cidades do estado de São Paulo e atribuídos pesos aos seus indicadores econômicos, populacionais e educacionais, com base no último censo geográfico, por ordem de prioridade:.</p>', unsafe_allow_html = True)
 
     st.markdown('<p style="text-align: justify;"> <strong> Quanto menor, maior o peso: </strong> </p>', unsafe_allow_html = True)
     st.markdown('- <p style="text-align: justify;"> Salário médio dos trabalhadores formais;</p>', unsafe_allow_html = True)
