@@ -132,8 +132,8 @@ def tratamento_base_idade():
     dados_idade_total['Município'] = dados_idade_total['Município'].str.strip()
 
     dados_idade_total.iloc[:, 1:] = dados_idade_total.iloc[:, 1:].astype(str).replace('-', '0')
-
-    dados_idade_total['Pessoas em idade elegível'] = dados_idade_total.iloc[:, 7:27].astype(int).sum(axis=1) # 5 a 24
+    # 5 a 24
+    dados_idade_total['Pessoas em idade elegível'] = dados_idade_total.iloc[:, 7:27].astype(int).sum(axis=1) 
     dados_idade_total['Pessoas de 6 a 19 anos'] = dados_idade_total.iloc[:, 8:22].astype(int).sum(axis=1)
     return dados_idade_total
 dados_idade_total = tratamento_base_idade()
@@ -231,4 +231,7 @@ df_junto['Elegíveis/População'] = df_junto['Pessoas em idade elegível'].asty
 df_junto['Matriculados/População 6 a 19'] = df_junto['Matriculados 6 a 19'].astype(float)/df_junto['Pessoas de 6 a 19 anos'].astype(float)
 st.write(df_junto)
 
+
+
+# dados_externos = dados_externos.rename(columns= {'Município': 'municipio', 'Salário médio mensal dos trabalhadores formais': 'salario_medio_trabalhadores', 'PIB per capita': 'pib_per_capita', 'Área da unidade territorial': 'area_territorial', 'População no último censo': 'populacao', 'Densidade demográfica habitante/km²': 'densidade_demografica_km2', 'Distância': 'distancia_de_embu_guacu', 'Matriculados/População 6 a 19': 'percent_matriculados_6a19a'})
 
