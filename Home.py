@@ -117,7 +117,8 @@ with aba1:
     # Adicionar estilos CSS para centralizar os nomes das colunas e justificar o texto das células
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; color: #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    # html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; color: #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
@@ -134,7 +135,7 @@ with aba1:
     html = df_programas.to_html(index=False)
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; color: #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
@@ -154,7 +155,7 @@ with aba1:
     html = df_eventos.to_html(index=False)
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; color: #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
