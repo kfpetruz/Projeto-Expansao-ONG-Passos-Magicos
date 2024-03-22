@@ -1,7 +1,6 @@
 # Importação das bibliotecas
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
 
@@ -48,37 +47,109 @@ df_alunos_populacao['População do município'] = df_alunos_populacao['Populaç
 df_alunos_populacao['Alunos/População'] = df_alunos_populacao['Quantidade de alunos'] /df_alunos_populacao['População do município']*100
 df_alunos_populacao['Alunos/População'] = df_alunos_populacao['Alunos/População'].apply(lambda x: '{:.2f}'.format(x))
 
-# Dados
-x = df_alunos_populacao['Ano']
-y = df_alunos_populacao['Quantidade de alunos']
-y2 = df_alunos_populacao['População do município']
-percentual = df_alunos_populacao['Alunos/População'] 
 
-# Criar o gráfico
-fig = go.Figure()
+def grafico_duas_linhas_ponto(x,y,y2,percentual):
+    # Criar o gráfico
+    fig = go.Figure()
 
-# Adicionar a linha ao gráfico para y
-fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Quantidade de alunos da ONG', line=dict(color='#0145AC')))
+    # Adicionar a linha ao gráfico para y
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Quantidade de alunos da ONG', line=dict(color='#0145AC')))
 
-# Adicionar os pontos ao gráfico com os percentuais
-fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Alunos / População (percentual)',
-                         text=percentual.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#0145AC', size=10)))
+    # Adicionar os pontos ao gráfico com os percentuais
+    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Alunos / População (percentual)',
+                            text=percentual.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#0145AC', size=10)))
 
-# Adicionar a linha ao gráfico para y2
-fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='População de Embu-Guaçu', yaxis='y2', line=dict(color='#82C7A5')))
+    # Adicionar a linha ao gráfico para y2
+    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='População de Embu-Guaçu', yaxis='y2', line=dict(color='#82C7A5')))
 
-# Atualizar o layout
-fig.update_layout(
-    title='Quantidade de alunos da ONG x População de Embu-Guaçu',
-    yaxis=dict(title='Quantidade de alunos da ONG', side='left'),
-    yaxis2=dict(
-        title='População de Embu-Guaçu', 
-        overlaying='y', 
-        side='right'
-    ),
-    legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top')
-)
+    # Atualizar o layout
+    fig.update_layout(
+        title='Quantidade de alunos da ONG x População de Embu-Guaçu',
+        yaxis=dict(title='Quantidade de alunos da ONG', side='left'),
+        yaxis2=dict(
+            title='População de Embu-Guaçu', 
+            overlaying='y', 
+            side='right'
+        ),
+        legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top')
+    )
+    return fig
 
+def grafico_tres_linhas_ponto(x,y1,y2,y3,percentual1,percentual2):
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Quantidade de alunos da ONG', line=dict(color='#0145AC')))
+    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Bolsistas em escola parceira', line=dict(color='#82C7A5')))
+    fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Universitários', line=dict(color='#CD5C5C')))
+    fig.add_trace(go.Scatter(x=x, y=y2, mode='markers', name='Bolsistas / Quantidade de alunos da ONG',
+                            text=percentual1.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#82C7A5', size=10)))
+    fig.add_trace(go.Scatter(x=x, y=y3, mode='markers', name='Universitários / Quantidade de alunos da ONG',
+                            text=percentual2.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#CD5C5C', size=10)))
+
+    
+    fig.update_layout(title='Quantidade de Alunos x Bolsistas x Universitários da ONG',
+                    xaxis_title='Ano',
+                    yaxis_title='Quantidade',
+                    legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'))
+    return fig
+
+# Função para plotar o gráfico com base nas categorias selecionadas
+def plotar_grafico(categorias_selecionadas):
+    fig = go.Figure()
+    
+    # Adicionar barras para cada categoria selecionada
+    for categoria in categorias_selecionadas:
+        if categoria == 'Professor':
+            fig.add_trace(go.Bar(
+                x=linha_do_tempo_completo['Ano'],
+                y=linha_do_tempo_completo['Professores'],
+                name='Professores',
+                marker_color='#0145AC'
+            ))
+
+        elif categoria == 'Psicóloga':
+            fig.add_trace(go.Bar(
+                x=linha_do_tempo_completo['Ano'],
+                y=linha_do_tempo_completo['Psicólogas'],
+                name='Psicólogas',
+                marker_color='#82C7A5'
+            ))
+
+        elif categoria == 'Psicopedagoga':
+            fig.add_trace(go.Bar(
+                x=linha_do_tempo_completo['Ano'],
+                y=linha_do_tempo_completo['Psicopedagoga'],
+                name='Psicopedagogas',
+                marker_color='#CD5C5C'
+            ))
+        
+        elif categoria == 'Psiquiatra':
+            fig.add_trace(go.Bar(
+                x=linha_do_tempo_completo['Ano'],
+                y=linha_do_tempo_completo['Psiquiatra'],
+                name='Psiquiatras',
+                marker_color='#F4A460'
+            ))
+
+        elif categoria == 'Assistente Social':
+            fig.add_trace(go.Bar(
+                x=linha_do_tempo_completo['Ano'],
+                y=linha_do_tempo_completo['Assistente Social'],
+                name='Assistente Social',
+                marker_color='#D8BFD8'
+            ))
+
+    # Atualizar layout do gráfico
+    fig.update_layout(
+        #legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
+        title='Formação da equipe ao longo dos anos',
+        xaxis=dict(title='Ano'),
+        yaxis=dict(title='Quantidade'),
+        barmode='stack'
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 ## VISUALIZAÇÃO NO STREAMLIT
 aba1, aba2, aba3 = st.tabs(['Sobre a ONG', 'Fatores de sucesso', 'Impacto Social'])
@@ -92,9 +163,9 @@ with aba1:
     with col2:
         st.markdown(f"<h2 style='{cor_estilizada}'>4 núcleos</h2> <span style='{fonte_negrito}'>distribuídos pelo município </span>", unsafe_allow_html=True)
     with col3:
-        st.markdown(f"<h2 style='{cor_estilizada}'>1100</h2> <span style='{fonte_negrito}'>Alunos no programa de Aceleração do conhecimento (2023)</span>", unsafe_allow_html=True) 
+        st.markdown(f"<h2 style='{cor_estilizada}'>+ 1000</h2> <span style='{fonte_negrito}'>alunos anual no programa de Aceleração do Conhecimento</span>", unsafe_allow_html=True) 
     with col4:
-        st.markdown(f"<h2 style='{cor_estilizada}'>5 a 24 anos</h2> <span style='{fonte_negrito}'>Idade dos beneficiários (2022)</span>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='{cor_estilizada}'>6 anos</h2> <span style='{fonte_negrito}'>idade mínima dos beneficiários</span>", unsafe_allow_html=True)
 
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
@@ -162,109 +233,42 @@ with aba1:
 
 with aba2:
 
-    # st.title('Fatores de Sucesso')
+    st.markdown(f"<p style='text-align: justify;'> Indicadores de impacto da Passos Mágicos em <span style='{fonte_negrito}'>2023</span>:</p>", unsafe_allow_html = True)
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.markdown(f"<h2 style='{cor_estilizada}'>1100</h2> <span style='{fonte_negrito}'>Alunos no programa de Aceleração do conhecimento (2023)</span>", unsafe_allow_html=True) 
-    with col2: #utilizando a cláusula with, mas poderíamos escrever apenas "col1." antes da métrica
-        st.markdown(f"<h2 style='{cor_estilizada}'>98</h2> <span style='{fonte_negrito}'>Bolsistas em instituições de ensino particular (2023)</span>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='{cor_estilizada}'>4400</h2> <span style='{fonte_negrito}'>pessoas impactadas (Considerando a média de 4 familiares por aluno)</span>", unsafe_allow_html=True) 
+    with col2:
+        st.markdown(f"<h2 style='{cor_estilizada}'>98</h2> <span style='{fonte_negrito}'>bolsistas em instituições de ensino particular</span>", unsafe_allow_html=True)
     with col3:
-        st.markdown(f"<h2 style='{cor_estilizada}'>103</h2> <span style='{fonte_negrito}'>Universitários em instituições de ensino superior (2023)</span>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='{cor_estilizada}'>103</h2> <span style='{fonte_negrito}'>universitários em instituições de ensino superior</span>", unsafe_allow_html=True)
     with col4:
-        st.markdown(f"<h2 style='{cor_estilizada}'>41</h2> <span style='{fonte_negrito}'>Universitários formados (2023)</span>", unsafe_allow_html=True) 
-        # st.markdown(f"<h2 style='{cor_estilizada}'>Mais de 10.500</h2> <span style='{fonte_negrito}'>horas de aula no Programa de Aceleração do Conhecimento (PAC) </span>", unsafe_allow_html=True)
-
+        st.markdown(f"<h2 style='{cor_estilizada}'>41</h2> <span style='{fonte_negrito}'>universitários formados</span>", unsafe_allow_html=True) 
+       
     st.markdown("<div style='height: 40px;'></div>", unsafe_allow_html=True) #Linha 
-    # Exibir o gráfico
-    st.plotly_chart(fig, use_container_width=True)
-
+    st.markdown(f"<p style='text-align: justify;'> Variação do número de alunos beneficiados, bem como à relação entre bolsistas e universitários nas escolas parceiras ao longo do tempo:</p>", unsafe_allow_html = True)
+    
+    
     dados = [(2016, 70, 26, 0, 5, 1, 0, 0, 0), (2017, 300, 35, 0, 6, 1, 1, 0, 0), (2018, 550, 80, 1, 7, 1, 1, 0, 0), (2019, 812, 106, 2, 9, 2, 1, 0, 0), (2020, 841, 112, 26, 9, 2, 1, 0, 0), (2021, 824, 133, 51, 12, 2, 2, 0, 0), (2022, 970, 112, 71, 13, 3, 3, 1, 1), (2023, 1100, 100, 94, 14, 3, 3, 1, 1)]
     linha_do_tempo_completo = pd.DataFrame(dados, columns=['Ano', 'Quantidade de alunos', 'Bolsistas em escola parceira', 'Universitários', 'Professores', 'Psicólogas', 'Psicopedagoga', 'Psiquiatra', 'Assistente Social'])
+    linha_do_tempo_completo['Bolsistas/Alunos'] = linha_do_tempo_completo['Bolsistas em escola parceira'] /linha_do_tempo_completo['Quantidade de alunos']*100
+    linha_do_tempo_completo['Bolsistas/Alunos'] = linha_do_tempo_completo['Bolsistas/Alunos'].apply(lambda x: '{:.2f}'.format(x))
+    linha_do_tempo_completo['Universitários/Alunos'] = linha_do_tempo_completo['Universitários'] /linha_do_tempo_completo['Quantidade de alunos']*100
+    linha_do_tempo_completo['Universitários/Alunos'] = linha_do_tempo_completo['Universitários/Alunos'].apply(lambda x: '{:.2f}'.format(x))
 
-    # Função para plotar o gráfico com base nas categorias selecionadas
-    def plotar_grafico(categorias_selecionadas):
-        fig = go.Figure()
-        
-        # Adicionar barras para cada categoria selecionada
-        for categoria in categorias_selecionadas:
-            if categoria == 'Aluno':
-                fig.add_trace(go.Bar(
-                    x=linha_do_tempo_completo['Ano'],
-                    y=linha_do_tempo_completo['Quantidade de alunos'],
-                    name='Alunos',
-                    marker_color='#6A5ACD'
-                ))
-            elif categoria == 'Bolsista':
-                fig.add_trace(go.Bar(
-                    x=linha_do_tempo_completo['Ano'],
-                    y=linha_do_tempo_completo['Bolsistas em escola parceira'],
-                    name='Bolsistas em escola parceira',
-                    marker_color='#1E90FF',
-                    opacity=0.7
-                ))
-            elif categoria == 'Universitário':
-                fig.add_trace(go.Bar(
-                    x=linha_do_tempo_completo['Ano'],
-                    y=linha_do_tempo_completo['Universitários'],
-                    name='Universitários',
-                    marker_color='#556B2F'
-                ))
-            elif categoria == 'Professor':
-                fig.add_trace(go.Bar(
-                    x=linha_do_tempo_completo['Ano'],
-                    y=linha_do_tempo_completo['Professores'],
-                    name='Professores',
-                    marker_color='#0145AC'
-                ))
-
-            elif categoria == 'Psicóloga':
-                fig.add_trace(go.Bar(
-                    x=linha_do_tempo_completo['Ano'],
-                    y=linha_do_tempo_completo['Psicólogas'],
-                    name='Psicólogas',
-                    marker_color='#82C7A5'
-                ))
-
-            elif categoria == 'Psicopedagoga':
-                fig.add_trace(go.Bar(
-                    x=linha_do_tempo_completo['Ano'],
-                    y=linha_do_tempo_completo['Psicopedagoga'],
-                    name='Psicopedagogas',
-                    marker_color='#CD5C5C'
-                ))
-            
-            elif categoria == 'Psiquiatra':
-                fig.add_trace(go.Bar(
-                    x=linha_do_tempo_completo['Ano'],
-                    y=linha_do_tempo_completo['Psiquiatra'],
-                    name='Psiquiatras',
-                    marker_color='#F4A460'
-                ))
-
-            elif categoria == 'Assistente Social':
-                fig.add_trace(go.Bar(
-                    x=linha_do_tempo_completo['Ano'],
-                    y=linha_do_tempo_completo['Assistente Social'],
-                    name='Assistente Social',
-                    marker_color='#D8BFD8'
-                ))
-
-        # Atualizar layout do gráfico
-        fig.update_layout(
-            #legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
-            title='Corpo docente',
-            xaxis=dict(title='Ano'),
-            yaxis=dict(title='Quantidade'),
-            barmode='stack'
-        )
-
-        st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(grafico_tres_linhas_ponto(linha_do_tempo_completo['Ano'],linha_do_tempo_completo['Quantidade de alunos'],linha_do_tempo_completo['Bolsistas em escola parceira'],linha_do_tempo_completo['Universitários'],linha_do_tempo_completo['Bolsistas/Alunos'],linha_do_tempo_completo['Universitários/Alunos']), use_container_width=True)
+    
+    st.markdown(f"<p style='text-align: justify;'> Evolução da quantidade de alunos atendidos em relação a população do município de Embu-Guaçu:</p>", unsafe_allow_html = True)
+    st.plotly_chart(grafico_duas_linhas_ponto(df_alunos_populacao['Ano'],df_alunos_populacao['Quantidade de alunos'],df_alunos_populacao['População do município'],df_alunos_populacao['Alunos/População'] ), use_container_width=True)
+    
+   
 
 
+    st.markdown(f"<p style='text-align: justify;'> A equipe Passos Mágicos é formada por profissionais que têm em mente o objetivo de atuarem como agentes transformadores da vida de cada um de nossos alunos.</p>", unsafe_allow_html = True)
     # Interface do usuário com multiselect (com alunos e professores pré-selecionados)
     categorias_selecionadas = st.multiselect(
         'Selecione as categorias:',
-        ['Bolsista','Universitário','Professor','Psicóloga', 'Psicopedagoga', 'Psiquiatra', 'Assistente Social','Aluno'],
+        ['Professor','Psicóloga', 'Psicopedagoga', 'Psiquiatra', 'Assistente Social'],
         default=['Professor','Psicóloga','Psicopedagoga', 'Psiquiatra', 'Assistente Social']  # Predefinindo Professor e Aluno como selecionados
     )
 
