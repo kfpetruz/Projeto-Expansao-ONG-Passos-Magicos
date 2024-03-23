@@ -104,7 +104,7 @@ def insert_bq(dados,tabela):
                 if_exists = parametro,
                 credentials = credentials)
     
-# insert_bq(df_concatenado,'tb_pesquisa_desenvolvimento_educacional_passos')
+insert_bq(df_concatenado,'tb_pede_passos')
 
 def tratamento_base_idade():
     dados_idade_total = select_bq ('tb_populacao_total_idade')

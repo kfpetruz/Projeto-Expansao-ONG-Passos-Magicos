@@ -2,6 +2,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import numpy as np
+from utils import select_bq
 
 
 # Configuração da página
@@ -53,10 +55,10 @@ def grafico_duas_linhas_ponto(x,y,y2,percentual):
     fig = go.Figure()
 
     # Adicionar a linha ao gráfico para y
-    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Quantidade de alunos da ONG', line=dict(color='#0145AC')))
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Quantidade de alunos', line=dict(color='#0145AC')))
 
     # Adicionar os pontos ao gráfico com os percentuais
-    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Alunos / População (percentual)',
+    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Quantidade de Alunos / População (%)',
                             text=percentual.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#0145AC', size=10)))
 
     # Adicionar a linha ao gráfico para y2
@@ -79,12 +81,12 @@ def grafico_tres_linhas_ponto(x,y1,y2,y3,percentual1,percentual2):
 
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Quantidade de alunos da ONG', line=dict(color='#0145AC')))
+    fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Quantidade de alunos', line=dict(color='#0145AC')))
     fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Bolsistas em escola parceira', line=dict(color='#82C7A5')))
     fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Universitários', line=dict(color='#CD5C5C')))
-    fig.add_trace(go.Scatter(x=x, y=y2, mode='markers', name='Bolsistas / Quantidade de alunos da ONG',
+    fig.add_trace(go.Scatter(x=x, y=y2, mode='markers', name='Bolsistas / Quantidade de alunos (%)',
                             text=percentual1.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#82C7A5', size=10)))
-    fig.add_trace(go.Scatter(x=x, y=y3, mode='markers', name='Universitários / Quantidade de alunos da ONG',
+    fig.add_trace(go.Scatter(x=x, y=y3, mode='markers', name='Universitários / Quantidade de alunos (%)',
                             text=percentual2.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#CD5C5C', size=10)))
 
     
@@ -165,7 +167,7 @@ with aba1:
     with col3:
         st.markdown(f"<h2 style='{cor_estilizada}'>+ 1000</h2> <span style='{fonte_negrito}'>alunos anual no programa de Aceleração do Conhecimento</span>", unsafe_allow_html=True) 
     with col4:
-        st.markdown(f"<h2 style='{cor_estilizada}'>6 anos</h2> <span style='{fonte_negrito}'>idade mínima dos beneficiários</span>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='{cor_estilizada}'>6 anos</h2> <span style='{fonte_negrito}'>idade mínima de entrada dos beneficiários</span>", unsafe_allow_html=True)
 
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
@@ -264,7 +266,7 @@ with aba2:
    
 
 
-    st.markdown(f"<p style='text-align: justify;'> A equipe Passos Mágicos é formada por profissionais que têm em mente o objetivo de atuarem como agentes transformadores da vida de cada um de nossos alunos.</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;'> A equipe Passos Mágicos é formada por profissionais que têm em mente o objetivo de atuarem como agentes transformadores da vida de cada um dos alunos.</p>", unsafe_allow_html = True)
     # Interface do usuário com multiselect (com alunos e professores pré-selecionados)
     categorias_selecionadas = st.multiselect(
         'Selecione as categorias:',
@@ -276,15 +278,78 @@ with aba2:
     plotar_grafico(categorias_selecionadas)
 
 with aba3:
-    col1, col2 = st.columns(2)
+    
+    st.markdown(f"<p style='text-align: justify;'> Análise da <span style='{fonte_negrito}'>PEDE (Pesquisa de Desenvolvimento Educacional)</span> dos alunos da Passos Mágicos entre os anos de <span style='{fonte_negrito}'>2020 a 2022</span>:</p>", unsafe_allow_html = True)
+    tabela = 'tb_pede_passos'
+    dados_passos_tratado = select_bq (tabela)
+    # st.write(dados_passos_tratado)
+    col1, col2, col3, col4 = st.columns(4)
     with col1: 
-        st.title('Impacto social')
+        alunos_distintos = len(dados_passos_tratado['NOME'].unique())
+        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos}</h2> <span style='{fonte_negrito}'>alunos distintos analisados na pesquisa</span>", unsafe_allow_html=True) 
     with col2:
-        st.title('Coluna 2')
+        # idade = pd.to_numeric(dados_passos_tratado['IDADE_ALUNO'], errors='coerce').dropna()
+        # idade_min = int(idade.min())
+        # idade_max = int(idade.max())
+        # st.markdown(f"<h2 style='{cor_estilizada}'>Entre {idade_min} a {idade_max}</h2> <span style='{fonte_negrito}'>idade dos alunos em 2020</span>", unsafe_allow_html=True) 
+        dados_passos_sem_nome = dados_passos_tratado.drop('NOME', axis=1)
+        dados_passos_2020 = dados_passos_sem_nome[dados_passos_sem_nome['ANO']=='2020']
+        dados_passos_2020_drop = dados_passos_2020.drop('ANO', axis=1)
+        # Substituir valores vazios por None
+        dados_passos_2020_drop.replace('', np.nan, inplace=True)
+        # Substituir valores None por NaN
+        dados_passos_2020_drop.fillna(np.nan, inplace=True)
+        alunos_distintos_2020 = len(dados_passos_2020_drop.dropna(how='all'))
+        percentual_alunos_distintos_2020 = alunos_distintos_2020/linha_do_tempo_completo[linha_do_tempo_completo['Ano']==2020]['Quantidade de alunos'].iloc[0]*100
+        percentual_alunos_distintos_2020 = int(round(percentual_alunos_distintos_2020,0))
+        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2020}</h2> <span style='{fonte_negrito}'>respostas em 2020 <br>({percentual_alunos_distintos_2020}% do total de alunos no ano)</span>", unsafe_allow_html=True) 
+        
+    with col3:
+        # dados_pv = dados_passos_tratado[dados_passos_tratado['PONTO_VIRADA']=='Sim']
+        # alunos_distintos_pv = len(dados_pv['NOME'].unique())
+        # st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_pv}</h2> <span style='{fonte_negrito}'>alunos que atigiram o ponto de virada nesse período</span>", unsafe_allow_html=True) 
+        dados_passos_2021 = dados_passos_sem_nome[dados_passos_sem_nome['ANO']=='2021']
+        dados_passos_2021_drop = dados_passos_2021.drop('ANO', axis=1)
+        # Substituir valores vazios por None
+        dados_passos_2021_drop.replace('', np.nan, inplace=True)
+        # Substituir valores None por NaN
+        dados_passos_2021_drop.fillna(np.nan, inplace=True)
+        alunos_distintos_2021 = len(dados_passos_2021_drop.dropna(how='all'))
+        percentual_alunos_distintos_2021 = alunos_distintos_2021/linha_do_tempo_completo[linha_do_tempo_completo['Ano']==2021]['Quantidade de alunos'].iloc[0]*100
+        percentual_alunos_distintos_2021 = int(round(percentual_alunos_distintos_2021,0))
+        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2021}</h2> <span style='{fonte_negrito}'>respostas em 2021 <br>({percentual_alunos_distintos_2021}% do total de alunos no ano)</span>", unsafe_allow_html=True) 
+    with col4:
+        # dados_bolsa = dados_passos_tratado[dados_passos_tratado['BOLSISTA']=='Sim']
+        # alunos_distintos_bolsa = len(dados_bolsa['NOME'].unique())
+        # st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_bolsa}</h2> <span style='{fonte_negrito}'>alunos bolsistas em 2022</span>", unsafe_allow_html=True) 
+        dados_passos_2022 = dados_passos_sem_nome[dados_passos_sem_nome['ANO']=='2022']
+        dados_passos_2022_drop = dados_passos_2022.drop('ANO', axis=1)
+        # Substituir valores vazios por None
+        dados_passos_2022_drop.replace('', np.nan, inplace=True)
+        # Substituir valores None por NaN
+        dados_passos_2022_drop.fillna(np.nan, inplace=True)
+        alunos_distintos_2022 = len(dados_passos_2022_drop.dropna(how='all'))
+        percentual_alunos_distintos_2022 = alunos_distintos_2022/linha_do_tempo_completo[linha_do_tempo_completo['Ano']==2022]['Quantidade de alunos'].iloc[0]*100
+        percentual_alunos_distintos_2022 = int(round(percentual_alunos_distintos_2022,0))
+        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2022}</h2> <span style='{fonte_negrito}'>respostas em 2022 <br>({percentual_alunos_distintos_2022}% do total de alunos no ano)</span>", unsafe_allow_html=True) 
+# Big numbers com percentual
+# Usuário escolher entre pedra e INDE
+# Pedra -> Gráfico de barras (Ponto de virada por pedra)
+# INDE -> Métricas que compõe o INDE + INDE - Colocar o descritivo do racional - Multiseleção
+# Fazer um gráfico por matéria quebrado por fase
+# Total de alunos por fase x Fase ideal - Filtro por ano (Total de alunos por fase x Fase ideal para o aluno) 
+    st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
+    
+    st.markdown(f"<p style='text-align: justify;''> Do total de alunos <span style='{fonte_negrito}'>distintos</span>, <span style='{fonte_negrito}'>500</span> estiveram presentes nos três anos consecutivos.</p>", unsafe_allow_html = True)
 
-# 1ª aba - História da Passos(Overview), Análise Dados Históricos e Resultado das ações na cidade - # 2ª aba Fatores-Chave de Sucesso - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers
-# 2ª aba - Colocar descrições com cores destaques 
-# 3ª aba - Análise do Impacto Emocional e Social - Desempenho dos alUnos - (Análise do dataset - Notas com o passar dos anos , qual idade tem maior desempenho, notas por matéria, avaliação qualitativa (quantidade de comentários sobre os alunos),  tem desistência? ponto de virada PV)
+# Média do tempo de casa dos alunos em cada ano, quantidade de alunos em cada ano
+        
+# --------------------------------------------------------------
+        
+# 1ª aba - História da Passos(Overview), Análise Dados Históricos e Resultado das ações na cidade - 
+# 2ª aba - Fatores-Chave de Sucesso - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers - Colocar descrições com cores destaques 
+# 3ª aba - Análise do Impacto Emocional e Social - Desempenho dos alUnos - (Análise do dataset - Notas com o passar dos anos , qual idade tem maior desempenho, notas por matéria, avaliação qualitativa (quantidade de comentários sobre os alunos),  tem desistência? ponto de virada PV) - colocar cursos que os alunos estão fazendo
 # 4ª aba - Aprimoramento de estratégias e operações Futuras (PIX, Potencias cidades para expansão(Modelo) e Previsão de aumento de alunos (Quantidade de alunos para os próximos anos))
 # 5ª aba - Sobre
 
