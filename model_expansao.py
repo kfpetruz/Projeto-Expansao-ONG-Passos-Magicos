@@ -79,7 +79,6 @@ dados_model_math[variaveis_normalizar] = scaler.fit_transform(dados_model_math[v
 scaler = MinMaxScaler()
 dados_model_math[variaveis_normalizar_inversamente] = 1 - scaler.fit_transform(dados_model_math[variaveis_normalizar_inversamente])
 
-dados_model_math.head()
 
 #DEIXAR VARIÁVEIS DINAMICAS NO STREAMLIT
 # Pesos
@@ -105,15 +104,6 @@ dados_model_math['soma_ponderada'] = dados_model_math[['distancia_de_embu_guacu'
 # Classificar o DataFrame com base na soma ponderada
 dados_model_math = dados_model_math.sort_values(by='soma_ponderada', ascending=False)
 
-# Visualizando o DataFrame classificado
-dados_model_math.head(10)
-
-dados_model_math.describe()
-
-dados_externos.iloc[121]
-
-dados_externos.iloc[412]
-
 dados_externos_model_math = pd.merge(dados_externos, dados_model_math[['municipio', 'soma_ponderada']], on='municipio', how='left')
 dados_externos_model_math.head()
 
@@ -123,11 +113,7 @@ dados_externos_model_math.head(10)
 """# K-Means"""
 
 dados_model_kmeans = dados_model_math.drop('soma_ponderada', axis = 1)
-dados_model_kmeans.head()
 
-dados_model_kmeans.shape
-
-dados_model_kmeans.info()
 
 #variaveis_preditoras = ['Salário médio mensal dos trabalhadores formais', 'Índice de Desenvolvimento Humano Municipal (IDHM)', 'PIB per capita', 'População no último censo', 'Densidade demográfica habitante/km²', 'Pessoas em idade elegível']
 # variaveis_preditoras = ['Salário médio mensal dos trabalhadores formais', 'Índice de Desenvolvimento Humano Municipal (IDHM)']
@@ -158,33 +144,6 @@ dados_externos_order_math.head()
 dados_externos_model_kmeans = pd.merge(dados_externos_order_math, dados_model_kmeans[['municipio', 'grupos']], on='municipio', how='left')
 dados_externos_model_kmeans.head(10)
 
-
-
-import matplotlib.pyplot as plt
-
-# Plotando os dados identificando com os seus clusters
-plt.scatter(dados_model_kmeans['distancia_de_embu_guacu'],
-            dados_model_kmeans['salario_medio_trabalhadores'],
-            c=kmeans_labels,
-            alpha=0.5,
-            cmap='rainbow')
-
-# Plotando os centroides
-plt.scatter(centroides[:, 0],
-            centroides[:, 1],
-            c='black',
-            marker='X',
-            s=200,
-            alpha=0.5)
-
-plt.xlabel('Distância de Embu Guaçu')
-plt.ylabel('Salário Médio dos Trabalhadores')
-plt.title('Clusters Identificados')
-plt.rcParams['figure.figsize'] = (10, 5)
-plt.show()
-
-import matplotlib.pyplot as plt
-
 # Criando a figura
 fig = plt.figure()
 
@@ -210,5 +169,4 @@ plt.rcParams['figure.figsize'] = (10, 5)
 
 # Definindo a cor de fundo
 fig.patch.set_facecolor('#F2F2F2')
-
 plt.show()
