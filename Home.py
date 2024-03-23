@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import numpy as np
+import plotly.express as px
 from utils import select_bq
 
 
@@ -241,9 +242,10 @@ with aba2:
     with col1:
         st.markdown(f"<h2 style='{cor_estilizada}'>4400</h2> <span style='{fonte_negrito}'>pessoas impactadas (Considerando a média de 4 familiares por aluno)</span>", unsafe_allow_html=True) 
     with col2:
-        st.markdown(f"<h2 style='{cor_estilizada}'>98</h2> <span style='{fonte_negrito}'>bolsistas em instituições de ensino particular</span>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='{cor_estilizada}'>100</h2> <span style='{fonte_negrito}'>bolsistas em instituições de ensino particular</span>", unsafe_allow_html=True)
     with col3:
-        st.markdown(f"<h2 style='{cor_estilizada}'>103</h2> <span style='{fonte_negrito}'>universitários em instituições de ensino superior</span>", unsafe_allow_html=True)
+        # 103
+        st.markdown(f"<h2 style='{cor_estilizada}'>94</h2> <span style='{fonte_negrito}'>universitários em instituições de ensino superior</span>", unsafe_allow_html=True)
     with col4:
         st.markdown(f"<h2 style='{cor_estilizada}'>41</h2> <span style='{fonte_negrito}'>universitários formados</span>", unsafe_allow_html=True) 
        
@@ -263,9 +265,6 @@ with aba2:
     st.markdown(f"<p style='text-align: justify;'> Evolução da quantidade de alunos atendidos em relação a população do município de Embu-Guaçu:</p>", unsafe_allow_html = True)
     st.plotly_chart(grafico_duas_linhas_ponto(df_alunos_populacao['Ano'],df_alunos_populacao['Quantidade de alunos'],df_alunos_populacao['População do município'],df_alunos_populacao['Alunos/População'] ), use_container_width=True)
     
-   
-
-
     st.markdown(f"<p style='text-align: justify;'> A equipe Passos Mágicos é formada por profissionais que têm em mente o objetivo de atuarem como agentes transformadores da vida de cada um dos alunos.</p>", unsafe_allow_html = True)
     # Interface do usuário com multiselect (com alunos e professores pré-selecionados)
     categorias_selecionadas = st.multiselect(
@@ -288,10 +287,6 @@ with aba3:
         alunos_distintos = len(dados_passos_tratado['NOME'].unique())
         st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos}</h2> <span style='{fonte_negrito}'>alunos distintos analisados na pesquisa</span>", unsafe_allow_html=True) 
     with col2:
-        # idade = pd.to_numeric(dados_passos_tratado['IDADE_ALUNO'], errors='coerce').dropna()
-        # idade_min = int(idade.min())
-        # idade_max = int(idade.max())
-        # st.markdown(f"<h2 style='{cor_estilizada}'>Entre {idade_min} a {idade_max}</h2> <span style='{fonte_negrito}'>idade dos alunos em 2020</span>", unsafe_allow_html=True) 
         dados_passos_sem_nome = dados_passos_tratado.drop('NOME', axis=1)
         dados_passos_2020 = dados_passos_sem_nome[dados_passos_sem_nome['ANO']=='2020']
         dados_passos_2020_drop = dados_passos_2020.drop('ANO', axis=1)
@@ -302,12 +297,9 @@ with aba3:
         alunos_distintos_2020 = len(dados_passos_2020_drop.dropna(how='all'))
         percentual_alunos_distintos_2020 = alunos_distintos_2020/linha_do_tempo_completo[linha_do_tempo_completo['Ano']==2020]['Quantidade de alunos'].iloc[0]*100
         percentual_alunos_distintos_2020 = int(round(percentual_alunos_distintos_2020,0))
-        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2020}</h2> <span style='{fonte_negrito}'>respostas em 2020 <br>({percentual_alunos_distintos_2020}% do total de alunos no ano)</span>", unsafe_allow_html=True) 
+        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2020}</h2> <span style='{fonte_negrito}'>respostas em 2020 <br>({percentual_alunos_distintos_2020}% do total de alunos do mesmo ano)</span>", unsafe_allow_html=True) 
         
     with col3:
-        # dados_pv = dados_passos_tratado[dados_passos_tratado['PONTO_VIRADA']=='Sim']
-        # alunos_distintos_pv = len(dados_pv['NOME'].unique())
-        # st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_pv}</h2> <span style='{fonte_negrito}'>alunos que atigiram o ponto de virada nesse período</span>", unsafe_allow_html=True) 
         dados_passos_2021 = dados_passos_sem_nome[dados_passos_sem_nome['ANO']=='2021']
         dados_passos_2021_drop = dados_passos_2021.drop('ANO', axis=1)
         # Substituir valores vazios por None
@@ -317,11 +309,8 @@ with aba3:
         alunos_distintos_2021 = len(dados_passos_2021_drop.dropna(how='all'))
         percentual_alunos_distintos_2021 = alunos_distintos_2021/linha_do_tempo_completo[linha_do_tempo_completo['Ano']==2021]['Quantidade de alunos'].iloc[0]*100
         percentual_alunos_distintos_2021 = int(round(percentual_alunos_distintos_2021,0))
-        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2021}</h2> <span style='{fonte_negrito}'>respostas em 2021 <br>({percentual_alunos_distintos_2021}% do total de alunos no ano)</span>", unsafe_allow_html=True) 
+        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2021}</h2> <span style='{fonte_negrito}'>respostas em 2021 <br>({percentual_alunos_distintos_2021}% do total de alunos do mesmo ano)</span>", unsafe_allow_html=True) 
     with col4:
-        # dados_bolsa = dados_passos_tratado[dados_passos_tratado['BOLSISTA']=='Sim']
-        # alunos_distintos_bolsa = len(dados_bolsa['NOME'].unique())
-        # st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_bolsa}</h2> <span style='{fonte_negrito}'>alunos bolsistas em 2022</span>", unsafe_allow_html=True) 
         dados_passos_2022 = dados_passos_sem_nome[dados_passos_sem_nome['ANO']=='2022']
         dados_passos_2022_drop = dados_passos_2022.drop('ANO', axis=1)
         # Substituir valores vazios por None
@@ -331,30 +320,142 @@ with aba3:
         alunos_distintos_2022 = len(dados_passos_2022_drop.dropna(how='all'))
         percentual_alunos_distintos_2022 = alunos_distintos_2022/linha_do_tempo_completo[linha_do_tempo_completo['Ano']==2022]['Quantidade de alunos'].iloc[0]*100
         percentual_alunos_distintos_2022 = int(round(percentual_alunos_distintos_2022,0))
-        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2022}</h2> <span style='{fonte_negrito}'>respostas em 2022 <br>({percentual_alunos_distintos_2022}% do total de alunos no ano)</span>", unsafe_allow_html=True) 
-# Big numbers com percentual
-# Usuário escolher entre pedra e INDE
-# Pedra -> Gráfico de barras (Ponto de virada por pedra)
-# INDE -> Métricas que compõe o INDE + INDE - Colocar o descritivo do racional - Multiseleção
-# Fazer um gráfico por matéria quebrado por fase
-# Total de alunos por fase x Fase ideal - Filtro por ano (Total de alunos por fase x Fase ideal para o aluno) 
+        st.markdown(f"<h2 style='{cor_estilizada}'>{alunos_distintos_2022}</h2> <span style='{fonte_negrito}'>respostas em 2022 <br>({percentual_alunos_distintos_2022}% do total de alunos do mesmo ano)</span>", unsafe_allow_html=True) 
+    
+    dados_alunos_2020 = dados_passos_tratado.merge(dados_passos_2020_drop.dropna(how='all')['DEFASAGEM'], how='inner', left_index=True, right_index=True)
+    dados_alunos_2021 = dados_passos_tratado.merge(dados_passos_2021_drop.dropna(how='all')['DEFASAGEM'], how='inner', left_index=True, right_index=True)
+    dados_alunos_2022 = dados_passos_tratado.merge(dados_passos_2022_drop.dropna(how='all')['DEFASAGEM'], how='inner', left_index=True, right_index=True)
+    dados_alunos_todos_anos = dados_alunos_2020[['ANO','NOME']].merge(dados_alunos_2021[['ANO','NOME']], how='inner', on='NOME')
+    dados_alunos_todos_anos = dados_alunos_todos_anos.merge(dados_alunos_2022[['ANO','NOME']], how='inner', on='NOME')
+    dados_alunos_todos_anos['3_ANOS'] = 'Sim'
+    dados_alunos_todos_anos = dados_alunos_todos_anos[['NOME','3_ANOS']].merge(dados_passos_tratado, how='inner', on='NOME')
+    alunos_distintos_todos_anos = len(dados_alunos_todos_anos['NOME'].unique())
+    
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     
-    st.markdown(f"<p style='text-align: justify;''> Do total de alunos <span style='{fonte_negrito}'>distintos</span>, <span style='{fonte_negrito}'>500</span> estiveram presentes nos três anos consecutivos.</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;''> Do total de alunos <span style='{fonte_negrito}'>distintos</span> da pesquisa, <span style='{fonte_negrito}'>{alunos_distintos_todos_anos}</span> estiveram presentes nos três anos consecutivos. Com base nesse resultado, para demonstrar a média da evolução do INDE (Índice de Desenvolvimento Educacional) anual e sua composição, serão considerados estes alunos.</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>Composição do Índice de Desenvolvimento Educacional (INDE):</span></p>", unsafe_allow_html=True)
 
-# Média do tempo de casa dos alunos em cada ano, quantidade de alunos em cada ano
-        
+    inde = {
+    'Fases 0 a 7': ['INDE = (IAN*0.1) + (IDA*0.2) + (IEG*0.2) + (IAA*O.1) + (IPS*0.1) + (IPP*0.1) + (IPV+0.2)'],
+    'Fase 8': ['INDE = (IAN*0.1) + (IDA*0.4) + (IEG*0.2) + (IAA*O.1) + (IPS*0.2)'],
+    }
+    df_inde = pd.DataFrame(inde)
+    html = df_inde.to_html(index=False)
+
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+
+    st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
+    st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;''> Significado de cada sigla mencionada na composição:  </p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>IAN </span>- Indicador de Adequação ao Nível – Media das Notas de Adequação do Aluno ao nível atual <br> <span style='{fonte_negrito}'>IDA </span>- Indicador de Aprendizagem - Média das Notas do Indicador de Aprendizagem <br><span style='{fonte_negrito}'>IEG </span>- Indicador de Engajamento – Média das Notas de Engajamento do Aluno <br><span style='{fonte_negrito}'>IAA </span>- Indicador de Auto Avalição – Média das Notas de Auto Avaliação do Aluno<br><span style='{fonte_negrito}'>IPS </span>- Indicador Psicossocial – Média das Notas Psicossociais do Aluno<br><span style='{fonte_negrito}'>IPP </span>- Indicador Psicopedagogico – Média das Notas Psico Pedagogicas do Aluno<br><span style='{fonte_negrito}'>IPV </span>- Indicador de Ponto de Virada – Média das Notas dePonto de Virada do Aluno</p>", unsafe_allow_html = True)
+    
+    dados_alunos_todos_anos['INDE'] = pd.to_numeric(dados_alunos_todos_anos['INDE'], errors='coerce')
+    dados_alunos_todos_anos['IAN'] = pd.to_numeric(dados_alunos_todos_anos['IAN'], errors='coerce')
+    dados_alunos_todos_anos['IDA'] = pd.to_numeric(dados_alunos_todos_anos['IDA'], errors='coerce')
+    dados_alunos_todos_anos['IEG'] = pd.to_numeric(dados_alunos_todos_anos['IEG'], errors='coerce')
+    dados_alunos_todos_anos['IAA'] = pd.to_numeric(dados_alunos_todos_anos['IAA'], errors='coerce')
+    dados_alunos_todos_anos['IPS'] = pd.to_numeric(dados_alunos_todos_anos['IPS'], errors='coerce')
+    dados_alunos_todos_anos['IPP'] = pd.to_numeric(dados_alunos_todos_anos['IPP'], errors='coerce')
+    dados_alunos_todos_anos['IPV'] = pd.to_numeric(dados_alunos_todos_anos['IPV'], errors='coerce')
+    colunas_para_media = ['INDE', 'IAN', 'IDA', 'IEG', 'IAA', 'IPS', 'IPP','IPV']
+    media_por_ano = dados_alunos_todos_anos.groupby('ANO')[colunas_para_media].mean().reset_index()
+    media_por_ano['ANO']=media_por_ano['ANO'].astype(int)
+
+
+    categorias_selecionadas = st.multiselect('Selecione as categorias:', list(media_por_ano.columns[1:]), default=['INDE','IPV'])
+    media_por_ano_filtrados = media_por_ano[['ANO'] + categorias_selecionadas]
+
+    fig = px.line(media_por_ano_filtrados, x='ANO', y=categorias_selecionadas)
+    for trace in fig.data:
+        trace.update(mode='lines+markers')
+    fig.update_layout(title='Média dos indicadores por ano',
+                    xaxis_title='Ano',
+                    yaxis_title='Média da notas',
+                    xaxis=dict(tickmode='array', tickvals=media_por_ano['ANO'], ticktext=[str(i) for i in media_por_ano['ANO']]),
+                    legend=dict(title=None))
+    fig.update_xaxes(range=[min(media_por_ano['ANO']) - 0.1, max(media_por_ano['ANO'])+ 0.1])
+    st.plotly_chart(fig, use_container_width=True)
 # --------------------------------------------------------------
-        
+    st.markdown(f"<p style='text-align: justify;'> Para uma análise mais detalhada, é possível visualizar como cada aluno evoluiu ao longo dos três anos. Selecione o aluno e o(s) indicador(es) que deseja analisar:</p>", unsafe_allow_html = True)
+    
+    dados_alunos_indicadores = dados_alunos_todos_anos[['ANO','NOME','INDE', 'IAN', 'IDA', 'IEG', 'IAA', 'IPS', 'IPP','IPV']]
+    dados_alunos_indicadores = dados_alunos_indicadores.sort_values(by=['ANO', 'NOME'])
+    # Selecionar aluno
+    aluno_selecionado = st.selectbox('Selecione o aluno:', dados_alunos_indicadores['NOME'].unique())
+
+    # Selecionar matérias
+    materias_selecionadas = st.multiselect('Selecione o(s) Indicador(es):', dados_alunos_indicadores.columns[2:], default=['INDE','IPV'])
+
+    # Filtrar o DataFrame de acordo com o aluno selecionado
+    df_aluno = dados_alunos_indicadores[dados_alunos_indicadores['NOME'] == aluno_selecionado]
+
+    # Melt do DataFrame para tornar as colunas de matérias em uma coluna 'Matéria' e 'Nota'
+    df_melt = pd.melt(df_aluno, id_vars=['ANO', 'NOME'], var_name='Matéria', value_name='Nota')
+
+    # Filtrar o DataFrame de acordo com as matérias selecionadas
+    df_melt_filtrado = df_melt[df_melt['Matéria'].isin(materias_selecionadas)]
+
+    # Plotar um gráfico de linhas para cada matéria
+    fig = px.line(df_melt_filtrado, x='ANO', y='Nota', color='Matéria', markers=True, title=f'Evolução dos Indicadores para o Aluno {aluno_selecionado}')
+    fig.update_layout(title='Indicadores por aluno',
+                    xaxis_title='Ano',
+                    yaxis_title='Média da nota',
+                    xaxis=dict(tickmode='array', tickvals=dados_alunos_indicadores['ANO'], ticktext=[str(i) for i in dados_alunos_indicadores['ANO']]),
+                    legend=dict(title=None))
+    st.plotly_chart(fig, use_container_width=True)
+
+# ------------------------
+    st.markdown(f"<p style='text-align: justify;'> A seguir, serão realizadas análises da quantidade total de respostas em cada ano.</p>", unsafe_allow_html = True)
+    colunas_para_remover = ['DEFASAGEM_x', 'DEFASAGEM_y']
+    dados_alunos_2020 = dados_alunos_2020.drop(colunas_para_remover, axis=1)
+    dados_alunos_2021 = dados_alunos_2021.drop(colunas_para_remover, axis=1)
+    dados_alunos_2022 = dados_alunos_2022.drop(colunas_para_remover, axis=1)
+    dados_totais_concat = pd.concat([dados_alunos_2020, dados_alunos_2021, dados_alunos_2022])
+    agrupado_pedra_ponto = dados_totais_concat.groupby(['ANO', 'PEDRA','PONTO_VIRADA']).size().reset_index(name='Quantidade')
+    agrupado_pedra_ponto['PEDRA'] = agrupado_pedra_ponto['PEDRA'].replace('D9891/2A', 'Outro')
+    agrupado_pedra_ponto['PONTO_VIRADA'] = agrupado_pedra_ponto['PONTO_VIRADA'].replace('D9600', 'Outro')
+    agrupado_pedra_ponto['PEDRA'] = agrupado_pedra_ponto['PEDRA'].replace('#NULO!', 'Outro')
+    
+    agrupado_pedra = agrupado_pedra_ponto.groupby(['ANO', 'PEDRA'])['Quantidade'].sum().reset_index()
+    agrupado_pedra.rename(columns={'Quantidade': 'Alunos por pedra'}, inplace=True)
+    agrupado_ponto = agrupado_pedra_ponto[agrupado_pedra_ponto['PONTO_VIRADA']=='Sim']
+    agrupado_ponto.rename(columns={'Quantidade': 'Alunos que tiveram Ponto de Virada'}, inplace=True)
+    agrupado_pedra_ponto_merge = pd.merge(agrupado_pedra, agrupado_ponto, on=['ANO', 'PEDRA'], how='left')
+
+    st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'> A Classificação do aluno é baseado pelo número do INDE, sendo separado por nomes de Pedras:</span></p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>Quartzo </span>- 2.405 a 5.506 <br> <span style='{fonte_negrito}'>Agata </span>- 5.506 a 6.868 <br><span style='{fonte_negrito}'>Ametista </span>-  6.868 a 8.230 <br><span style='{fonte_negrito}'>Topazio </span>- 8.230 a 9.294<br></p>", unsafe_allow_html = True)
+
+
+    ano_selecionado = st.selectbox('Selecione o ano:', sorted(agrupado_pedra_ponto_merge['ANO'].unique()))
+    dados_filtrados = agrupado_pedra_ponto_merge[agrupado_pedra_ponto_merge['ANO'] == ano_selecionado]
+    dados_filtrados = dados_filtrados.sort_values(by='Alunos por pedra', ascending = False)
+    fig = px.bar(dados_filtrados, x='PEDRA', y=['Alunos por pedra', 'Alunos que tiveram Ponto de Virada'],
+                title=f'Quantidade de alunos tiveram Ponto de Virada por Tipo de Pedra no Ano {ano_selecionado}',
+                labels={'Alunos por pedra': 'Quantidade de Pedra', 'Alunos que tiveram Ponto de Virada': 'Quantidade de Ponto', 'PEDRA': 'Tipo de Pedra'},
+                barmode='group')
+    fig.update_layout(
+                    yaxis_title='Quantidade de alunos',
+                    legend=dict(title=None))
+    st.plotly_chart(fig, use_container_width=True)
+
+
+
+
+
+# OK - INDE -> Métricas que compõe o INDE + INDE - Colocar o descritivo do racional - Multiseleção
+# OK - Pedra -> Gráfico de barras (Ponto de virada por pedra)
+# Fazer um gráfico por matéria quebrado por fase
+# Total de alunos por fase x Fase ideal - Filtro por ano (Total de alunos por fase x Fase ideal para o aluno) 
+
 # 1ª aba - História da Passos(Overview), Análise Dados Históricos e Resultado das ações na cidade - 
 # 2ª aba - Fatores-Chave de Sucesso - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers - Colocar descrições com cores destaques 
 # 3ª aba - Análise do Impacto Emocional e Social - Desempenho dos alUnos - (Análise do dataset - Notas com o passar dos anos , qual idade tem maior desempenho, notas por matéria, avaliação qualitativa (quantidade de comentários sobre os alunos),  tem desistência? ponto de virada PV) - colocar cursos que os alunos estão fazendo
 # 4ª aba - Aprimoramento de estratégias e operações Futuras (PIX, Potencias cidades para expansão(Modelo) e Previsão de aumento de alunos (Quantidade de alunos para os próximos anos))
 # 5ª aba - Sobre
 
-# Anotações :
-# História da Passos(Overview) - qualificações dos professores
+
 
 
 # Quantidade de população de Embu Guaçu, percentual de matriculados no ensino básico, PIB
