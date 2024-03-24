@@ -17,6 +17,7 @@ st.title('Projeto de expansão 🤝')
 
 #PREPARAÇÃO DOS DADOS
 cor_estilizada = 'color: #0145AC;'
+fonte_negrito = 'font-weight: bold;'
 dados_externos = pd.read_excel('tb_populacao_economia_idade_distancia.xlsx')
 
 dados_externos['percent_elegiveis_6a19a'] = dados_externos['Pessoas de 6 a 19 anos'] / dados_externos['População no último censo'] * 100
@@ -141,17 +142,70 @@ with aba1:
 with aba2:
     st.markdown('<p style="text-align: justify;"> Após analisar os dados históricos da ONG, dados da PEDE (Pesquisa de Desenvolvimento Educacional), os recursos digitais utilizados atualmente pela ONG, dados da economia, população e educacionais de Embu-Guaçu e demais cidades do estado de São Paulo, listamos as melhores propostas escolhidas para a ONG concretizar seu plano de expansão.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
+    st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<h5 style="{cor_estilizada}"> Expandir a partir das cidades selecionadas no Modelo Matemático ou Modelo K-means </h5>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: justify;"> Acreditamos que, num plano de expansão de suas atividades, a ONG terá maior impacto social e chance de sucesso ao escolher iniciar pelas cidades selecionadas nos modelos Matemático ou K-means, pois as cidades ali selecionadas, além de serem mais carentes de ações como as da ONG, têm um perfil semelhante ao que a ONG está habituada a atender.</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;"> Acreditamos que, num plano de expansão de suas atividades, a ONG terá maior impacto social e chance de sucesso ao escolher iniciar pelas cidades selecionadas nos modelos Matemático ou K-means, pois as cidades ali selecionadas, além de serem mais carentes de ações como as da ONG, têm um perfil semelhante ao que ela está habituada a atender.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
+    st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<h5 style="{cor_estilizada}"> Disponibilizar meios de doação por boleto, cartão de crédito, pix, entre outros, diretamente pelo site </h5>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: justify;"> Na era em que tudo é feito às pressas, acreditamos que haveria um ganho ao incluir a possibilidade de doação direto no site, através de meios de doação de autoatendimento, tirando a necessidade de a pessoa doadora ter que entrar em contato com a ONG, aguardar atendimento, tendo assim até mesmo a possibilidade de a pessoa desistir da doação nesse meio tempo. </p>', unsafe_allow_html = True)
     st.markdown('<p style="text-align: justify;"> É sabido que é necessário contrato com adquirentes de cartão de crédito, bancos, entre outros intermediadores, para viabilizar algo do tipo, porém, vemos uma possibilidade de ganho nessa frente, especialmente quando se fala de pequenos doadores. </p>', unsafe_allow_html = True)
-    st.image("https://thumbs2.imgbox.com/80/53/UV38xRlO_t.png")
+
     
-    st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
+    st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<h5 style="{cor_estilizada}"> Inclusão de opção de valores pré-cadastrados</h5>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: justify;"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
-    st.image("https://thumbs2.imgbox.com/bc/19/Lgy8LcJR_t.png")
+
+    st.markdown('<p style="text-align: justify;"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG.</p>', unsafe_allow_html = True)
+    st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True) #Linha cinza sólida
+
+    #FORMULÁRIO DE DOAÇÃO
+    st.markdown(f"<h2 style='{cor_estilizada}; text-align: center'><span style='{fonte_negrito}'>COMO DOAR?</span></h2>", unsafe_allow_html=True)
+
+    st.markdown(f"<h5 style='{cor_estilizada}; text-align: center'>Ajude a fazer a diferença! Sua doação é fundamental para o sucesso da nossa missão.</h5>", unsafe_allow_html=True)
+
+
+    # Valores de doação em botões e opção de inserir outros valores
+    st.markdown("<h4> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
+    valores_doacao = [10, 20, 50, 100, 200, "Outro"]
+    valor_doacao = st.radio("Escolha o valor:", valores_doacao)
+    if valor_doacao == "Outro":
+        valor_doacao = st.number_input("Digite o valor da doação:", step=10.0)
+
+    # Opção de recorrência de doação
+    recorrencia = st.radio("Deseja fazer uma doação única ou recorrente?", ["Única", "Recorrente"])
+
+    # Formas de pagamento
+    st.markdown("<h4> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
+    forma_pagamento = st.selectbox("Forma de pagamento:", ["Cartão de crédito", "Boleto bancário", "PIX"])
+
+    # Formulário para preencher dados pessoais e de pagamento
+    st.markdown("<h4> Preencha seus dados: </h4>", unsafe_allow_html=True)
+    nome = st.text_input("Nome completo:")
+    email = st.text_input("Email:")
+    endereco = st.text_input("Endereço:")
+    cidade = st.text_input("Cidade:")
+    estado = st.text_input("Estado:")
+    cep = st.text_input("CEP:")
+
+    if forma_pagamento == "Cartão de crédito":
+        numero_cartao = st.text_input("Número do cartão:")
+        data_validade = st.text_input("Data de validade (MM/AAAA):")
+        cvv = st.text_input("CVV:")
+
+    # Botão para confirmar doação
+    if st.button("Confirmar Doação"):
+        if forma_pagamento == "Cartão de crédito":
+            # Aqui você pode adicionar a lógica para processar o pagamento com cartão de crédito
+            if recorrencia == "Única":
+                st.success(f"Obrigado por sua doação única de R${valor_doacao}!")
+            else:
+                st.success(f"Obrigado por sua doação recorrente de R${valor_doacao}!")
+        else:
+            # Aqui você pode adicionar a lógica para gerar o boleto bancário
+            if recorrencia == "Única":
+                st.success(f"Obrigado por sua doação única de R${valor_doacao}! Seu boleto será enviado para o email {email}.")
+            else:
+                st.success(f"Obrigado por sua doação recorrente de R${valor_doacao}! Seu boleto será enviado para o email {email}.")
+    st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True) #Linha cinza sólida
+
