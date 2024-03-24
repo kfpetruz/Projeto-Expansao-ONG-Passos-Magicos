@@ -11,13 +11,29 @@ from sklearn.metrics import adjusted_rand_score, silhouette_score
 
 # Configuração da página
 st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= '🤝')
+cor_estilizada = 'color: #1A4A6A;'
+fonte_negrito = 'font-weight: bold;'
+fonte_escura = 'color: #292F39;'
 
 # Título da página
-st.title('Projeto de expansão 🤝')
+st.markdown(f"<h1 style='{fonte_escura} {fonte_negrito}'> Projeto de expansão 🤝 </h1>", unsafe_allow_html=True)
+
+# Estilo CSS para a barra lateral
+sidebar_style = """
+    <style>
+        .sidebar .sidebar-content {
+            color: white;
+        }
+    </style>
+"""
+st.markdown(sidebar_style, unsafe_allow_html=True)
+
+# Adicionando conteúdo à barra lateral
+st.sidebar.title("Barra Lateral")
+st.sidebar.write("Este é um exemplo de conteúdo na barra lateral do Streamlit.")
+
 
 #PREPARAÇÃO DOS DADOS
-cor_estilizada = 'color: #0145AC;'
-fonte_negrito = 'font-weight: bold;'
 dados_externos = pd.read_excel('tb_populacao_economia_idade_distancia.xlsx')
 
 dados_externos['percent_elegiveis_6a19a'] = dados_externos['Pessoas de 6 a 19 anos'] / dados_externos['População no último censo'] * 100
@@ -44,11 +60,11 @@ dados_model_math[variaveis_normalizar_inversamente] = 1 - scaler.fit_transform(d
 ## VISUALIZAÇÃO NO STREAMLIT
 aba1, aba2= st.tabs(['Modelo', 'Propostas'])
 with aba1:
-    st.markdown('<p style="text-align: justify;"> Para auxiliar a ONG em seu desejo de expandir as atividades, ampliando a capacidade, para que ela possa atender e mudar a vida de centenas de crianças e adolescentes como vem fazendo há anos na cidade de Embu-Guaçu, foram criados dois modelos, levando em consideração dados <strong> econômicos </strong>, de <strong> população </strong>, <strong> educacionais </strong>, com base no último censo, e de <strong> distância da cidade sede</strong>  com base numa biblioteca geográfica do Python.</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Para auxiliar a ONG em seu desejo de expandir as atividades, ampliando a capacidade, para que ela possa atender e mudar a vida de centenas de crianças e adolescentes como vem fazendo há anos na cidade de Embu-Guaçu, foram criados dois modelos, levando em consideração dados <strong> econômicos </strong>, de <strong> população </strong>, <strong> educacionais </strong>, com base no último censo, e de <strong> distância da cidade sede</strong>  com base numa biblioteca geográfica do Python.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify;"> Em ambos os modelos foram consideradas as 645 cidades do estado de São Paulo, a fim de propôr as <strong> potenciais cidades </strong> onde a ONG poderá investir seus esforços.</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Em ambos os modelos foram consideradas as 645 cidades do estado de São Paulo, a fim de propôr as <strong> potenciais cidades </strong> onde a ONG poderá investir seus esforços.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify;"> Nesta análise, certos campos, como salário, têm um impacto maior no algoritmo quando são menores. Em termos de peso, isso significa que, quanto menor o salário, mais significativo é o efeito dele na análise.</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Nesta análise, certos campos, como salário, têm um impacto maior no algoritmo quando são menores. Em termos de peso, isso significa que, quanto menor o salário, mais significativo é o efeito dele na análise.</p>', unsafe_allow_html = True)
     
     st.markdown(f"<h3 style='{cor_estilizada}'> Variáveis analisadas separadas por efeito </h3>", unsafe_allow_html=True)
     pesos = {
@@ -66,9 +82,9 @@ with aba1:
     st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
 
     #ESCOLHA DAS PRIORIDADES
-    st.markdown('<p style="text-align: justify;"> Abaixo, os administradores da ONG têm a opção de selecionar a relevância atribuída a cada uma das variáveis nas análises. Podem testar diferentes graus de importância e realizar uma variedade de testes conforme desejarem.</p>', unsafe_allow_html = True) 
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Abaixo, os administradores da ONG têm a opção de selecionar a relevância atribuída a cada uma das variáveis nas análises. Podem testar diferentes graus de importância e realizar uma variedade de testes conforme desejarem.</p>', unsafe_allow_html = True) 
     
-    st.markdown('<p style="text-align: justify;"> Escolha a <strong> relevância das variáveis, de 1 a 6 </strong>. Quanto maior o número, maior o peso. Os pesos escolhidos nesta seção se aplicam tanto ao <strong> Modelo Matemático </strong> quanto ao <strong> Modelo K-means </strong></p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Escolha a <strong> relevância das variáveis, de 1 a 6 </strong>. Quanto maior o número, maior o peso. Os pesos escolhidos nesta seção se aplicam tanto ao <strong> Modelo Matemático </strong> quanto ao <strong> Modelo K-means </strong></p>', unsafe_allow_html = True)
     col1, col2 = st.columns(2)
     with col1:
         # Pesos
@@ -104,7 +120,7 @@ with aba1:
 
         #Mostra o dataframe gerado pelo modelo
     quantidade_cidades = st.number_input("Escolha a quantidade de cidades que deseja visualizar, entre as melhores classificadas, para potencial expansão das atividades da ONG:", min_value=1, value=15, max_value=645)
-    st.markdown('<p style="text-align: justify;"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são:</p>', unsafe_allow_html = True) 
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são:</p>', unsafe_allow_html = True) 
     st.dataframe(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
 
     st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
@@ -134,13 +150,13 @@ with aba1:
     grupo_embu = dados_externos_model_kmeans[dados_externos_model_kmeans['municipio'] == 'Embu-Guaçu']['grupos'].values
     qtd_cidades_grupo_embu = dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].shape[0]
 
-    st.markdown(f'<p style="text-align: justify;"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são as <strong> {qtd_cidades_grupo_embu} </strong> listadas abaixo:</p>', unsafe_allow_html = True) 
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são as <strong> {qtd_cidades_grupo_embu} </strong> listadas abaixo:</p>', unsafe_allow_html = True) 
 
     st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
 
 
 with aba2:
-    st.markdown('<p style="text-align: justify;"> Após analisar os dados históricos da ONG, dados da PEDE (Pesquisa de Desenvolvimento Educacional), os recursos digitais utilizados atualmente pela ONG, dados da economia, população e educacionais de Embu-Guaçu e demais cidades do estado de São Paulo, listamos as melhores propostas escolhidas para a ONG concretizar seu plano de expansão.</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Após analisar os dados históricos da ONG, dados da PEDE (Pesquisa de Desenvolvimento Educacional), os recursos digitais utilizados atualmente pela ONG, dados da economia, população e educacionais de Embu-Guaçu e demais cidades do estado de São Paulo, listamos as melhores propostas escolhidas para a ONG concretizar seu plano de expansão.</p>', unsafe_allow_html = True)
 
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<h5 style="{cor_estilizada}"> Expandir a partir das cidades selecionadas no Modelo Matemático ou Modelo K-means </h5>', unsafe_allow_html=True)
@@ -149,14 +165,14 @@ with aba2:
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<h5 style="{cor_estilizada}"> Disponibilizar meios de doação por boleto, cartão de crédito, pix, entre outros, diretamente pelo site </h5>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: justify;"> Na era em que tudo é feito às pressas, acreditamos que haveria um ganho ao incluir a possibilidade de doação direto no site, através de meios de doação de autoatendimento, tirando a necessidade de a pessoa doadora ter que entrar em contato com a ONG, aguardar atendimento, tendo assim até mesmo a possibilidade de a pessoa desistir da doação nesse meio tempo. </p>', unsafe_allow_html = True)
-    st.markdown('<p style="text-align: justify;"> É sabido que é necessário contrato com adquirentes de cartão de crédito, bancos, entre outros intermediadores, para viabilizar algo do tipo, porém, vemos uma possibilidade de ganho nessa frente, especialmente quando se fala de pequenos doadores. </p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> É sabido que é necessário contrato com adquirentes de cartão de crédito, bancos, entre outros intermediadores, para viabilizar algo do tipo, porém, vemos uma possibilidade de ganho nessa frente, especialmente quando se fala de pequenos doadores. </p>', unsafe_allow_html = True)
 
     
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
-    st.markdown(f'<h5 style="{cor_estilizada}"> Inclusão de opção de valores pré-cadastrados</h5>', unsafe_allow_html=True)
+    st.markdown(f'<h5 style="{cor_estilizada} {fonte_escura}"> Inclusão de opção de valores pré-cadastrados</h5>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: justify;"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify;"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG.</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG.</p>', unsafe_allow_html = True)
     st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True) #Linha cinza sólida
 
     #FORMULÁRIO DE DOAÇÃO
@@ -166,7 +182,7 @@ with aba2:
 
 
     # Valores de doação em botões e opção de inserir outros valores
-    st.markdown("<h4> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='{fonte_negrito}'> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
     valores_doacao = [10, 20, 50, 100, 200, "Outro"]
     valor_doacao = st.radio("Escolha o valor:", valores_doacao)
     if valor_doacao == "Outro":
@@ -176,11 +192,11 @@ with aba2:
     recorrencia = st.radio("Deseja fazer uma doação única ou recorrente?", ["Única", "Recorrente"])
 
     # Formas de pagamento
-    st.markdown("<h4> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='{fonte_negrito}'> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
     forma_pagamento = st.selectbox("Forma de pagamento:", ["Cartão de crédito", "Boleto bancário", "PIX"])
 
     # Formulário para preencher dados pessoais e de pagamento
-    st.markdown("<h4> Preencha seus dados: </h4>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='{fonte_negrito}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
     nome = st.text_input("Nome completo:")
     email = st.text_input("Email:")
     endereco = st.text_input("Endereço:")
