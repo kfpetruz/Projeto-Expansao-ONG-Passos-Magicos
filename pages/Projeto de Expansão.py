@@ -75,7 +75,7 @@ with aba1:
         #st.markdown('<p>Escolha o peso que a <strong> distância </strong> que a cidade tem de Embu-Guaçu terá (de 1 a 6):</p>', unsafe_allow_html = True)
         prioridade_distancia_embu = st.number_input("Distância que a cidade tem de Embu-Guaçu:", min_value=1, value=6, max_value=6)
         prioridade_salario_medio = st.number_input("Salário médio mensal dos trabalhadores:", min_value=1, value=5, max_value=6)
-        prioridade_pib_per_capita = st.number_input("Pib per capita:", min_value=1, value=4, max_value=6)
+        prioridade_pib_per_capita = st.number_input("PIB per capita:", min_value=1, value=4, max_value=6)
     with col2:
         prioridade_percent_idade_elegivel = st.number_input("Percentual de crianças e jovens em idade elegível :", min_value=1, value=3, max_value=6)
         prioridade_percent_matriculados = st.number_input("Percentual de matriculados em idade elegível:", min_value=1, value=2, max_value=6)
