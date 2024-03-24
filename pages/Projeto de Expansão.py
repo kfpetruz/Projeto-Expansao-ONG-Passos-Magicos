@@ -95,7 +95,7 @@ with aba1:
 
     #MODELO MATEMÁTICO
     st.markdown(f"<h3 style='{cor_estilizada}'> Modelo Matemático </h3>", unsafe_allow_html=True)
-    st.markdown('<p style="text-align: justify;"> O modelo matemático calcula o valor das variáveis de acordo com os pesos escolhidos acima e dele extraímos o coeficiente chamado "resultado_modelo_expansao", que pode ser visto ao final da tabela. Quanto maior o resultado, maior o indicador de que a ONG deve expandir suas atividades para a respectiva cidade. </p>', unsafe_allow_html = True) 
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> O modelo matemático calcula o valor das variáveis de acordo com os pesos escolhidos acima e dele extraímos o coeficiente chamado "resultado_modelo_expansao", que pode ser visto ao final da tabela. Quanto maior o resultado, maior o indicador de que a ONG deve expandir suas atividades para a respectiva cidade. </p>', unsafe_allow_html = True) 
 
         # Soma ponderada
     dados_model_math['resultado_modelo_expansao'] = dados_model_math[['distancia_de_embu_guacu', 'salario_medio_trabalhadores', 'pib_per_capita', 'percent_elegiveis_6a19a', 'percent_matriculados_6a19a', 'densidade_demografica_km2']].sum(axis=1)
@@ -107,7 +107,20 @@ with aba1:
         #Mostra o dataframe gerado pelo modelo
     quantidade_cidades = st.number_input("Escolha a quantidade de cidades que deseja visualizar, entre as melhores classificadas, para potencial expansão das atividades da ONG:", min_value=1, value=15, max_value=645)
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são:</p>', unsafe_allow_html = True) 
-    st.dataframe(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
+    #st.dataframe(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
+
+    df_style = """
+        <style>
+            .dataframe td {
+                color: #292F39;
+            }
+        </style>
+    """
+
+    # Exibir DataFrame com estilo personalizado
+    st.markdown(df_style, unsafe_allow_html=True)
+    st.write(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
+
 
     st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
 
@@ -138,7 +151,11 @@ with aba1:
 
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são as <strong> {qtd_cidades_grupo_embu} </strong> listadas abaixo:</p>', unsafe_allow_html = True) 
 
-    st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
+    #st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
+
+    # Exibir DataFrame com estilo personalizado
+    st.markdown(df_style, unsafe_allow_html=True)
+    st.write(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
 
 
 with aba2:
@@ -159,7 +176,7 @@ with aba2:
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
 
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG.</p>', unsafe_allow_html = True)
-    st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True) #Linha cinza sólida
+    st.markdown("<hr style='border: 1px solid #1A4A6A;'>", unsafe_allow_html=True) #Linha cinza sólida
 
     #FORMULÁRIO DE DOAÇÃO
     st.markdown(f"<h2 style='{cor_estilizada}; text-align: center'><span style='{fonte_negrito}'>COMO DOAR?</span></h2>", unsafe_allow_html=True)
@@ -209,5 +226,5 @@ with aba2:
                 st.success(f"Obrigado por sua doação única de R${valor_doacao}! Seu boleto será enviado para o email {email}.")
             else:
                 st.success(f"Obrigado por sua doação recorrente de R${valor_doacao}! Seu boleto será enviado para o email {email}.")
-    st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True) #Linha cinza sólida
+    st.markdown("<hr style='border: 1px solid #1A4A6A;'>", unsafe_allow_html=True) #Linha cinza sólida
 
