@@ -158,7 +158,7 @@ def plotar_grafico(categorias_selecionadas):
 aba1, aba2, aba3 = st.tabs(['Sobre a ONG', 'Fatores de sucesso', 'Impacto Social'])
 with aba1:
 
-    st.markdown('<p style="text-align: justify;"> A Passos Mágicos é uma organização social, cujo objetivo é transformar a vida de crianças e adolescentes do Município de Embu-Guaçu, zona sul de São Paulo, em situação de vulnerabilidade social, através da educação.</p>', unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;'> A Passos Mágicos é uma organização social, cujo objetivo é transformar a vida de crianças e adolescentes do <span style='{fonte_negrito}'>município de Embu-Guaçu</span>, zona sul de São Paulo, em situação de vulnerabilidade social, através da educação.</p>", unsafe_allow_html = True)
     
     col1, col2, col3, col4 = st.columns(4)
     with col1: #utilizando a cláusula with, mas poderíamos escrever apenas "col1." antes da métrica
@@ -244,7 +244,6 @@ with aba2:
     with col2:
         st.markdown(f"<h2 style='{cor_estilizada}'>100</h2> <span style='{fonte_negrito}'>bolsistas em instituições de ensino particular</span>", unsafe_allow_html=True)
     with col3:
-        # 103
         st.markdown(f"<h2 style='{cor_estilizada}'>94</h2> <span style='{fonte_negrito}'>universitários em instituições de ensino superior</span>", unsafe_allow_html=True)
     with col4:
         st.markdown(f"<h2 style='{cor_estilizada}'>41</h2> <span style='{fonte_negrito}'>universitários formados</span>", unsafe_allow_html=True) 
@@ -266,15 +265,53 @@ with aba2:
     st.plotly_chart(grafico_duas_linhas_ponto(df_alunos_populacao['Ano'],df_alunos_populacao['Quantidade de alunos'],df_alunos_populacao['População do município'],df_alunos_populacao['Alunos/População'] ), use_container_width=True)
     
     st.markdown(f"<p style='text-align: justify;'> A equipe Passos Mágicos é formada por profissionais que têm em mente o objetivo de atuarem como agentes transformadores da vida de cada um dos alunos.</p>", unsafe_allow_html = True)
-    # Interface do usuário com multiselect (com alunos e professores pré-selecionados)
+   
     categorias_selecionadas = st.multiselect(
         'Selecione as categorias:',
         ['Professor','Psicóloga', 'Psicopedagoga', 'Psiquiatra', 'Assistente Social'],
-        default=['Professor','Psicóloga','Psicopedagoga', 'Psiquiatra', 'Assistente Social']  # Predefinindo Professor e Aluno como selecionados
+        default=['Professor','Psicóloga','Psicopedagoga', 'Psiquiatra', 'Assistente Social'] 
     )
 
     # Plotar gráfico com base nas categorias selecionadas
     plotar_grafico(categorias_selecionadas)
+
+    st.markdown(f"<p style='text-align: justify;'> Alunos graduados por instituição e curso (Base de dados de 2023):</p>", unsafe_allow_html = True)
+
+    cursos = [('Estácio de Sá', 'Design gráfico', 1), 
+             ('FIAP', 'Produção Multimídia', 2), 
+             ('FIAP', 'ADS', 12), 
+             ('FIAP', 'Sistema para Internet', 4), 
+             ('FIAP', 'Defesa Cibernética', 3), 
+             ('FIAP', 'Gestão da Tecnologia da Informação', 3), 
+             ('FIAP', 'Tecnologia em Banco de Dados', 3), 
+             ('FIAP', 'Jogos Digitais', 1),
+             ('Estácio de Sá', 'Direito', 1),
+             ('UNISA', 'Fisioterapia', 1),
+             ('Estácio de Sá', 'Engenharia Civil', 1),
+             ('FIAP', 'Inteligência Artificial', 2),
+             ('FIAP', 'Administração', 1),
+             ('UNISA', 'Ciências Biológicas', 2),
+             ('UNISA', 'Nutrição', 1),
+             ('UNISA', 'Enfermagem', 3)]
+    df_cursos = pd.DataFrame(cursos, columns=['Instituição', 'Curso', 'Quantidade'])
+
+
+    # Multiselect para selecionar instituições
+    instituicoes_selecionadas = st.multiselect('Selecione as instituições:', df_cursos['Instituição'].unique(),default=df_cursos['Instituição'].unique())
+
+    # Filtrar dataframe de acordo com as instituições selecionadas
+    df_filtrado = df_cursos[df_cursos['Instituição'].isin(instituicoes_selecionadas)]
+
+    # Criar gráfico Plotly
+    fig = px.bar(df_filtrado, x='Curso', y='Quantidade', color='Instituição', barmode='group')
+
+    # Atualizar layout do gráfico
+    fig.update_layout(title='Quantidade de Cursos por Instituição',
+                    xaxis_title='Curso',
+                    yaxis_title='Quantidade')
+
+    st.plotly_chart(fig,use_container_width=True)
+
 
 with aba3:
     
@@ -335,8 +372,8 @@ with aba3:
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     
     st.markdown(f"<p style='text-align: justify;''> Do total de alunos <span style='{fonte_negrito}'>distintos</span> da pesquisa, <span style='{fonte_negrito}'>{alunos_distintos_todos_anos}</span> estiveram presentes nos três anos consecutivos. Com base nesse resultado, para demonstrar a média da evolução do INDE (Índice de Desenvolvimento Educacional) anual e sua composição, serão considerados estes alunos.</p>", unsafe_allow_html = True)
-    st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>Composição do Índice de Desenvolvimento Educacional (INDE):</span></p>", unsafe_allow_html=True)
-
+    # st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>Composição do Índice de Desenvolvimento Educacional (INDE):</span></p>", unsafe_allow_html=True)
+    st.markdown(f"<h3 style='{cor_estilizada}'>Composição do Índice de Desenvolvimento Educacional (INDE)</h3>", unsafe_allow_html=True)
     inde = {
     'Fases 0 a 7': ['INDE = (IAN*0.1) + (IDA*0.2) + (IEG*0.2) + (IAA*O.1) + (IPS*0.1) + (IPP*0.1) + (IPV+0.2)'],
     'Fase 8': ['INDE = (IAN*0.1) + (IDA*0.4) + (IEG*0.2) + (IAA*O.1) + (IPS*0.2)'],
@@ -377,8 +414,9 @@ with aba3:
                     legend=dict(title=None))
     fig.update_xaxes(range=[min(media_por_ano['ANO']) - 0.1, max(media_por_ano['ANO'])+ 0.1])
     st.plotly_chart(fig, use_container_width=True)
-# --------------------------------------------------------------
-    st.markdown(f"<p style='text-align: justify;'> Para uma análise mais detalhada, é possível visualizar como cada aluno evoluiu ao longo dos três anos. Selecione o aluno e o(s) indicador(es) que deseja analisar:</p>", unsafe_allow_html = True)
+
+    
+    st.markdown(f"<p style='text-align: justify;'> Para uma análise mais detalhada, é possível visualizar como cada aluno evoluiu ao longo dos três anos. O nome do aluno foi substituido por um número, para preservar a sua identidade. Selecione o aluno e o(s) indicador(es) que deseja analisar:</p>", unsafe_allow_html = True)
     
     dados_alunos_indicadores = dados_alunos_todos_anos[['ANO','NOME','INDE', 'IAN', 'IDA', 'IEG', 'IAA', 'IPS', 'IPP','IPV']]
     dados_alunos_indicadores = dados_alunos_indicadores.sort_values(by=['ANO', 'NOME'])
@@ -406,8 +444,9 @@ with aba3:
                     legend=dict(title=None))
     st.plotly_chart(fig, use_container_width=True)
 
-# ------------------------
-    st.markdown(f"<p style='text-align: justify;'> A seguir, serão realizadas análises da quantidade total de respostas em cada ano. Alguns anos podem não conter informações específicas no gráfico, dependendo da seleção feita.</p>", unsafe_allow_html = True)
+
+    st.markdown(f"<h3 style='{cor_estilizada}'>Análises segmentadas por ano</h3>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align: justify;'> A seguir, serão realizadas análises sobre as respostas de cada ano. Algumas informações podem estar ausentes no ano selecionado devido à sua inexistência na base de dados. Portanto, os gráficos só serão exibidos se os dados correspondentes estiverem presentes.</p>", unsafe_allow_html = True)
     colunas_para_remover = ['DEFASAGEM_x', 'DEFASAGEM_y']
     dados_alunos_2020 = dados_alunos_2020.drop(colunas_para_remover, axis=1)
     dados_alunos_2021 = dados_alunos_2021.drop(colunas_para_remover, axis=1)
@@ -432,7 +471,7 @@ with aba3:
     dados_filtrados = agrupado_pedra_ponto_merge[agrupado_pedra_ponto_merge['ANO'] == ano_selecionado]
     dados_filtrados = dados_filtrados.sort_values(by='Alunos por pedra', ascending = False)
     fig = px.bar(dados_filtrados, x='PEDRA', y=['Alunos por pedra', 'Alunos que tiveram Ponto de Virada'],
-                title=f'Quantidade de alunos tiveram Ponto de Virada por Tipo de Pedra no Ano {ano_selecionado}',
+                title=f'Quantidade de alunos que tiveram Ponto de Virada Positivo por Tipo de Pedra no Ano {ano_selecionado}',
                 barmode='group')
     fig.update_layout(
                     yaxis_title='Quantidade de alunos',
@@ -444,8 +483,8 @@ with aba3:
     dados_totais_concat['FASE'] = dados_totais_concat['FASE'].fillna('Indefinido')
     dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('ERRO', 'Indefinido')
     dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].fillna('Indefinido')
-    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('ALFA  (2o e 3o ano)', 'ALFA  (2º e 3º ano)')
-    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('ALFA', 'Alfa')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('ALFA  (2o e 3o ano)', 'Alfabetização  (2º e 3º ano)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('ALFA  (2º e 3º ano)', 'Alfabetização  (2º e 3º ano)')
     dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 1 (4o ano)', 'Fase 1 (4º ano)')
     dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 2 (5o e 6o ano)', 'Fase 2 (5º e 6º ano)')
     dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 3 (7o e 8o ano)', 'Fase 3 (7º e 8º ano)')
@@ -454,7 +493,7 @@ with aba3:
     dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 6 (2o EM)', 'Fase 6 (2º EM)')
     dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 7 (3o EM)', 'Fase 7 (3º EM)')
     dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 8 (Universitários)', 'Fase 8 (Universitários)')
-    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('0.0', 'Alfa  (2º e 3º ano)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('0.0', 'Alfabetização  (2º e 3º ano)')
     dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('1.0', 'Fase 1 (4º ano)')
     dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('2.0', 'Fase 2 (5º e 6º ano)')
     dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('3.0', 'Fase 3 (7º e 8º ano)')
@@ -480,10 +519,10 @@ with aba3:
                         xaxis_title='Fase',
                         legend=dict(title=None))
         st.plotly_chart(fig, use_container_width=True)
-#------------------------------------------------
+
     if (ano_selecionado == '2022'):
-        dados_totais_concat['NOTA_ING'] .replace('', np.nan, inplace=True)
-        dados_totais_concat['NOTA_ING'] .fillna(np.nan, inplace=True)
+        dados_totais_concat['NOTA_ING'].replace('', np.nan, inplace=True)
+        dados_totais_concat['NOTA_ING'].fillna(np.nan, inplace=True)
         dados_totais_concat['NOTA_ING'] = dados_totais_concat['NOTA_ING'].fillna(0)
         dados_totais_concat['NOTA_MAT'] = dados_totais_concat['NOTA_MAT'].fillna(0)
         dados_totais_concat['NOTA_PORT'] = dados_totais_concat['NOTA_PORT'].fillna(0)
@@ -499,23 +538,53 @@ with aba3:
         df_filtrado = dados_fase_materias_media[dados_fase_materias_media['ANO'] == ano_selecionado]
 
         fig = px.line(df_filtrado, x='FASE', y=['Inglês', 'Matemática', 'Português'], 
-                    title=f'Notas por Fase - Ano {ano_selecionado}',
+                    title=f'Média das notas na matérias por Fase - Ano {ano_selecionado}',
                     labels={'value': 'Nota', 'variable': 'Nota'},
                     color_discrete_map={'Inglês': 'blue', 'Matemática': 'green', 'Português': 'red'})
+        for trace in fig.data:
+            trace.update(mode='lines+markers')
         fig.update_layout(
                         yaxis_title='Média das notas',
                         xaxis_title='Fase',
                         legend=dict(title=None))
-        # Exibindo o gráfico
-        st.plotly_chart(fig)
 
+        st.plotly_chart(fig, use_container_width=True)
 
+    if (ano_selecionado == '2020' or ano_selecionado == '2022'):
+        dados_totais_concat['DESTAQUE_IDA'] = dados_totais_concat['DESTAQUE_IDA'].fillna('Indefinido')
+        dados_totais_concat['DESTAQUE_IDA'] = dados_totais_concat['DESTAQUE_IDA'].replace('D302', 'Indefinido')
+        dados_totais_concat['DESTAQUE_IEG'] = dados_totais_concat['DESTAQUE_IEG'].fillna('Indefinido')
+        dados_totais_concat['DESTAQUE_IEG'] = dados_totais_concat['DESTAQUE_IEG'].replace('D301', 'Indefinido')
+        dados_totais_concat['DESTAQUE_IPV'].replace('', np.nan, inplace=True)
+        dados_totais_concat['DESTAQUE_IPV'].fillna(np.nan, inplace=True)
+        dados_totais_concat['DESTAQUE_IPV'] = dados_totais_concat['DESTAQUE_IPV'].fillna('Indefinido')
+        dados_totais_concat['DESTAQUE_IPV'] = dados_totais_concat['DESTAQUE_IPV'].replace('D302', 'Indefinido')
+        # dados_qualitativos = dados_totais_concat[['ANO', 'DESTAQUE_IDA', 'DESTAQUE_IEG', 'DESTAQUE_IPV']]
+        destaque_ida = dados_totais_concat.groupby(['ANO', 'DESTAQUE_IDA']).size().reset_index(name='Contagem')
+        destaque_ieg = dados_totais_concat.groupby(['ANO', 'DESTAQUE_IEG']).size().reset_index(name='Contagem')
+        destaque_ipv = dados_totais_concat.groupby(['ANO', 'DESTAQUE_IPV']).size().reset_index(name='Contagem')
 
+        destaque_selecionado = st.selectbox('Selecione o destaque observado sobre os alunos:', ['IDA','IEG','IPV'])
+        def grafico_barra_um_valor(dados, x, y, xaxis, yaxis, titulo):
+            fig = px.bar(dados, x=x, y=y)
 
-# OK - INDE -> Métricas que compõe o INDE + INDE - Colocar o descritivo do racional - Multiseleção
-# OK - Pedra -> Gráfico de barras (Ponto de virada por pedra)
-# Fazer um gráfico por matéria quebrado por fase
-# OK - Total de alunos por fase x Fase ideal - Filtro por ano (Total de alunos por fase x Fase ideal para o aluno) 
+            # Atualizar layout do gráfico
+            fig.update_layout(title=titulo,
+                            xaxis_title=xaxis,
+                            yaxis_title=yaxis)
+            return st.plotly_chart(fig,use_container_width=True)
+        
+        if destaque_selecionado == 'IDA':
+            destaque_ida.sort_values(by='Contagem',ascending = False, inplace = True)
+            grafico_barra_um_valor(destaque_ida[destaque_ida['ANO']==ano_selecionado], 'DESTAQUE_IDA', 'Contagem', 'Destaques observados', 'Quantidade de alunos', 'Destaques qualitativos observados pelos mestres sobre os alunos  referente ao Indicador de Aprendizagem')
+        elif destaque_selecionado == 'IEG':
+            destaque_ieg.sort_values(by='Contagem',ascending = False, inplace = True)
+            grafico_barra_um_valor(destaque_ieg[destaque_ieg['ANO']==ano_selecionado], 'DESTAQUE_IEG', 'Contagem', 'Destaques observados', 'Quantidade de alunos', 'Destaques qualitativos observados pelos mestres sobre os alunos  referente ao Indicador de Engajamento')
+        elif destaque_selecionado == 'IPV':
+            destaque_ipv.sort_values(by='Contagem',ascending = False, inplace = True)
+            grafico_barra_um_valor(destaque_ipv[destaque_ipv['ANO']==ano_selecionado], 'DESTAQUE_IPV', 'Contagem', 'Destaques observados', 'Quantidade de alunos', 'Destaques qualitativos observados pelos mestres sobre os alunos  referente ao Indicador de Ponto de Virada')
+
+#  Destaques qualitativos observados pelos mestres sobre os alunos 
 
 # 1ª aba - História da Passos(Overview), Análise Dados Históricos e Resultado das ações na cidade - 
 # 2ª aba - Fatores-Chave de Sucesso - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers - Colocar descrições com cores destaques 
