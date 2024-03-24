@@ -110,7 +110,7 @@ with aba1:
 
     #MODELO UTILIZANDO ALGORITMO K-MEANS
     st.markdown(f"<h3 style='{cor_estilizada}'> Modelo K-means </h3>", unsafe_allow_html=True)
-    st.markdown('<p style="text-align: justify;"> O modelo K-means também usa os pesos definidos acima pelos administradores da ONG, porém, neste modelo, é feito um cáclculo de aproximação dos indicadores das cidades do estado de São Paulo com os indicadores da cidade de Embu-Guaçu. Assim, as cidades mais semelhantes (de acordo com os indicadores) ficarão no mesmo grupo que a cidade de Embu-Guaçu, e, portanto, recomenda-se a expansão a partir dessas cidades.</p>', unsafe_allow_html = True) 
+    st.markdown('<p style="text-align: justify;"> O modelo K-means também usa os pesos definidos acima pelos administradores da ONG, porém, neste modelo, é feito um cálculo de aproximação dos indicadores das cidades do estado de São Paulo com os indicadores da cidade de Embu-Guaçu. Assim, as cidades mais semelhantes (de acordo com os indicadores) ficarão no mesmo grupo que a cidade de Embu-Guaçu, e, portanto, recomenda-se a expansão a partir dessas cidades.</p>', unsafe_allow_html = True) 
 
     dados_model_kmeans = dados_model_math.drop('resultado_modelo_expansao', axis = 1)
     kmeans = KMeans(n_clusters=6,random_state=0) #definindo os hiperparametros do algoritmo (definir o número de grupo = cluster)
@@ -133,21 +133,25 @@ with aba1:
     grupo_embu = dados_externos_model_kmeans[dados_externos_model_kmeans['municipio'] == 'Embu-Guaçu']['grupos'].values
     qtd_cidades_grupo_embu = dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].shape[0]
 
-    st.markdown(f'<p style="text-align: justify;"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são as {qtd_cidades_grupo_embu} listadas abaixo:</p>', unsafe_allow_html = True) 
+    st.markdown(f'<p style="text-align: justify;"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são as <strong> {qtd_cidades_grupo_embu} </strong> listadas abaixo:</p>', unsafe_allow_html = True) 
 
     st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
 
 
-
- 
-
 with aba2:
     st.title('Propostas para Expansão')
 
-    st.markdown('<p style="text-align: justify;"> Após analisar os dados históricos da ONG, dados da PEDE (Pesquisa de Desenvolvimento Educacional), os recursos digitais utilizados atualmente pela ONG, dados de economia, população e educacionais de Embu-Guaçu e demais cidades do estado de São Paulo, listamos as melhores propostas escolhidas para a ONG concretizar seu plano de expansão.</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;"> Após analisar os dados históricos da ONG, dados da PEDE (Pesquisa de Desenvolvimento Educacional), os recursos digitais utilizados atualmente pela ONG, dados da economia, população e educacionais de Embu-Guaçu e demais cidades do estado de São Paulo, listamos as melhores propostas escolhidas para a ONG concretizar seu plano de expansão.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify; font-weight: bold"> Expandir a partir das cidades selecionadas no Modelo Matemático ou Modelo K-means.</p>', unsafe_allow_html = True)
+    st.markdown(f'<h2 style="{cor_estilizada}"> Expandir a partir das cidades selecionadas no Modelo Matemático ou Modelo K-means </h2>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: justify;"> Acreditamos que, num plano de expansão de suas atividades, a ONG terá maior impacto social e chance de sucesso ao escolher iniciar pelas cidades selecionadas nos modelos Matemático ou K-means, pois as cidades ali selecionadas, além de serem mais carentes de ações como as da ONG, têm um perfil semelhante ao que a ONG está habituada a atender.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify; font-weight: bold"> Disponibilizar meios de doação por boleto, cartão de crédito, pix, entre outros meios, direto pelo site e com possibilidade de recorrência. </p>', unsafe_allow_html = True)
+    st.markdown(f'<h2 style="{cor_estilizada}"> Disponibilizar meios de doação por boleto, cartão de crédito, pix, entre outros meios, direto pelo site e com possibilidade de recorrência </h2>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: justify;"> Na era em que tudo é feito às pressas, acreditamos que haveria um ganho ao incluir a possibilidade de doação direto no site, através de meios de doação de autoatendimento, tirando a necessidade de a pessoa doadora ter que entrar em contato com a ONG, aguardar atendimento, tendo assim até mesmo a possibilidade de a pessoa desistir da doação nesse meio tempo. </p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;"> É sabido que é necessário contrato com adquirentes de cartão de crédito, bancos, entre outros intermediadores, para viabilizar algo do tipo, porém, vemos uma possibilidade de ganho nessa frente, especialmente quendo se fala de pequenos doadores e até doadores que queiram doar de forma recorrente. </p>', unsafe_allow_html = True)
+    st.image('\img\formas_doacao.png')
     
+    
+    st.markdown(f'<h2 style="{cor_estilizada}"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até mesmo de forma recorrente. </h2>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: justify; font-weight: bold"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente.</p>', unsafe_allow_html = True)
+    st.image('\img\valores_pre_cadastrados.png')
