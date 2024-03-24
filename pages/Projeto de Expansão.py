@@ -8,6 +8,7 @@ from matplotlib import colors
 from sklearn.preprocessing import StandardScaler, MinMaxScaler #Feature Engineer
 from sklearn.cluster import KMeans # Algoritmo de Agrupamento
 from sklearn.metrics import adjusted_rand_score, silhouette_score
+from pandas import DataFrame, Styler
 
 # Configuração da página
 st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= '🤝')
@@ -107,19 +108,10 @@ with aba1:
         #Mostra o dataframe gerado pelo modelo
     quantidade_cidades = st.number_input("Escolha a quantidade de cidades que deseja visualizar, entre as melhores classificadas, para potencial expansão das atividades da ONG:", min_value=1, value=15, max_value=645)
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são:</p>', unsafe_allow_html = True) 
+    
     dados_externos_model_math = pd.DataFrame(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
-
-    df_style = """
-        <style>
-            .dataframe td {
-                color: black;
-            }
-        </style>
-    """
-
-    # Exibir DataFrame com estilo personalizado
-    st.markdown(df_style, unsafe_allow_html=True)
-    st.write(dados_externos_model_math)
+    dados_externos_model_math = dados_externos_model_math.style.set_properties(**{'color': '#292F39'})
+    st.write(dados_externos_model_math.to_html(), unsafe_allow_html=True)
 
 
     st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
@@ -154,10 +146,8 @@ with aba1:
     #st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
 
     dados_externos_model_kmeans = pd.DataFrame(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
-
-    # Exibir DataFrame com estilo personalizado
-    st.markdown(df_style, unsafe_allow_html=True)
-    st.write(dados_externos_model_kmeans)
+    dados_externos_model_kmeans = dados_externos_model_kmeans.style.set_properties(**{'color': '#292F39'})
+    st.write(dados_externos_model_kmeans.to_html(), unsafe_allow_html=True)
 
 
 with aba2:
