@@ -22,7 +22,7 @@ dados = [(2016, 70), (2017, 300), (2018, 550), (2019, 812), (2020, 841), (2021, 
 linha_do_tempo_ong = pd.DataFrame(dados, columns=['Ano', 'Quantidade de alunos'])
 
 
-dados_estimados = pd.read_csv('Base de dados\\populacao_estimativa_2001_2021.csv',sep = ';', encoding='utf-8-sig')
+dados_estimados = pd.read_csv('populacao_estimativa_2001_2021.csv',sep = ';', encoding='utf-8-sig')
 novos_nomes = dados_estimados.iloc[2]
 dados_estimados = dados_estimados.rename(columns=novos_nomes)
 dados_estimados.columns = [str(col).replace('.0', '') for col in dados_estimados.columns]
