@@ -44,17 +44,9 @@ aba1, aba2= st.tabs(['Modelo', 'Propostas'])
 with aba1:
     st.markdown('<p style="text-align: justify;"> Para auxiliar a ONG em seu desejo de expandir as atividades, ampliando a capacidade, para que ela possa atender e mudar a vida de centenas de crianças e adolescentes como vem fazendo há anos na cidade de Embu-Guaçu, foram criados dois modelos, levando em consideração dados <strong> econômicos </strong>, de <strong> população </strong>, <strong> educacionais </strong> e de <strong> distância da cidade sede </strong>.</p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify;"> Em ambos os modelos foram consideradas as 645 cidades do estado de São Paulo e atribuídos pesos aos seus indicadores, com base no último censo geográfico, por ordem de prioridade.</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;"> Em ambos os modelos foram consideradas as 645 cidades do estado de São Paulo, com base no último censo geográfico.</p>', unsafe_allow_html = True)
 
-    # st.markdown('<p style="text-align: justify;"> <strong> Quanto menor, maior o peso: </strong> </p>', unsafe_allow_html = True)
-    # st.markdown('- <p style="text-align: justify;"> Salário médio dos trabalhadores formais;</p>', unsafe_allow_html = True)
-    # st.markdown('- <p style="text-align: justify;"> Índice de desenvolvimento humano municipal (IDHM);</p>', unsafe_allow_html = True)
-    # st.markdown('- <p style="text-align: justify;"> PIB per capita;</p>', unsafe_allow_html = True)
-    # st.markdown('- <p style="text-align: justify;"> Percentual de alunos matriculados;</p>', unsafe_allow_html = True)
-
-    # st.markdown('<p style="text-align: justify;"> <strong> Quanto maior, maior o peso: </strong> </p>', unsafe_allow_html = True)
-    # st.markdown('- <p style="text-align: justify;"> Densidade demográfica - habitantes/km²;</p>', unsafe_allow_html = True)
-    # st.markdown('- <p style="text-align: justify;"> Percentual de crianças e jovens em idade elegível;</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;"> Na análise, certos campos, como salário, têm um impacto maior quando são menores. Em termos de peso, isso significa que, quanto menor o salário, mais significativo é o efeito na análise.</p>', unsafe_allow_html = True)
 
     pesos = {
     'Quanto menor, maior o peso': ['Salário médio dos trabalhadores formais; Índice de desenvolvimento humano municipal (IDHM); PIB per capita; Percentual de alunos matriculados;'],
@@ -165,7 +157,7 @@ with aba1:
 
     # Definindo a cor de fundo
     fig.patch.set_facecolor('#F2F2F2')
-    plt.show()
+    st.plotly_chart(fig)
 
 with aba2:
     st.title('Propostas para Expansão')
