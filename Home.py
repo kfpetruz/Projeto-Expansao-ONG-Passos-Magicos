@@ -372,7 +372,7 @@ with aba3:
         trace.update(mode='lines+markers')
     fig.update_layout(title='Média dos indicadores por ano',
                     xaxis_title='Ano',
-                    yaxis_title='Média da notas',
+                    yaxis_title='Média das notas',
                     xaxis=dict(tickmode='array', tickvals=media_por_ano['ANO'], ticktext=[str(i) for i in media_por_ano['ANO']]),
                     legend=dict(title=None))
     fig.update_xaxes(range=[min(media_por_ano['ANO']) - 0.1, max(media_por_ano['ANO'])+ 0.1])
@@ -407,7 +407,7 @@ with aba3:
     st.plotly_chart(fig, use_container_width=True)
 
 # ------------------------
-    st.markdown(f"<p style='text-align: justify;'> A seguir, serão realizadas análises da quantidade total de respostas em cada ano.</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;'> A seguir, serão realizadas análises da quantidade total de respostas em cada ano. Alguns anos podem não conter informações específicas no gráfico, dependendo da seleção feita.</p>", unsafe_allow_html = True)
     colunas_para_remover = ['DEFASAGEM_x', 'DEFASAGEM_y']
     dados_alunos_2020 = dados_alunos_2020.drop(colunas_para_remover, axis=1)
     dados_alunos_2021 = dados_alunos_2021.drop(colunas_para_remover, axis=1)
@@ -424,22 +424,90 @@ with aba3:
     agrupado_ponto.rename(columns={'Quantidade': 'Alunos que tiveram Ponto de Virada'}, inplace=True)
     agrupado_pedra_ponto_merge = pd.merge(agrupado_pedra, agrupado_ponto, on=['ANO', 'PEDRA'], how='left')
 
+    ano_selecionado = st.selectbox('Selecione o ano:', sorted(agrupado_pedra_ponto_merge['ANO'].unique(),reverse=True))
+
     st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'> A Classificação do aluno é baseado pelo número do INDE, sendo separado por nomes de Pedras:</span></p>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>Quartzo </span>- 2.405 a 5.506 <br> <span style='{fonte_negrito}'>Agata </span>- 5.506 a 6.868 <br><span style='{fonte_negrito}'>Ametista </span>-  6.868 a 8.230 <br><span style='{fonte_negrito}'>Topazio </span>- 8.230 a 9.294<br></p>", unsafe_allow_html = True)
 
-
-    ano_selecionado = st.selectbox('Selecione o ano:', sorted(agrupado_pedra_ponto_merge['ANO'].unique()))
     dados_filtrados = agrupado_pedra_ponto_merge[agrupado_pedra_ponto_merge['ANO'] == ano_selecionado]
     dados_filtrados = dados_filtrados.sort_values(by='Alunos por pedra', ascending = False)
     fig = px.bar(dados_filtrados, x='PEDRA', y=['Alunos por pedra', 'Alunos que tiveram Ponto de Virada'],
                 title=f'Quantidade de alunos tiveram Ponto de Virada por Tipo de Pedra no Ano {ano_selecionado}',
-                labels={'Alunos por pedra': 'Quantidade de Pedra', 'Alunos que tiveram Ponto de Virada': 'Quantidade de Ponto', 'PEDRA': 'Tipo de Pedra'},
                 barmode='group')
     fig.update_layout(
                     yaxis_title='Quantidade de alunos',
+                    xaxis_title='Tipo de pedra',
                     legend=dict(title=None))
     st.plotly_chart(fig, use_container_width=True)
 
+
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].fillna('Indefinido')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('ERRO', 'Indefinido')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].fillna('Indefinido')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('ALFA  (2o e 3o ano)', 'ALFA  (2º e 3º ano)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('ALFA', 'Alfa')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 1 (4o ano)', 'Fase 1 (4º ano)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 2 (5o e 6o ano)', 'Fase 2 (5º e 6º ano)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 3 (7o e 8o ano)', 'Fase 3 (7º e 8º ano)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 4 (9o ano)', 'Fase 4 (9º ano)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 5 (1o EM)', 'Fase 5 (1º EM)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 6 (2o EM)', 'Fase 6 (2º EM)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 7 (3o EM)', 'Fase 7 (3º EM)')
+    dados_totais_concat['NIVEL_IDEAL'] = dados_totais_concat['NIVEL_IDEAL'].replace('Nível 8 (Universitários)', 'Fase 8 (Universitários)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('0.0', 'Alfa  (2º e 3º ano)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('1.0', 'Fase 1 (4º ano)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('2.0', 'Fase 2 (5º e 6º ano)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('3.0', 'Fase 3 (7º e 8º ano)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('4.0', 'Fase 4 (9º ano)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('5.0', 'Fase 5 (1º EM)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('6.0', 'Fase 6 (2º EM)')
+    dados_totais_concat['FASE'] = dados_totais_concat['FASE'].replace('7.0', 'Fase 7 (3º EM)')
+    
+    dados_fase_nivel= dados_totais_concat[['ANO','FASE','NIVEL_IDEAL']]
+    
+    dados_fase = dados_fase_nivel.groupby(['ANO', 'FASE']).size().reset_index(name='Quantidade real por fase')
+    dados_nivel = dados_fase_nivel.groupby(['ANO', 'NIVEL_IDEAL']).size().reset_index(name='Quantidade ideal por fase')
+    dados_nivel.rename(columns={'NIVEL_IDEAL': 'FASE'}, inplace=True)
+    dados_fase_nivel = pd.merge(dados_nivel, dados_fase, on=['ANO', 'FASE'], how='left')
+
+    if (ano_selecionado == '2021' or ano_selecionado == '2022'):
+        dados_filtrados = dados_fase_nivel[dados_fase_nivel['ANO'] == ano_selecionado]
+        fig = px.bar(dados_filtrados, x='FASE', y=['Quantidade real por fase', 'Quantidade ideal por fase'],
+                    title=f'Quantidade de alunos real e ideal por fase {ano_selecionado}',
+                    barmode='group')
+        fig.update_layout(
+                        yaxis_title='Quantidade de alunos',
+                        xaxis_title='Fase',
+                        legend=dict(title=None))
+        st.plotly_chart(fig, use_container_width=True)
+#------------------------------------------------
+    if (ano_selecionado == '2022'):
+        dados_totais_concat['NOTA_ING'] .replace('', np.nan, inplace=True)
+        dados_totais_concat['NOTA_ING'] .fillna(np.nan, inplace=True)
+        dados_totais_concat['NOTA_ING'] = dados_totais_concat['NOTA_ING'].fillna(0)
+        dados_totais_concat['NOTA_MAT'] = dados_totais_concat['NOTA_MAT'].fillna(0)
+        dados_totais_concat['NOTA_PORT'] = dados_totais_concat['NOTA_PORT'].fillna(0)
+        dados_fase_materias= dados_totais_concat[['ANO', 'FASE', 'NOTA_ING','NOTA_MAT','NOTA_PORT']]
+        dados_fase_materias['NOTA_ING'] = pd.to_numeric(dados_fase_materias['NOTA_ING'], errors='coerce')
+        dados_fase_materias['NOTA_MAT'] = pd.to_numeric(dados_fase_materias['NOTA_MAT'], errors='coerce')
+        dados_fase_materias['NOTA_PORT'] = pd.to_numeric(dados_fase_materias['NOTA_PORT'], errors='coerce')
+        dados_fase_materias.rename(columns={'NOTA_ING': 'Inglês','NOTA_MAT': 'Matemática','NOTA_PORT': 'Português'}, inplace=True)
+
+        dados_fase_materias_media = dados_fase_materias.groupby(['ANO','FASE']).mean().reset_index()
+        
+
+        df_filtrado = dados_fase_materias_media[dados_fase_materias_media['ANO'] == ano_selecionado]
+
+        fig = px.line(df_filtrado, x='FASE', y=['Inglês', 'Matemática', 'Português'], 
+                    title=f'Notas por Fase - Ano {ano_selecionado}',
+                    labels={'value': 'Nota', 'variable': 'Nota'},
+                    color_discrete_map={'Inglês': 'blue', 'Matemática': 'green', 'Português': 'red'})
+        fig.update_layout(
+                        yaxis_title='Média das notas',
+                        xaxis_title='Fase',
+                        legend=dict(title=None))
+        # Exibindo o gráfico
+        st.plotly_chart(fig)
 
 
 
@@ -447,7 +515,7 @@ with aba3:
 # OK - INDE -> Métricas que compõe o INDE + INDE - Colocar o descritivo do racional - Multiseleção
 # OK - Pedra -> Gráfico de barras (Ponto de virada por pedra)
 # Fazer um gráfico por matéria quebrado por fase
-# Total de alunos por fase x Fase ideal - Filtro por ano (Total de alunos por fase x Fase ideal para o aluno) 
+# OK - Total de alunos por fase x Fase ideal - Filtro por ano (Total de alunos por fase x Fase ideal para o aluno) 
 
 # 1ª aba - História da Passos(Overview), Análise Dados Históricos e Resultado das ações na cidade - 
 # 2ª aba - Fatores-Chave de Sucesso - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers - Colocar descrições com cores destaques 
