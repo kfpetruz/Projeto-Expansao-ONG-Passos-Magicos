@@ -170,5 +170,10 @@ with aba1:
 with aba2:
     st.title('Propostas para Expansão')
 
+    st.markdown('<p style="text-align: justify;"> Após analisar os dados históricos da ONG, dados da PEDE (Pesquisa de Desenvolvimento Educacional), os recursos digitais utilizados atualmente pela ONG, dados de economia, população e educacionais de Embu-Guaçu e demais cidades do estado de São Paulo, listamos as melhores propostas escolhidas para a ONG concretizar seu plano de expansão.</p>', unsafe_allow_html = True)
 
+    st.markdown('<p style="text-align: justify; font-weight: bold"> Expandir a partir das cidades selecionadas no Modelo Matemático ou Modelo K-means.</p>', unsafe_allow_html = True)
 
+    st.markdown('<p style="text-align: justify; font-weight: bold"> Disponibilizar meios de doação por boleto, cartão de crédito, pix, entre outros meios, direto pelo site e com possibilidade de recorrência. </p>', unsafe_allow_html = True)
+    
+    st.markdown('<p style="text-align: justify; font-weight: bold"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente.</p>', unsafe_allow_html = True)
