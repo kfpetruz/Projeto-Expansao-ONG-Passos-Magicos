@@ -16,3 +16,4 @@ google-auth-oauthlib==1.0.0
 google-cloud==0.34.0
 google-cloud-bigquery-storage==2.24.0
 google-cloud-core==2.4.1
+openpyxl==3.0.10
