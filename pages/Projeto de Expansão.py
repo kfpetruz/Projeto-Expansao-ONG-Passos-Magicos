@@ -112,7 +112,7 @@ with aba1:
     df_style = """
         <style>
             .dataframe td {
-                color: #292F39;
+                color: black;
             }
         </style>
     """
