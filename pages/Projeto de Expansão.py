@@ -139,19 +139,19 @@ with aba1:
 
 
 with aba2:
-    st.title('Propostas para Expansão')
-
     st.markdown('<p style="text-align: justify;"> Após analisar os dados históricos da ONG, dados da PEDE (Pesquisa de Desenvolvimento Educacional), os recursos digitais utilizados atualmente pela ONG, dados da economia, população e educacionais de Embu-Guaçu e demais cidades do estado de São Paulo, listamos as melhores propostas escolhidas para a ONG concretizar seu plano de expansão.</p>', unsafe_allow_html = True)
 
-    st.markdown(f'<h2 style="{cor_estilizada}"> Expandir a partir das cidades selecionadas no Modelo Matemático ou Modelo K-means </h2>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
+    st.markdown(f'<h5 style="{cor_estilizada}"> Expandir a partir das cidades selecionadas no Modelo Matemático ou Modelo K-means </h5>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: justify;"> Acreditamos que, num plano de expansão de suas atividades, a ONG terá maior impacto social e chance de sucesso ao escolher iniciar pelas cidades selecionadas nos modelos Matemático ou K-means, pois as cidades ali selecionadas, além de serem mais carentes de ações como as da ONG, têm um perfil semelhante ao que a ONG está habituada a atender.</p>', unsafe_allow_html = True)
 
-    st.markdown(f'<h2 style="{cor_estilizada}"> Disponibilizar meios de doação por boleto, cartão de crédito, pix, entre outros meios, direto pelo site e com possibilidade de recorrência </h2>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
+    st.markdown(f'<h5 style="{cor_estilizada}"> Disponibilizar meios de doação por boleto, cartão de crédito, pix, entre outros, diretamente pelo site </h5>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: justify;"> Na era em que tudo é feito às pressas, acreditamos que haveria um ganho ao incluir a possibilidade de doação direto no site, através de meios de doação de autoatendimento, tirando a necessidade de a pessoa doadora ter que entrar em contato com a ONG, aguardar atendimento, tendo assim até mesmo a possibilidade de a pessoa desistir da doação nesse meio tempo. </p>', unsafe_allow_html = True)
-    st.markdown('<p style="text-align: justify;"> É sabido que é necessário contrato com adquirentes de cartão de crédito, bancos, entre outros intermediadores, para viabilizar algo do tipo, porém, vemos uma possibilidade de ganho nessa frente, especialmente quendo se fala de pequenos doadores e até doadores que queiram doar de forma recorrente. </p>', unsafe_allow_html = True)
-    st.image('\img\formas_doacao.png')
+    st.markdown('<p style="text-align: justify;"> É sabido que é necessário contrato com adquirentes de cartão de crédito, bancos, entre outros intermediadores, para viabilizar algo do tipo, porém, vemos uma possibilidade de ganho nessa frente, especialmente quando se fala de pequenos doadores. </p>', unsafe_allow_html = True)
+    st.image("https://thumbs2.imgbox.com/80/53/UV38xRlO_t.png")
     
-    
-    st.markdown(f'<h2 style="{cor_estilizada}"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até mesmo de forma recorrente. </h2>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: justify; font-weight: bold"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente.</p>', unsafe_allow_html = True)
-    st.image('\img\valores_pre_cadastrados.png')
+    st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
+    st.markdown(f'<h5 style="{cor_estilizada}"> Inclusão de opção de valores pré-cadastrados</h5>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: justify;"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
+    st.image("https://thumbs2.imgbox.com/bc/19/Lgy8LcJR_t.png")
