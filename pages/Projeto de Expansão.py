@@ -107,7 +107,7 @@ with aba1:
         #Mostra o dataframe gerado pelo modelo
     quantidade_cidades = st.number_input("Escolha a quantidade de cidades que deseja visualizar, entre as melhores classificadas, para potencial expansão das atividades da ONG:", min_value=1, value=15, max_value=645)
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são:</p>', unsafe_allow_html = True) 
-    #st.dataframe(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
+    dados_externos_model_math = pd.DataFrame(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
 
     df_style = """
         <style>
@@ -119,7 +119,7 @@ with aba1:
 
     # Exibir DataFrame com estilo personalizado
     st.markdown(df_style, unsafe_allow_html=True)
-    st.write(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
+    st.write(dados_externos_model_math)
 
 
     st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
@@ -153,9 +153,11 @@ with aba1:
 
     #st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
 
+    dados_externos_model_kmeans = pd.DataFrame(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
+
     # Exibir DataFrame com estilo personalizado
     st.markdown(df_style, unsafe_allow_html=True)
-    st.write(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
+    st.write(dados_externos_model_kmeans)
 
 
 with aba2:
