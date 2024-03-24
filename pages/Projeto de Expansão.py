@@ -18,20 +18,6 @@ fonte_escura = 'color: #292F39;'
 # Título da página
 st.markdown(f"<h1 style='{fonte_escura} {fonte_negrito}'> Projeto de expansão 🤝 </h1>", unsafe_allow_html=True)
 
-# Estilo CSS para a barra lateral
-sidebar_style = """
-    <style>
-        .sidebar .sidebar-content {
-            color: white;
-        }
-    </style>
-"""
-st.markdown(sidebar_style, unsafe_allow_html=True)
-
-# Adicionando conteúdo à barra lateral
-st.sidebar.title("Barra Lateral")
-st.sidebar.write("Este é um exemplo de conteúdo na barra lateral do Streamlit.")
-
 
 #PREPARAÇÃO DOS DADOS
 dados_externos = pd.read_excel('tb_populacao_economia_idade_distancia.xlsx')
@@ -75,7 +61,7 @@ with aba1:
     html = df_pesos.to_html(index=False)
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center; color: #292F39;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center; color: #292F39;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
@@ -127,7 +113,7 @@ with aba1:
 
     #MODELO UTILIZANDO ALGORITMO K-MEANS
     st.markdown(f"<h3 style='{cor_estilizada}'> Modelo K-means </h3>", unsafe_allow_html=True)
-    st.markdown('<p style="text-align: justify;"> O modelo K-means também usa os pesos definidos acima pelos administradores da ONG, porém, neste modelo, é feito um cálculo de aproximação dos indicadores das cidades do estado de São Paulo com os indicadores da cidade de Embu-Guaçu. Assim, as cidades mais semelhantes (de acordo com os indicadores) ficarão no mesmo grupo que a cidade de Embu-Guaçu, e, portanto, recomenda-se a expansão a partir dessas cidades.</p>', unsafe_allow_html = True) 
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> O modelo K-means também usa os pesos definidos acima pelos administradores da ONG, porém, neste modelo, é feito um cálculo de aproximação dos indicadores das cidades do estado de São Paulo com os indicadores da cidade de Embu-Guaçu. Assim, as cidades mais semelhantes (de acordo com os indicadores) ficarão no mesmo grupo que a cidade de Embu-Guaçu, e, portanto, recomenda-se a expansão a partir dessas cidades.</p>', unsafe_allow_html = True) 
 
     dados_model_kmeans = dados_model_math.drop('resultado_modelo_expansao', axis = 1)
     kmeans = KMeans(n_clusters=6,random_state=0) #definindo os hiperparametros do algoritmo (definir o número de grupo = cluster)
@@ -160,17 +146,17 @@ with aba2:
 
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<h5 style="{cor_estilizada}"> Expandir a partir das cidades selecionadas no Modelo Matemático ou Modelo K-means </h5>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: justify;"> Acreditamos que, num plano de expansão de suas atividades, a ONG terá maior impacto social e chance de sucesso ao escolher iniciar pelas cidades selecionadas nos modelos Matemático ou K-means, pois as cidades ali selecionadas, além de serem mais carentes de ações como as da ONG, têm um perfil semelhante ao que ela está habituada a atender.</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Acreditamos que, num plano de expansão de suas atividades, a ONG terá maior impacto social e chance de sucesso ao escolher iniciar pelas cidades selecionadas nos modelos Matemático ou K-means, pois as cidades ali selecionadas, além de serem mais carentes de ações como as da ONG, têm um perfil semelhante ao que ela está habituada a atender.</p>', unsafe_allow_html = True)
 
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<h5 style="{cor_estilizada}"> Disponibilizar meios de doação por boleto, cartão de crédito, pix, entre outros, diretamente pelo site </h5>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: justify;"> Na era em que tudo é feito às pressas, acreditamos que haveria um ganho ao incluir a possibilidade de doação direto no site, através de meios de doação de autoatendimento, tirando a necessidade de a pessoa doadora ter que entrar em contato com a ONG, aguardar atendimento, tendo assim até mesmo a possibilidade de a pessoa desistir da doação nesse meio tempo. </p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Na era em que tudo é feito às pressas, acreditamos que haveria um ganho ao incluir a possibilidade de doação direto no site, através de meios de doação de autoatendimento, tirando a necessidade de a pessoa doadora ter que entrar em contato com a ONG, aguardar atendimento, tendo assim até mesmo a possibilidade de a pessoa desistir da doação nesse meio tempo. </p>', unsafe_allow_html = True)
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> É sabido que é necessário contrato com adquirentes de cartão de crédito, bancos, entre outros intermediadores, para viabilizar algo do tipo, porém, vemos uma possibilidade de ganho nessa frente, especialmente quando se fala de pequenos doadores. </p>', unsafe_allow_html = True)
 
     
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
-    st.markdown(f'<h5 style="{cor_estilizada} {fonte_escura}"> Inclusão de opção de valores pré-cadastrados</h5>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: justify;"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
+    st.markdown(f'<h5 style="{cor_estilizada}"> Inclusão de opção de valores pré-cadastrados</h5>', unsafe_allow_html=True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
 
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG.</p>', unsafe_allow_html = True)
     st.markdown("<hr style='border: 1px solid #ccc;'>", unsafe_allow_html=True) #Linha cinza sólida
@@ -182,7 +168,7 @@ with aba2:
 
 
     # Valores de doação em botões e opção de inserir outros valores
-    st.markdown(f"<h4 style='{fonte_negrito}'> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
     valores_doacao = [10, 20, 50, 100, 200, "Outro"]
     valor_doacao = st.radio("Escolha o valor:", valores_doacao)
     if valor_doacao == "Outro":
@@ -192,11 +178,11 @@ with aba2:
     recorrencia = st.radio("Deseja fazer uma doação única ou recorrente?", ["Única", "Recorrente"])
 
     # Formas de pagamento
-    st.markdown(f"<h4 style='{fonte_negrito}'> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
     forma_pagamento = st.selectbox("Forma de pagamento:", ["Cartão de crédito", "Boleto bancário", "PIX"])
 
     # Formulário para preencher dados pessoais e de pagamento
-    st.markdown(f"<h4 style='{fonte_negrito}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
+    st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
     nome = st.text_input("Nome completo:")
     email = st.text_input("Email:")
     endereco = st.text_input("Endereço:")
