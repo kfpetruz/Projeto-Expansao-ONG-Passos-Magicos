@@ -31,6 +31,7 @@ st.markdown(f'<h4 style= "{cor_estilizada}"> Links Úteis </h4>', unsafe_allow_h
 st.markdown(f'<h5 style= "{cor_estilizada}"> Repositório do projeto </h5>', unsafe_allow_html = True)
 st.markdown('[Repositório do projeto no Github](https://github.com/kfpetruz/Projeto-Expansao-ONG-Passos-Magicos)')
 st.markdown(f'<h5 style= "{cor_estilizada}"> Fontes de dados </h5>', unsafe_allow_html = True)
+st.markdown('[Site Passos Mágicos](https://passosmagicos.org.br/quem-somos/)')
 st.markdown('[Idade da população](https://sidra.ibge.gov.br/tabela/9514)')
 st.markdown('[Dados econômicos e populacionais](https://cidades.ibge.gov.br/brasil/sintese/sp?indicadores=47001,97907,97911,29167,29765,30255)')
 st.markdown('[População estimada nos anos que não tem Censo](https://sidra.ibge.gov.br/tabela/6579)') 
