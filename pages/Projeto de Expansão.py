@@ -194,8 +194,8 @@ with aba2:
 
     # Formulário para preencher dados pessoais e de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
-    nome = st.text_input(":red[Nome completo:]")
-    email = st.text_input(":red[Email:]")
+    nome = st.text_input(":#292F39[Nome completo:]")
+    email = st.text_input(":#292F39[Email:]")
     st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Endereço:</p>", unsafe_allow_html=True)
     endereco = st.text_input("")
     st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Cidade:</p>", unsafe_allow_html=True)
