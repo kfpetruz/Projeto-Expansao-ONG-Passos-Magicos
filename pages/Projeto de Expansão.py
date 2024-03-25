@@ -73,11 +73,13 @@ with aba1:
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Escolha a <strong> relevância das variáveis, de 1 a 6 </strong>. Quanto maior o número, maior o peso. Os pesos escolhidos nesta seção se aplicam tanto ao <strong> Modelo Matemático </strong> quanto ao <strong> Modelo K-means </strong></p>', unsafe_allow_html = True)
     col1, col2 = st.columns(2)
     with col1:
-        prioridade_distancia_embu = st.number_input("Distância que a cidade tem de Embu-Guaçu:", min_value=1, value=6, max_value=6)
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Distância que a cidade tem de Embu-Guaçu:</p>", unsafe_allow_html=True)
+        prioridade_distancia_embu = st.number_input("", min_value=1, value=6, max_value=6, label_visibility='collapsed')
         prioridade_salario_medio = st.number_input("Salário médio mensal dos trabalhadores:", min_value=1, value=5, max_value=6)
         prioridade_pib_per_capita = st.number_input("PIB per capita:", min_value=1, value=4, max_value=6)
     with col2:
-        prioridade_percent_idade_elegivel = st.number_input("Percentual de crianças e jovens em idade elegível :", min_value=1, value=3, max_value=6)
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Percentual de crianças e jovens em idade elegível:</p>", unsafe_allow_html=True)
+        prioridade_percent_idade_elegivel = st.number_input("", min_value=1, value=3, max_value=6, label_visibility='collapsed')
         prioridade_percent_matriculados = st.number_input("Percentual de matriculados em idade elegível:", min_value=1, value=2, max_value=6)
         prioridade_densidade_demografica = st.number_input("Densidade demográfica:", min_value=1, value=1, max_value=6)
         
