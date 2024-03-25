@@ -46,7 +46,7 @@ dados_model_math[variaveis_normalizar_inversamente] = 1 - scaler.fit_transform(d
 ## VISUALIZAÇÃO NO STREAMLIT
 aba1, aba2= st.tabs(['Modelo', 'Propostas'])
 with aba1:
-    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Para auxiliar a ONG em seu desejo de expandir as atividades, ampliando a capacidade, para que ela possa atender e mudar a vida de centenas de crianças e adolescentes como vem fazendo há anos na cidade de Embu-Guaçu, foram criados dois modelos, levando em consideração dados <strong> econômicos </strong>, de <strong> população </strong>, <strong> educacionais </strong>, com base no último censo, e de <strong> distância da cidade sede</strong>  com base numa biblioteca geográfica do Python.</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Para auxiliar a ONG em seu desejo de expandir as atividades, ampliando a capacidade, para que ela possa atender e mudar a vida de centenas de crianças e adolescentes como vem fazendo há anos na cidade de Embu-Guaçu, foram criados dois modelos, levando em consideração dados <strong> econômicos </strong>, de <strong> população </strong>, <strong> educacionais </strong>, com base no último censo, e de <strong> distância da cidade sede</strong>  com base numa biblioteca geográfica do Python. Para determinar os percentuais de crianças e jovens em <strong>idade elegível</strong>, considerou-se o intervalo de <strong>6 a 19 anos</strong>, abrangendo desde a idade mínima de entrada na ONG, até a idade predominante de finalização do 3º ano do ensino médio.</p>', unsafe_allow_html = True)
 
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Em ambos os modelos foram consideradas as 645 cidades do estado de São Paulo, a fim de propôr as <strong> potenciais cidades </strong> onde a ONG poderá investir seus esforços.</p>', unsafe_allow_html = True)
 
@@ -54,14 +54,14 @@ with aba1:
     
     st.markdown(f"<h3 style='{cor_estilizada}'> Variáveis analisadas separadas por efeito </h3>", unsafe_allow_html=True)
     pesos = {
-    'Quanto menor, maior o peso': ['Salário médio dos trabalhadores formais; Índice de desenvolvimento humano municipal (IDHM); PIB per capita; Percentual de alunos matriculados;'],
-    'Quanto maior, maior o peso': ['Densidade demográfica - habitantes/km²; Percentual de crianças e jovens em idade elegível;']}
-    
+    'Quanto menor, maior o peso': ['- Distância que a cidade tem de Embu-Guaçu;- Salário médio dos trabalhadores formais;- PIB per capita;- Percentual de alunos matriculados;(Alunos matriculados de 6 a 19 anos/População de 6 a 19 anos);'],
+    'Quanto maior, maior o peso': ['- Densidade demográfica - habitantes/km²;- Percentual de crianças e jovens em idade elegível;(População de 6 a 19 anos/População total);']}
+
     df_pesos = pd.DataFrame(pesos)
     html = df_pesos.to_html(index=False)
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>')
+    html_estilizado = html.replace(';', '<br>').replace('-', '&#8226;').replace('<th>', '<th style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
