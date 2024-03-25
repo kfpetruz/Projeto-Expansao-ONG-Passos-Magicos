@@ -75,13 +75,17 @@ with aba1:
     with col1:
         st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Distância que a cidade tem de Embu-Guaçu:</p>", unsafe_allow_html=True)
         prioridade_distancia_embu = st.number_input("", min_value=1, value=6, max_value=6, label_visibility='collapsed')
-        prioridade_salario_medio = st.number_input("Salário médio mensal dos trabalhadores:", min_value=1, value=5, max_value=6)
-        prioridade_pib_per_capita = st.number_input("PIB per capita:", min_value=1, value=4, max_value=6)
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Salário médio mensal dos trabalhadores:</p>", unsafe_allow_html=True)
+        prioridade_salario_medio = st.number_input("", min_value=1, value=5, max_value=6, label_visibility='collapsed')
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>PIB per capita:</p>", unsafe_allow_html=True)
+        prioridade_pib_per_capita = st.number_input("", min_value=1, value=4, max_value=6, label_visibility='collapsed')
     with col2:
         st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Percentual de crianças e jovens em idade elegível:</p>", unsafe_allow_html=True)
         prioridade_percent_idade_elegivel = st.number_input("", min_value=1, value=3, max_value=6, label_visibility='collapsed')
-        prioridade_percent_matriculados = st.number_input("Percentual de matriculados em idade elegível:", min_value=1, value=2, max_value=6)
-        prioridade_densidade_demografica = st.number_input("Densidade demográfica:", min_value=1, value=1, max_value=6)
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Percentual de matriculados em idade elegível:</p>", unsafe_allow_html=True)
+        prioridade_percent_matriculados = st.number_input("", min_value=1, value=2, max_value=6, label_visibility='collapsed')
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Densidade demográfica:</p>", unsafe_allow_html=True)
+        prioridade_densidade_demografica = st.number_input("", min_value=1, value=1, max_value=6, label_visibility='collapsed')
         
 
         # Atribuição de pesos
@@ -106,7 +110,8 @@ with aba1:
     dados_externos_model_math = dados_externos_model_math.sort_values('resultado_modelo_expansao', ascending = False)
 
         #Mostra o dataframe gerado pelo modelo
-    quantidade_cidades = st.number_input("Escolha a quantidade de cidades que deseja visualizar, entre as melhores classificadas, para potencial expansão das atividades da ONG:", min_value=1, value=15, max_value=645)
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Escolha a quantidade de cidades que deseja visualizar, entre as melhores classificadas, para potencial expansão das atividades da ONG:</p>", unsafe_allow_html=True)
+    quantidade_cidades = st.number_input("", min_value=1, value=15, max_value=645, label_visibility='collapsed')
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são:</p>', unsafe_allow_html = True) 
     
     st.dataframe(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
@@ -172,7 +177,8 @@ with aba2:
     # Valores de doação em botões e opção de inserir outros valores
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
     valores_doacao = [10, 20, 50, 100, 200, "Outro"]
-    valor_doacao = st.radio("Escolha o valor:", valores_doacao)
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Escolha o valor:</p>", unsafe_allow_html=True)
+    valor_doacao = st.radio("", valores_doacao, label_visibility='collapsed')
     if valor_doacao == "Outro":
         valor_doacao = st.number_input("Digite o valor da doação:", step=10.0)
 
