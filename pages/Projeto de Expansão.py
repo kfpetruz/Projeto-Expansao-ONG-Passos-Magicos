@@ -61,7 +61,7 @@ with aba1:
     html = df_pesos.to_html(index=False)
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace(';', '<br>').replace('*', '&#8226;').replace('<th>', '<th style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>')
+    html_estilizado = html.replace(';', '<br>').replace('*', '<span style="font-size: 20px">&nbsp;&#8226;</span>&nbsp; ').replace('<th>', '<th style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
