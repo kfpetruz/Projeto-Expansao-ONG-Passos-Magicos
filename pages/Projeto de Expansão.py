@@ -119,10 +119,7 @@ with aba1:
     quantidade_cidades = st.number_input("Escolha a quantidade de cidades que deseja visualizar, entre as melhores classificadas, para potencial expansão das atividades da ONG:", min_value=1, value=15, max_value=645)
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são:</p>', unsafe_allow_html = True) 
     
-    dados_externos_model_math = pd.DataFrame(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
-    dados_externos_model_math = dados_externos_model_math.style.set_properties(**{'color': '#292F39'})
-    st.write(dados_externos_model_math.to_html(), unsafe_allow_html=True)
-
+    st.dataframe(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
 
     st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
 
@@ -153,11 +150,7 @@ with aba1:
 
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são as <strong> {qtd_cidades_grupo_embu} </strong> listadas abaixo:</p>', unsafe_allow_html = True) 
 
-    #st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
-
-    dados_externos_model_kmeans = pd.DataFrame(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
-    dados_externos_model_kmeans = dados_externos_model_kmeans.style.set_properties(**{'color': '#292F39'})
-    st.write(dados_externos_model_kmeans.to_html(), unsafe_allow_html=True)
+    st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
 
 
 with aba2:
