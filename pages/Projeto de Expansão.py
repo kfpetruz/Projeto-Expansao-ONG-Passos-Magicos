@@ -176,38 +176,31 @@ with aba2:
 
     # Valores de doação em botões e opção de inserir outros valores
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
-    valores_doacao = [10, 20, 50, 100, 200, "Outro"]
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Escolha o valor:</p>", unsafe_allow_html=True)
-    valor_doacao = st.radio("", valores_doacao, label_visibility='collapsed')
+    valores_doacao = [':gray[10, 20, 50, 100, 200, "Outro"]']
+    valor_doacao = st.radio("**:gray[Escolha o valor:]**", valores_doacao)
     if valor_doacao == "Outro":
-        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Digite o valor da doação:</p>", unsafe_allow_html=True)
-        valor_doacao = st.number_input("", step=10.0, label_visibility='collapsed')
+        valor_doacao = st.number_input("**:gray[Digite o valor da doação:]**", step=10.0)
 
     # Opção de recorrência de doação
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Deseja fazer uma doação única ou recorrente?</p>", unsafe_allow_html=True)
-    recorrencia = st.radio("", ["Única", "Recorrente"], label_visibility='collapsed')
+    recorrencia = st.radio("**:gray[Deseja fazer uma doação única ou recorrente?]**", ["Única", "Recorrente"])
 
     # Formas de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Forma de pagamento:</p>", unsafe_allow_html=True)
-    forma_pagamento = st.selectbox("", ["Cartão de crédito", "Boleto bancário", "PIX"], label_visibility='collapsed')
+    forma_pagamento = st.selectbox("**:gray[Forma de pagamento:]**", ["Cartão de crédito", "Boleto bancário", "PIX"])
 
     # Formulário para preencher dados pessoais e de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
-    nome = st.text_input(":gray[Nome completo:]")
-    email = st.text_input(":gray[Email:]")
-    endereco = st.text_input(":gray[Endereço:]")
-    cidade = st.text_input(":gray[Cidade:]")
-    estado = st.text_input(":gray[Estado:]")
-    cep = st.text_input(":gray[CEP:]")
+    nome = st.text_input("**:gray[Nome completo:]**")
+    email = st.text_input("**:gray[Email:]**")
+    endereco = st.text_input("**:gray[Endereço:]**")
+    cidade = st.text_input("**:gray[Cidade:]**")
+    estado = st.text_input("**:gray[Estado:]**")
+    cep = st.text_input("**:gray[CEP:]**")
 
     if forma_pagamento == "Cartão de crédito":
-        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Número do cartão:</p>", unsafe_allow_html=True)
-        numero_cartao = st.text_input("", label_visibility='collapsed')
-        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Data de validade (MM/AAAA):</p>", unsafe_allow_html=True)
-        data_validade = st.text_input("", label_visibility='collapsed')
-        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>CVV:</p>", unsafe_allow_html=True)
-        cvv = st.text_input("", label_visibility='collapsed')
+        numero_cartao = st.text_input("**:gray[Número do cartão:]**")
+        data_validade = st.text_input("**:gray[Data de validade (MM/AAAA):]**")
+        cvv = st.text_input("**:gray[CVV:]**")
 
     # Botão para confirmar doação
     if st.button("Confirmar Doação"):
