@@ -288,10 +288,12 @@ with aba2:
     
     st.markdown(f"<p style='text-align: justify;color:  #292F39;'> A equipe Passos Mágicos é formada por profissionais que têm em mente o objetivo de atuarem como agentes transformadores da vida de cada um dos alunos.</p>", unsafe_allow_html = True)
    
+    st.markdown(f"<p style='font-weight: bold; color:  #292F39; font-size:14px; margin: 0; padding: 0;'>Selecione as categorias:</p>", unsafe_allow_html=True)
     categorias_selecionadas = st.multiselect(
         'Selecione as categorias:',
         ['Professor','Psicóloga', 'Psicopedagoga', 'Psiquiatra', 'Assistente Social'],
-        default=['Professor','Psicóloga','Psicopedagoga', 'Psiquiatra', 'Assistente Social'] 
+        default=['Professor','Psicóloga','Psicopedagoga', 'Psiquiatra', 'Assistente Social'],
+        label_visibility = 'collapsed' 
     )
     
     # Plotar gráfico com base nas categorias selecionadas
@@ -317,7 +319,8 @@ with aba2:
              ('UNISA', 'Enfermagem', 3)]
     df_cursos = pd.DataFrame(cursos, columns=['Instituição', 'Curso', 'Quantidade'])
 
-    instituicoes_selecionadas = st.multiselect('Selecione as instituições:', df_cursos['Instituição'].unique(),default=df_cursos['Instituição'].unique())
+    st.markdown(f"<p style='font-weight: bold; color:  #292F39; font-size:14px; margin: 0; padding: 0;'>Selecione as Instituições:</p>", unsafe_allow_html=True)
+    instituicoes_selecionadas = st.multiselect('Selecione as instituições:', df_cursos['Instituição'].unique(),default=df_cursos['Instituição'].unique(),label_visibility = 'collapsed')
 
     # Filtrar dataframe de acordo com as instituições selecionadas
     df_filtrado = df_cursos[df_cursos['Instituição'].isin(instituicoes_selecionadas)]
@@ -429,7 +432,8 @@ with aba3:
     media_por_ano = dados_alunos_todos_anos.groupby('ANO')[colunas_para_media].mean().reset_index()
     media_por_ano['ANO']=media_por_ano['ANO'].astype(int)
 
-    categorias_selecionadas = st.multiselect('Selecione as categorias:', list(media_por_ano.columns[1:]), default=['INDE','IPV'])
+    st.markdown(f"<p style='font-weight: bold; color:  #292F39; font-size:14px; margin: 0; padding: 0;'>Selecione as categorias:</p>", unsafe_allow_html=True)
+    categorias_selecionadas = st.multiselect('Selecione as categorias:', list(media_por_ano.columns[1:]), default=['INDE','IPV'],label_visibility = 'collapsed')
     media_por_ano_filtrados = media_por_ano[['ANO'] + categorias_selecionadas]
 
     fig = px.line(media_por_ano_filtrados, x='ANO', y=categorias_selecionadas, color_discrete_sequence=['#1A4A6A', '#722f37', '#006400', '#D35400','#D98880', '#F1C40F', '#9B59B6','#7DCEA0'])
@@ -453,11 +457,12 @@ with aba3:
     
     dados_alunos_indicadores = dados_alunos_todos_anos[['ANO','NOME','INDE', 'IAN', 'IDA', 'IEG', 'IAA', 'IPS', 'IPP','IPV']]
     dados_alunos_indicadores = dados_alunos_indicadores.sort_values(by=['ANO', 'NOME'])
-    # Selecionar aluno
-    aluno_selecionado = st.selectbox('Selecione o aluno:', dados_alunos_indicadores['NOME'].unique())
+    
+    st.markdown(f"<p style='font-weight: bold; color:  #292F39; font-size:14px; margin: 0; padding: 0;'>Selecione o aluno:</p>", unsafe_allow_html=True)
+    aluno_selecionado = st.selectbox('Selecione o aluno:', dados_alunos_indicadores['NOME'].unique(),label_visibility = 'collapsed')
 
-    # Selecionar matérias
-    materias_selecionadas = st.multiselect('Selecione o(s) Indicador(es):', dados_alunos_indicadores.columns[2:], default=['INDE','IPV'])
+    st.markdown(f"<p style='font-weight: bold; color:  #292F39; font-size:14px; margin: 0; padding: 0;'>Selecione o(s) Indicador(es):</p>", unsafe_allow_html=True)
+    materias_selecionadas = st.multiselect('Selecione o(s) Indicador(es):', dados_alunos_indicadores.columns[2:], default=['INDE','IPV'],label_visibility = 'collapsed')
 
     # Filtrar o DataFrame de acordo com o aluno selecionado
     df_aluno = dados_alunos_indicadores[dados_alunos_indicadores['NOME'] == aluno_selecionado]
@@ -501,7 +506,8 @@ with aba3:
     agrupado_ponto.rename(columns={'Quantidade': 'Alunos que tiveram Ponto de Virada'}, inplace=True)
     agrupado_pedra_ponto_merge = pd.merge(agrupado_pedra, agrupado_ponto, on=['ANO', 'PEDRA'], how='left')
 
-    ano_selecionado = st.selectbox('Selecione o ano:', sorted(agrupado_pedra_ponto_merge['ANO'].unique(),reverse=True))
+    st.markdown(f"<p style='font-weight: bold; color:  #292F39; font-size:14px; margin: 0; padding: 0;'>Selecione o ano:</p>", unsafe_allow_html=True)
+    ano_selecionado = st.selectbox('Selecione o ano:', sorted(agrupado_pedra_ponto_merge['ANO'].unique(),reverse=True),label_visibility = 'collapsed')
 
     st.markdown(f"<p style='text-align: justify;color:  #292F39;'><span style='{fonte_negrito}'> A Classificação do aluno é baseado pelo número do INDE, sendo separado por nomes de Pedras:</span></p>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align: justify;color:  #292F39;'><span style='{fonte_negrito}'>Quartzo </span>- 2.405 a 5.506 <br> <span style='{fonte_negrito}'>Agata </span>- 5.506 a 6.868 <br><span style='{fonte_negrito}'>Ametista </span>-  6.868 a 8.230 <br><span style='{fonte_negrito}'>Topazio </span>- 8.230 a 9.294<br></p>", unsafe_allow_html = True)
@@ -627,14 +633,15 @@ with aba3:
         destaque_ieg = dados_totais_concat.groupby(['ANO', 'DESTAQUE_IEG']).size().reset_index(name='Contagem')
         destaque_ipv = dados_totais_concat.groupby(['ANO', 'DESTAQUE_IPV']).size().reset_index(name='Contagem')
 
-        destaque_selecionado = st.selectbox('Selecione o destaque observado sobre os alunos:', ['IDA','IEG','IPV'])
+        st.markdown(f"<p style='font-weight: bold; color:  #292F39; font-size:14px; margin: 0; padding: 0;'>Selecione o destaque observado sobre os alunos:</p>", unsafe_allow_html=True)
+        destaque_selecionado = st.selectbox('Selecione o destaque observado sobre os alunos:', ['IDA','IEG','IPV'],label_visibility = 'collapsed')
         def grafico_barra_um_valor(dados, x, y, xaxis, yaxis, titulo):
 
             fig = px.bar(dados, x=x, y=y,color =x,color_discrete_sequence=['#1A4A6A', '#722f37', '#006400', '#D35400','#D98880', '#F1C40F', '#9B59B6','#7DCEA0'])
 
             # Atualizar layout do gráfico
             fig.update_layout(title=titulo,
-                            xaxis_title=xaxis,
+                            xaxis_title=None,
                             yaxis_title=yaxis,
                             title_font_color='#292F39',  
                             font_color='#292F39',

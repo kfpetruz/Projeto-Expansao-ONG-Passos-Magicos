@@ -197,7 +197,7 @@ with aba2:
 
     # Botão para confirmar doação
     if st.button("Confirmar Doação"):
-        if forma_pagamento == "Cartão de crédito":
+        if forma_pagamento == "Cartão de crédito" or forma_pagamento == "PIX":
             # Aqui você pode adicionar a lógica para processar o pagamento com cartão de crédito
             if recorrencia == "Única":
                 st.success(f"Obrigado por sua doação única de R${valor_doacao}!")
