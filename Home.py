@@ -14,7 +14,7 @@ cor_estilizada = 'color:  #1A4A6A;'
 fonte_negrito = 'font-weight: bold;color:  #292F39;'
 
 # Título da página
-st.markdown(f"<h1 style='{fonte_negrito}';>Projeto ONG Passos Mágicos 🤝</h1>", unsafe_allow_html=True)
+st.markdown(f"<h1 style='font-weight: bold;color:  #1A4A6A;';>Projeto ONG Passos Mágicos 🤝</h1>", unsafe_allow_html=True)
 
 
 cor_estilizada = 'color:  #1A4A6A;'
@@ -120,7 +120,6 @@ def grafico_tres_linhas_ponto(x,y1,y2,y3,percentual1,percentual2):
 # Função para plotar o gráfico com base nas categorias selecionadas
 def plotar_grafico(categorias_selecionadas):
     fig = go.Figure()
-    
     # Adicionar barras para cada categoria selecionada
     for categoria in categorias_selecionadas:
         if categoria == 'Professor':
@@ -136,7 +135,7 @@ def plotar_grafico(categorias_selecionadas):
                 x=linha_do_tempo_completo['Ano'],
                 y=linha_do_tempo_completo['Psicólogas'],
                 name='Psicólogas',
-                marker_color='#82C7A5'
+                marker_color='#722f37'
             ))
 
         elif categoria == 'Psicopedagoga':
@@ -144,7 +143,7 @@ def plotar_grafico(categorias_selecionadas):
                 x=linha_do_tempo_completo['Ano'],
                 y=linha_do_tempo_completo['Psicopedagoga'],
                 name='Psicopedagogas',
-                marker_color='#CD5C5C'
+                marker_color='#006400'
             ))
         
         elif categoria == 'Psiquiatra':
@@ -160,7 +159,7 @@ def plotar_grafico(categorias_selecionadas):
                 x=linha_do_tempo_completo['Ano'],
                 y=linha_do_tempo_completo['Assistente Social'],
                 name='Assistente Social',
-                marker_color='#D8BFD8'
+                marker_color='#9B59B6'
             ))
 
     # Atualizar layout do gráfico
@@ -324,7 +323,7 @@ with aba2:
     df_filtrado = df_cursos[df_cursos['Instituição'].isin(instituicoes_selecionadas)]
 
     # Criar gráfico Plotly
-    fig = px.bar(df_filtrado, x='Curso', y='Quantidade',color_discrete_sequence=['#1A4A6A', '#722f37', '#006400'], barmode='group')
+    fig = px.bar(df_filtrado, x='Curso', y='Quantidade',color ='Instituição', color_discrete_sequence=['#1A4A6A', '#722f37', '#006400'], barmode='group')
 
     # Atualizar layout do gráfico
     fig.update_layout(title='Quantidade de Cursos por Instituição',
@@ -433,7 +432,7 @@ with aba3:
     categorias_selecionadas = st.multiselect('Selecione as categorias:', list(media_por_ano.columns[1:]), default=['INDE','IPV'])
     media_por_ano_filtrados = media_por_ano[['ANO'] + categorias_selecionadas]
 
-    fig = px.line(media_por_ano_filtrados, x='ANO', y=categorias_selecionadas)
+    fig = px.line(media_por_ano_filtrados, x='ANO', y=categorias_selecionadas, color_discrete_sequence=['#1A4A6A', '#722f37', '#006400', '#D35400','#D98880', '#F1C40F', '#9B59B6','#7DCEA0'])
     for trace in fig.data:
         trace.update(mode='lines+markers')
     fig.update_layout(title='Média dos indicadores por ano',
@@ -470,7 +469,7 @@ with aba3:
     df_melt_filtrado = df_melt[df_melt['Matéria'].isin(materias_selecionadas)]
 
     # Plotar um gráfico de linhas para cada matéria
-    fig = px.line(df_melt_filtrado, x='ANO', y='Nota', color='Matéria', markers=True, title=f'Evolução dos Indicadores para o Aluno {aluno_selecionado}')
+    fig = px.line(df_melt_filtrado, x='ANO', y='Nota', color='Matéria', markers=True, title=f'Evolução dos Indicadores para o Aluno {aluno_selecionado}',color_discrete_sequence=['#1A4A6A', '#722f37', '#006400', '#D35400','#D98880', '#F1C40F', '#9B59B6','#7DCEA0'])
     fig.update_layout(title='Indicadores por aluno',
                     xaxis_title='Ano',
                     yaxis_title='Média da nota',
@@ -511,7 +510,7 @@ with aba3:
     dados_filtrados = dados_filtrados.sort_values(by='Alunos por pedra', ascending = False)
     fig = px.bar(dados_filtrados, x='PEDRA', y=['Alunos por pedra', 'Alunos que tiveram Ponto de Virada'],
                 title=f'Quantidade de alunos que tiveram Ponto de Virada Positivo por Tipo de Pedra no Ano {ano_selecionado}',
-                barmode='group')
+                barmode='group',color_discrete_sequence=['#1A4A6A', '#722f37'])
     fig.update_layout(
                     yaxis_title='Quantidade de alunos',
                     xaxis_title='Tipo de pedra',
@@ -560,7 +559,8 @@ with aba3:
         dados_filtrados = dados_fase_nivel[dados_fase_nivel['ANO'] == ano_selecionado]
         fig = px.bar(dados_filtrados, x='FASE', y=['Quantidade real por fase', 'Quantidade ideal por fase'],
                     title=f'Quantidade de alunos real e ideal por fase {ano_selecionado}',
-                    barmode='group')
+                    color_discrete_sequence=['#1A4A6A', '#722f37', '#006400', '#D35400'],
+                    barmode='group',)
         fig.update_layout(
                         yaxis_title='Quantidade de alunos',
                         xaxis_title='Fase',
@@ -595,7 +595,7 @@ with aba3:
         fig = px.line(df_filtrado, x='FASE', y=['Inglês', 'Matemática', 'Português'], 
                     title=f'Média das notas na matérias por Fase - Ano {ano_selecionado}',
                     labels={'value': 'Nota', 'variable': 'Nota'},
-                    color_discrete_map={'Inglês': '#1A4A6A', 'Matemática': 'green', 'Português': 'red'})
+                    color_discrete_map={'Inglês': '#1A4A6A', 'Matemática': '#722f37', 'Português': '#006400'})
         for trace in fig.data:
             trace.update(mode='lines+markers')
         fig.update_layout(
@@ -629,7 +629,8 @@ with aba3:
 
         destaque_selecionado = st.selectbox('Selecione o destaque observado sobre os alunos:', ['IDA','IEG','IPV'])
         def grafico_barra_um_valor(dados, x, y, xaxis, yaxis, titulo):
-            fig = px.bar(dados, x=x, y=y)
+
+            fig = px.bar(dados, x=x, y=y,color =x,color_discrete_sequence=['#1A4A6A', '#722f37', '#006400', '#D35400','#D98880', '#F1C40F', '#9B59B6','#7DCEA0'])
 
             # Atualizar layout do gráfico
             fig.update_layout(title=titulo,
@@ -637,12 +638,14 @@ with aba3:
                             yaxis_title=yaxis,
                             title_font_color='#292F39',  
                             font_color='#292F39',
+                            xaxis_showticklabels=False,
                             xaxis=dict(
                                 gridcolor='gray'
                             ),
                             yaxis=dict(
                                 gridcolor='gray'
-                            ))
+                            ),
+                            legend=dict(title=None))
             return st.plotly_chart(fig,use_container_width=True)
         
         if destaque_selecionado == 'IDA':
