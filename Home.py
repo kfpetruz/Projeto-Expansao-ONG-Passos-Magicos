@@ -662,8 +662,8 @@ with aba3:
             destaque_ipv.sort_values(by='Contagem',ascending = False, inplace = True)
             grafico_barra_um_valor(destaque_ipv[destaque_ipv['ANO']==ano_selecionado], 'DESTAQUE_IPV', 'Contagem', 'Destaques observados', 'Quantidade de alunos', 'Destaques qualitativos observados pelos mestres sobre os alunos  referente ao Indicador de Ponto de Virada')
 
-# 1ª aba - História da Passos(Overview), Análise Dados Históricos e Resultado das ações na cidade - 
-# 2ª aba - Fatores-Chave de Sucesso - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers - Colocar descrições com cores destaques 
+# 1ª aba - História da Passos(Overview)
+# 2ª aba - Fatores-Chave de Sucesso - Análise Dados Históricos e Resultado das ações na cidade - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers - Colocar descrições com cores destaques 
 # 3ª aba - Análise do Impacto Emocional e Social - Desempenho dos alUnos - (Análise do dataset - Notas com o passar dos anos , qual idade tem maior desempenho, notas por matéria, avaliação qualitativa (quantidade de comentários sobre os alunos),  tem desistência? ponto de virada PV) - colocar cursos que os alunos estão fazendo
 # 4ª aba - Aprimoramento de estratégias e operações Futuras (PIX, Potencias cidades para expansão(Modelo) e Previsão de aumento de alunos (Quantidade de alunos para os próximos anos))
 # 5ª aba - Sobre
