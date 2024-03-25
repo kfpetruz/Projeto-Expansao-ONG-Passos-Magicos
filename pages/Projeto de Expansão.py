@@ -61,7 +61,7 @@ with aba1:
     html = df_pesos.to_html(index=False)
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center; color: #292F39;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center; color: #292F39;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; text-align: center; color: #292F39;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
@@ -73,18 +73,6 @@ with aba1:
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Escolha a <strong> relevância das variáveis, de 1 a 6 </strong>. Quanto maior o número, maior o peso. Os pesos escolhidos nesta seção se aplicam tanto ao <strong> Modelo Matemático </strong> quanto ao <strong> Modelo K-means </strong></p>', unsafe_allow_html = True)
     col1, col2 = st.columns(2)
     with col1:
-# Estilo CSS para o st.number_input
-        number_input_style = """
-            <style>
-                .stNumberInput input {
-                    color: black !important;
-                }
-            </style>
-        """
-
-        # Exibir estilo CSS
-        st.markdown(number_input_style, unsafe_allow_html=True)
-
         prioridade_distancia_embu = st.number_input("Distância que a cidade tem de Embu-Guaçu:", min_value=1, value=6, max_value=6)
         prioridade_salario_medio = st.number_input("Salário médio mensal dos trabalhadores:", min_value=1, value=5, max_value=6)
         prioridade_pib_per_capita = st.number_input("PIB per capita:", min_value=1, value=4, max_value=6)
