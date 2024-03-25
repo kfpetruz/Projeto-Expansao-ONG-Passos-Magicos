@@ -178,8 +178,8 @@ with aba2:
 
     
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
-    st.markdown(f'<h5 style="{cor_estilizada}"> Inclusão de opção de valores pré-cadastrados</h5>', unsafe_allow_html=True)
-    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Inclusão de opção de valores pré-cadastrados, deixando a opção "outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
+    st.markdown(f'<h5 style="{cor_estilizada}"> Inclusão de opção de valores pré-determinados</h5>', unsafe_allow_html=True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Inclusão de opção de valores pré-determinados, deixando a opção "Outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
 
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG.</p>', unsafe_allow_html = True)
     st.markdown("<hr style='border: 1px solid #1A4A6A;'>", unsafe_allow_html=True) #Linha cinza sólida
@@ -192,9 +192,9 @@ with aba2:
 
     # Valores de doação em botões e opção de inserir outros valores
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
-    valores_doacao = [':gray[10]', ':gray[20]', ':gray[50]', ':gray[100]', ':gray[200]', ':gray[Outro]']
-    valor_doacao = st.radio("**:gray[Escolha o valor:]**", valores_doacao)
-    if valor_doacao == ":gray[Outro]":
+    valores_doacao = [':gray[10]', ':gray[20]', ':gray[50]', ':gray[100]', ':gray[200]', ':gray[Outros]']
+    valor_doacao = st.radio("**:gray[Escolha o valor:]**", valores_doacao, index = 5 )
+    if valor_doacao == ":gray[Outros]":
         valor_doacao = st.number_input("**:gray[Digite o valor da doação:]**", step=10.0)
 
     # Opção de recorrência de doação
