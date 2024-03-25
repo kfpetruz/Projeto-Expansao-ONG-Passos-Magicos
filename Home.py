@@ -72,7 +72,7 @@ def grafico_duas_linhas_ponto(x,y,y2,percentual):
 
     fig.update_layout(
         title='Quantidade de alunos da ONG x População de Embu-Guaçu',
-        yaxis=dict(title='Quantidade de alunos da ONG', side='left',showline=False),
+        yaxis=dict(title='Quantidade de alunos da ONG', side='left',gridcolor='#B5C7D5'),
         yaxis2=dict(
             title='População de Embu-Guaçu', 
             overlaying='y', 
@@ -81,10 +81,7 @@ def grafico_duas_linhas_ponto(x,y,y2,percentual):
         ),
         legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
         title_font_color='#292F39',
-        font_color='#292F39',
-        xaxis=dict(
-            gridcolor='gray'
-        ),               
+        font_color='#292F39'              
     )
     return fig
 
