@@ -16,7 +16,7 @@ fonte_negrito = 'font-weight: bold;'
 fonte_escura = 'color: #292F39;'
 
 # Título da página
-st.markdown(f"<h1 style='{fonte_escura} {fonte_negrito}'> Projeto de expansão 🤝 </h1>", unsafe_allow_html=True)
+st.markdown(f"<h1 style='{cor_estilizada} {fonte_negrito}'> Projeto de Expansão 🤝 </h1>", unsafe_allow_html=True)
 
 
 #PREPARAÇÃO DOS DADOS
