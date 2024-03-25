@@ -10,20 +10,25 @@ from utils import select_bq
 # Configuração da página
 st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= '🤝')
 
-# Título da página
-st.title('Projeto ONG Passos Mágicos 🤝')
+cor_estilizada = 'color:  #1A4A6A;'
+fonte_negrito = 'font-weight: bold;color:  #292F39;'
 
-cor_estilizada = 'color: #0145AC;'
-fonte_negrito = 'font-weight: bold;'
+# Título da página
+st.markdown(f"<h1 style='{fonte_negrito}';>Projeto ONG Passos Mágicos 🤝</h1>", unsafe_allow_html=True)
+
+
+cor_estilizada = 'color:  #1A4A6A;'
+fonte_negrito = 'font-weight: bold;color:  #292F39;'
 
 dados = [(2016, 70), (2017, 300), (2018, 550), (2019, 812), (2020, 841), (2021, 824), (2022, 970)]
 
 # Criar um DataFrame a partir da lista de tuplas
 linha_do_tempo_ong = pd.DataFrame(dados, columns=['Ano', 'Quantidade de alunos'])
 
-
-dados_estimados = pd.read_csv('populacao_estimativa_2001_2021.csv',sep = ';', encoding='utf-8-sig')
-novos_nomes = dados_estimados.iloc[2]
+# Tratamento da base do BQ
+dados_estimados = tabela = select_bq ('tb_populacao_estimativa')
+dados_estimados = dados_estimados[dados_estimados.columns[0]].str.split(';', expand=True)
+novos_nomes = dados_estimados.iloc[3]
 dados_estimados = dados_estimados.rename(columns=novos_nomes)
 dados_estimados.columns = [str(col).replace('.0', '') for col in dados_estimados.columns]
 dados_estimados['Município'].fillna('', inplace=True)
@@ -56,25 +61,30 @@ def grafico_duas_linhas_ponto(x,y,y2,percentual):
     fig = go.Figure()
 
     # Adicionar a linha ao gráfico para y
-    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Quantidade de alunos', line=dict(color='#0145AC')))
+    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Quantidade de alunos', line=dict(color='#1A4A6A')))
 
     # Adicionar os pontos ao gráfico com os percentuais
     fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Quantidade de Alunos / População (%)',
-                            text=percentual.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#0145AC', size=10)))
+                            text=percentual.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#1A4A6A', size=10)))
 
     # Adicionar a linha ao gráfico para y2
-    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='População de Embu-Guaçu', yaxis='y2', line=dict(color='#82C7A5')))
+    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='População de Embu-Guaçu', yaxis='y2', line=dict(color='#722f37')))
 
-    # Atualizar o layout
     fig.update_layout(
         title='Quantidade de alunos da ONG x População de Embu-Guaçu',
-        yaxis=dict(title='Quantidade de alunos da ONG', side='left'),
+        yaxis=dict(title='Quantidade de alunos da ONG', side='left',showline=False),
         yaxis2=dict(
             title='População de Embu-Guaçu', 
             overlaying='y', 
-            side='right'
+            side='right',
+            gridcolor='gray'
         ),
-        legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top')
+        legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
+        title_font_color='#292F39',
+        font_color='#292F39',
+        xaxis=dict(
+            gridcolor='gray'
+        ),               
     )
     return fig
 
@@ -82,19 +92,29 @@ def grafico_tres_linhas_ponto(x,y1,y2,y3,percentual1,percentual2):
 
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Quantidade de alunos', line=dict(color='#0145AC')))
-    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Bolsistas em escola parceira', line=dict(color='#82C7A5')))
-    fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Universitários', line=dict(color='#CD5C5C')))
+    fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Quantidade de alunos', line=dict(color='#1A4A6A')))
+    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Bolsistas em escola parceira', line=dict(color='#722f37')))
+    fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Universitários', line=dict(color='#006400')))
     fig.add_trace(go.Scatter(x=x, y=y2, mode='markers', name='Bolsistas / Quantidade de alunos (%)',
-                            text=percentual1.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#82C7A5', size=10)))
+                            text=percentual1.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#722f37', size=10)))
     fig.add_trace(go.Scatter(x=x, y=y3, mode='markers', name='Universitários / Quantidade de alunos (%)',
-                            text=percentual2.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#CD5C5C', size=10)))
+                            text=percentual2.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#006400', size=10)))
 
     
     fig.update_layout(title='Quantidade de Alunos x Bolsistas x Universitários da ONG',
                     xaxis_title='Ano',
                     yaxis_title='Quantidade',
-                    legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'))
+                    legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
+                    title_font_color='#292F39',  
+                    font_color='#292F39',
+                    xaxis=dict(
+                        gridcolor='gray'
+                    ),
+                    yaxis=dict(
+                        gridcolor='gray'
+                    )
+                    )
+
     return fig
 
 # Função para plotar o gráfico com base nas categorias selecionadas
@@ -108,7 +128,7 @@ def plotar_grafico(categorias_selecionadas):
                 x=linha_do_tempo_completo['Ano'],
                 y=linha_do_tempo_completo['Professores'],
                 name='Professores',
-                marker_color='#0145AC'
+                marker_color='#1A4A6A'
             ))
 
         elif categoria == 'Psicóloga':
@@ -147,9 +167,12 @@ def plotar_grafico(categorias_selecionadas):
     fig.update_layout(
         #legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
         title='Formação da equipe ao longo dos anos',
-        xaxis=dict(title='Ano'),
-        yaxis=dict(title='Quantidade'),
-        barmode='stack'
+        xaxis=dict(title='Ano',gridcolor='gray'),
+        yaxis=dict(title='Quantidade',gridcolor='gray'),
+        barmode='stack',
+        title_font_color='#292F39',  
+        font_color='#292F39',
+
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -158,27 +181,27 @@ def plotar_grafico(categorias_selecionadas):
 aba1, aba2, aba3 = st.tabs(['Sobre a ONG', 'Fatores de sucesso', 'Impacto Social'])
 with aba1:
 
-    st.markdown(f"<p style='text-align: justify;'> A Passos Mágicos é uma organização social, cujo objetivo é transformar a vida de crianças e adolescentes do <span style='{fonte_negrito}'>município de Embu-Guaçu</span>, zona sul de São Paulo, em situação de vulnerabilidade social, através da educação.</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> A Passos Mágicos é uma organização social, cujo objetivo é transformar a vida de crianças e adolescentes do <span style='{fonte_negrito}'>município de Embu-Guaçu</span>, zona sul de São Paulo, em situação de vulnerabilidade social, através da educação.</p>", unsafe_allow_html = True)
     
     col1, col2, col3, col4 = st.columns(4)
     with col1: #utilizando a cláusula with, mas poderíamos escrever apenas "col1." antes da métrica
-        st.markdown(f"<h2 style='{cor_estilizada}'>+ 30 anos</h2> <span style='{fonte_negrito}'>transformando a vida de crianças e jovens de baixa renda</span>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='{cor_estilizada}'>+ 30 anos</h2> <span style='{fonte_negrito}';>transformando a vida de crianças e jovens de baixa renda</span>", unsafe_allow_html=True)
     with col2:
-        st.markdown(f"<h2 style='{cor_estilizada}'>4 núcleos</h2> <span style='{fonte_negrito}'>distribuídos pelo município </span>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='{cor_estilizada}'>4 núcleos</h2> <span style='{fonte_negrito}';>distribuídos pelo município </span>", unsafe_allow_html=True)
     with col3:
-        st.markdown(f"<h2 style='{cor_estilizada}'>+ 1000</h2> <span style='{fonte_negrito}'>alunos anual no programa de Aceleração do Conhecimento</span>", unsafe_allow_html=True) 
+        st.markdown(f"<h2 style='{cor_estilizada}'>+ 1000</h2> <span style='{fonte_negrito}';>alunos anual no programa de Aceleração do Conhecimento</span>", unsafe_allow_html=True) 
     with col4:
-        st.markdown(f"<h2 style='{cor_estilizada}'>6 anos</h2> <span style='{fonte_negrito}'>idade mínima de entrada dos beneficiários</span>", unsafe_allow_html=True)
+        st.markdown(f"<h2 style='{cor_estilizada}'>6 anos</h2> <span style='{fonte_negrito}';>idade mínima de entrada dos beneficiários</span>", unsafe_allow_html=True)
 
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     
-    st.markdown('<p style="text-align: justify;"> A Associação teve início em 1992, auxiliando crianças em orfanato com origem da idealização de seus fundadores: Michelle Flues Ivanoff, Dimitri Ivanoff, Carol Ivanoff e Alexandre Ivanoff.</p><p style="text-align: justify;">Em 2016, decidem ampliar o programa para que mais jovens tivessem acesso a essa fórmula mágica para transformação que inclui: educação de qualidade, auxílio psicológico/psicopedagógico, ampliação de sua visão de mundo e protagonismo. Passaram então a atuar como um projeto social e educacional, criando assim a Associação Passos Mágicos.</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;color:  #292F39;"> A Associação teve início em 1992, auxiliando crianças em orfanato com origem da idealização de seus fundadores: Michelle Flues Ivanoff, Dimitri Ivanoff, Carol Ivanoff e Alexandre Ivanoff.</p><p style="text-align: justify;color:  #292F39;">Em 2016, decidem ampliar o programa para que mais jovens tivessem acesso a essa fórmula mágica para transformação que inclui: educação de qualidade, auxílio psicológico/psicopedagógico, ampliação de sua visão de mundo e protagonismo. Passaram então a atuar como um projeto social e educacional, criando assim a Associação Passos Mágicos.</p>', unsafe_allow_html = True)
     
     st.markdown(f"<h3 style='{cor_estilizada}'>O que fazemos?</h3>", unsafe_allow_html=True)
 
     
-    st.markdown('<p style="text-align: justify;"><span style="font-weight: bold">Aceleração do Conhecimento:</span> Oferecer uma educação de qualidade, suporte psicológico e ampliar a visão de mundo de cada aluno impactado. Possui aulas de alfabetização, língua portuguesa e matemática para crianças e adolescentes. Os alunos são divididos por nível de conhecimento, determinado por meio de uma prova de sondagem que é realizada ao ingressarem na Passos Mágicos, e são inseridos em turmas que variam da alfabetização até o nível 8, sendo:</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;color:  #292F39;"><span style="font-weight: bold">Aceleração do Conhecimento:</span> Oferecer uma educação de qualidade, suporte psicológico e ampliar a visão de mundo de cada aluno impactado. Possui aulas de alfabetização, língua portuguesa e matemática para crianças e adolescentes. Os alunos são divididos por nível de conhecimento, determinado por meio de uma prova de sondagem que é realizada ao ingressarem na Passos Mágicos, e são inseridos em turmas que variam da alfabetização até o nível 8, sendo:</p>', unsafe_allow_html = True)
     aceleracao = {
     'Fase de alfabetização': ['Alunos que estejam em fase de alfabetização ou que apresentem dificuldade na leitura e na escrita'],
     'Fases 1 e 2': ['Focadas em conteúdo do ensino fundamental 1, sendo explorados com mais detalhes de um nível para o outro'],
@@ -191,15 +214,15 @@ with aba1:
     # Adicionar estilos CSS para centralizar os nomes das colunas e justificar o texto das células
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    # html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; color: #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    # html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; color: #1A4A6A; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; text-align: center;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; color:  #292F39;text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A;color:  #292F39; text-align: center;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
 
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify;"><span style="font-weight: bold">Programas Especiais:</span> Projeto de apadrinhamento e de intercâmbio, visando uma maior integração dos alunos com diferentes ambientes e culturas.</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;color:  #292F39"><span style="font-weight: bold;";>Programas Especiais:</span> Projeto de apadrinhamento e de intercâmbio, visando uma maior integração dos alunos com diferentes ambientes e culturas.</p>', unsafe_allow_html = True)
     programas = {
     'Apadrinhamento': ['Os alunos que se destacam dentro da Associação Passos Mágicos, a partir da evolução apresentada dentro da aplicação do conhecimento absorvido e dos princípios vividos, são expostos a diversas oportunidades e, dentre elas, a de ser apadrinhado e viver a experiência de estudar em uma escola de ensino particular.'],
     'Intercâmbio': ['Visando uma maior integração dos alunos com diferentes ambientes e culturas, a Associação Passos Mágicos promove diversas atividades que possibilitam esse contato.'],
@@ -209,14 +232,14 @@ with aba1:
     html = df_programas.to_html(index=False)
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; color:  #292F39; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; color:  #292F39; text-align: center;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
 
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
 
-    st.markdown('<p style="text-align: justify;"><span style="font-weight: bold">Eventos e ações sociais:</span> Anualmente, em prol dos alunos, são promovidas campanhas de arrecadação para presentear as centenas de crianças e adolescentes Passos Mágicos.</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify;color:  #292F39;"><span style="font-weight: bold">Eventos e ações sociais:</span> Anualmente, em prol dos alunos, são promovidas campanhas de arrecadação para presentear as centenas de crianças e adolescentes Passos Mágicos.</p>', unsafe_allow_html = True)
     eventos = {
     'Materiais escolares': ['Campanha de arrecadação de doações de materiais para os alunos bolsistas  e alunos no geral.'],
     'Páscoa Mágica': ['Arrecadação de ovos de páscoa, barras e caixas de chocolate para distribuir aos alunos.'],
@@ -229,14 +252,14 @@ with aba1:
     html = df_eventos.to_html(index=False)
 
     # Adicionando estilos CSS para a cor da borda de todas as células
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; color:  #292F39;text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A;color:  #292F39; text-align: center;\'>')
 
     # Exibir a tabela estilizada no Streamlit
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
 
 with aba2:
 
-    st.markdown(f"<p style='text-align: justify;'> Indicadores de impacto da Passos Mágicos em <span style='{fonte_negrito}'>2023</span>:</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Indicadores de impacto da Passos Mágicos em <span style='{fonte_negrito}'>2023</span>:</p>", unsafe_allow_html = True)
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -249,7 +272,7 @@ with aba2:
         st.markdown(f"<h2 style='{cor_estilizada}'>41</h2> <span style='{fonte_negrito}'>universitários formados</span>", unsafe_allow_html=True) 
        
     st.markdown("<div style='height: 40px;'></div>", unsafe_allow_html=True) #Linha 
-    st.markdown(f"<p style='text-align: justify;'> Variação do número de alunos beneficiados, bem como à relação entre bolsistas e universitários nas escolas parceiras ao longo do tempo:</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Variação do número de alunos beneficiados, bem como à relação entre bolsistas e universitários nas escolas parceiras ao longo do tempo:</p>", unsafe_allow_html = True)
     
     
     dados = [(2016, 70, 26, 0, 5, 1, 0, 0, 0), (2017, 300, 35, 0, 6, 1, 1, 0, 0), (2018, 550, 80, 1, 7, 1, 1, 0, 0), (2019, 812, 106, 2, 9, 2, 1, 0, 0), (2020, 841, 112, 26, 9, 2, 1, 0, 0), (2021, 824, 133, 51, 12, 2, 2, 0, 0), (2022, 970, 112, 71, 13, 3, 3, 1, 1), (2023, 1100, 100, 94, 14, 3, 3, 1, 1)]
@@ -261,21 +284,21 @@ with aba2:
 
     st.plotly_chart(grafico_tres_linhas_ponto(linha_do_tempo_completo['Ano'],linha_do_tempo_completo['Quantidade de alunos'],linha_do_tempo_completo['Bolsistas em escola parceira'],linha_do_tempo_completo['Universitários'],linha_do_tempo_completo['Bolsistas/Alunos'],linha_do_tempo_completo['Universitários/Alunos']), use_container_width=True)
     
-    st.markdown(f"<p style='text-align: justify;'> Evolução da quantidade de alunos atendidos em relação a população do município de Embu-Guaçu:</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Evolução da quantidade de alunos atendidos em relação a população do município de Embu-Guaçu:</p>", unsafe_allow_html = True)
     st.plotly_chart(grafico_duas_linhas_ponto(df_alunos_populacao['Ano'],df_alunos_populacao['Quantidade de alunos'],df_alunos_populacao['População do município'],df_alunos_populacao['Alunos/População'] ), use_container_width=True)
     
-    st.markdown(f"<p style='text-align: justify;'> A equipe Passos Mágicos é formada por profissionais que têm em mente o objetivo de atuarem como agentes transformadores da vida de cada um dos alunos.</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> A equipe Passos Mágicos é formada por profissionais que têm em mente o objetivo de atuarem como agentes transformadores da vida de cada um dos alunos.</p>", unsafe_allow_html = True)
    
     categorias_selecionadas = st.multiselect(
         'Selecione as categorias:',
         ['Professor','Psicóloga', 'Psicopedagoga', 'Psiquiatra', 'Assistente Social'],
         default=['Professor','Psicóloga','Psicopedagoga', 'Psiquiatra', 'Assistente Social'] 
     )
-
+    
     # Plotar gráfico com base nas categorias selecionadas
     plotar_grafico(categorias_selecionadas)
 
-    st.markdown(f"<p style='text-align: justify;'> Alunos graduados por instituição e curso (Base de dados de 2023):</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Alunos graduados por instituição e curso (Base de dados de 2023):</p>", unsafe_allow_html = True)
 
     cursos = [('Estácio de Sá', 'Design gráfico', 1), 
              ('FIAP', 'Produção Multimídia', 2), 
@@ -295,27 +318,34 @@ with aba2:
              ('UNISA', 'Enfermagem', 3)]
     df_cursos = pd.DataFrame(cursos, columns=['Instituição', 'Curso', 'Quantidade'])
 
-
-    # Multiselect para selecionar instituições
     instituicoes_selecionadas = st.multiselect('Selecione as instituições:', df_cursos['Instituição'].unique(),default=df_cursos['Instituição'].unique())
 
     # Filtrar dataframe de acordo com as instituições selecionadas
     df_filtrado = df_cursos[df_cursos['Instituição'].isin(instituicoes_selecionadas)]
 
     # Criar gráfico Plotly
-    fig = px.bar(df_filtrado, x='Curso', y='Quantidade', color='Instituição', barmode='group')
+    fig = px.bar(df_filtrado, x='Curso', y='Quantidade',color_discrete_sequence=['#1A4A6A', '#722f37', '#006400'], barmode='group')
 
     # Atualizar layout do gráfico
     fig.update_layout(title='Quantidade de Cursos por Instituição',
                     xaxis_title='Curso',
-                    yaxis_title='Quantidade')
+                    yaxis_title='Quantidade',
+                    title_font_color='#292F39',  
+                    font_color='#292F39',
+                    xaxis=dict(
+                        gridcolor='gray'
+                    ),
+                    yaxis=dict(
+                        gridcolor='gray'
+                    )
+                    )
 
     st.plotly_chart(fig,use_container_width=True)
 
 
 with aba3:
     
-    st.markdown(f"<p style='text-align: justify;'> Análise da <span style='{fonte_negrito}'>PEDE (Pesquisa de Desenvolvimento Educacional)</span> dos alunos da Passos Mágicos entre os anos de <span style='{fonte_negrito}'>2020 a 2022</span>:</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Análise da <span style='{fonte_negrito}'>PEDE (Pesquisa de Desenvolvimento Educacional)</span> dos alunos da Passos Mágicos entre os anos de <span style='{fonte_negrito}'>2020 a 2022</span>:</p>", unsafe_allow_html = True)
     tabela = 'tb_pede_passos'
     dados_passos_tratado = select_bq (tabela)
     # st.write(dados_passos_tratado)
@@ -371,7 +401,7 @@ with aba3:
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
     
-    st.markdown(f"<p style='text-align: justify;''> Do total de alunos <span style='{fonte_negrito}'>distintos</span> da pesquisa, <span style='{fonte_negrito}'>{alunos_distintos_todos_anos}</span> estiveram presentes nos três anos consecutivos. Com base nesse resultado, para demonstrar a média da evolução do INDE (Índice de Desenvolvimento Educacional) anual e sua composição, serão considerados estes alunos.</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Do total de alunos <span style='{fonte_negrito}'>distintos</span> da pesquisa, <span style='{fonte_negrito}'>{alunos_distintos_todos_anos}</span> estiveram presentes nos três anos consecutivos. Com base nesse resultado, para demonstrar a média da evolução do INDE (Índice de Desenvolvimento Educacional) anual e sua composição, serão considerados estes alunos.</p>", unsafe_allow_html = True)
     # st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>Composição do Índice de Desenvolvimento Educacional (INDE):</span></p>", unsafe_allow_html=True)
     st.markdown(f"<h3 style='{cor_estilizada}'>Composição do Índice de Desenvolvimento Educacional (INDE)</h3>", unsafe_allow_html=True)
     inde = {
@@ -381,12 +411,12 @@ with aba3:
     df_inde = pd.DataFrame(inde)
     html = df_inde.to_html(index=False)
 
-    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #0145AC; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #0145AC; text-align: center;\'>')
+    html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; color:  #292F39;text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; color:  #292F39;text-align: center;\'>')
 
     st.write("<style>table {{ width: 100%; border-collapse: collapse; }} th, td {{ padding: 10px; }}</style>{}".format(html_estilizado), unsafe_allow_html=True)
     st.markdown('<p style="text-align: justify;"></p>', unsafe_allow_html = True)
-    st.markdown(f"<p style='text-align: justify;''> Significado de cada sigla mencionada na composição:  </p>", unsafe_allow_html = True)
-    st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>IAN </span>- Indicador de Adequação ao Nível – Media das Notas de Adequação do Aluno ao nível atual <br> <span style='{fonte_negrito}'>IDA </span>- Indicador de Aprendizagem - Média das Notas do Indicador de Aprendizagem <br><span style='{fonte_negrito}'>IEG </span>- Indicador de Engajamento – Média das Notas de Engajamento do Aluno <br><span style='{fonte_negrito}'>IAA </span>- Indicador de Auto Avalição – Média das Notas de Auto Avaliação do Aluno<br><span style='{fonte_negrito}'>IPS </span>- Indicador Psicossocial – Média das Notas Psicossociais do Aluno<br><span style='{fonte_negrito}'>IPP </span>- Indicador Psicopedagogico – Média das Notas Psico Pedagogicas do Aluno<br><span style='{fonte_negrito}'>IPV </span>- Indicador de Ponto de Virada – Média das Notas dePonto de Virada do Aluno</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Significado de cada sigla mencionada na composição:  </p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'><span style='{fonte_negrito}'>IAN </span>- Indicador de Adequação ao Nível – Media das Notas de Adequação do Aluno ao nível atual <br> <span style='{fonte_negrito}'>IDA </span>- Indicador de Aprendizagem - Média das Notas do Indicador de Aprendizagem <br><span style='{fonte_negrito}'>IEG </span>- Indicador de Engajamento – Média das Notas de Engajamento do Aluno <br><span style='{fonte_negrito}'>IAA </span>- Indicador de Auto Avalição – Média das Notas de Auto Avaliação do Aluno<br><span style='{fonte_negrito}'>IPS </span>- Indicador Psicossocial – Média das Notas Psicossociais do Aluno<br><span style='{fonte_negrito}'>IPP </span>- Indicador Psicopedagogico – Média das Notas Psico Pedagogicas do Aluno<br><span style='{fonte_negrito}'>IPV </span>- Indicador de Ponto de Virada – Média das Notas dePonto de Virada do Aluno</p>", unsafe_allow_html = True)
     
     dados_alunos_todos_anos['INDE'] = pd.to_numeric(dados_alunos_todos_anos['INDE'], errors='coerce')
     dados_alunos_todos_anos['IAN'] = pd.to_numeric(dados_alunos_todos_anos['IAN'], errors='coerce')
@@ -400,7 +430,6 @@ with aba3:
     media_por_ano = dados_alunos_todos_anos.groupby('ANO')[colunas_para_media].mean().reset_index()
     media_por_ano['ANO']=media_por_ano['ANO'].astype(int)
 
-
     categorias_selecionadas = st.multiselect('Selecione as categorias:', list(media_por_ano.columns[1:]), default=['INDE','IPV'])
     media_por_ano_filtrados = media_por_ano[['ANO'] + categorias_selecionadas]
 
@@ -410,13 +439,18 @@ with aba3:
     fig.update_layout(title='Média dos indicadores por ano',
                     xaxis_title='Ano',
                     yaxis_title='Média das notas',
-                    xaxis=dict(tickmode='array', tickvals=media_por_ano['ANO'], ticktext=[str(i) for i in media_por_ano['ANO']]),
-                    legend=dict(title=None))
+                    xaxis=dict(gridcolor='gray',tickmode='array', tickvals=media_por_ano['ANO'], ticktext=[str(i) for i in media_por_ano['ANO']]),
+                    legend=dict(title=None),
+                    title_font_color='#292F39',  
+                            font_color='#292F39',
+                            yaxis=dict(
+                                gridcolor='gray'
+                            ))
     fig.update_xaxes(range=[min(media_por_ano['ANO']) - 0.1, max(media_por_ano['ANO'])+ 0.1])
     st.plotly_chart(fig, use_container_width=True)
 
     
-    st.markdown(f"<p style='text-align: justify;'> Para uma análise mais detalhada, é possível visualizar como cada aluno evoluiu ao longo dos três anos. O nome do aluno foi substituido por um número, para preservar a sua identidade. Selecione o aluno e o(s) indicador(es) que deseja analisar:</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Para uma análise mais detalhada, é possível visualizar como cada aluno evoluiu ao longo dos três anos. O nome do aluno foi substituido por um número, para preservar a sua identidade. Selecione o aluno e o(s) indicador(es) que deseja analisar:</p>", unsafe_allow_html = True)
     
     dados_alunos_indicadores = dados_alunos_todos_anos[['ANO','NOME','INDE', 'IAN', 'IDA', 'IEG', 'IAA', 'IPS', 'IPP','IPV']]
     dados_alunos_indicadores = dados_alunos_indicadores.sort_values(by=['ANO', 'NOME'])
@@ -440,13 +474,18 @@ with aba3:
     fig.update_layout(title='Indicadores por aluno',
                     xaxis_title='Ano',
                     yaxis_title='Média da nota',
-                    xaxis=dict(tickmode='array', tickvals=dados_alunos_indicadores['ANO'], ticktext=[str(i) for i in dados_alunos_indicadores['ANO']]),
-                    legend=dict(title=None))
+                    xaxis=dict(gridcolor='gray', tickmode='array', tickvals=dados_alunos_indicadores['ANO'], ticktext=[str(i) for i in dados_alunos_indicadores['ANO']]),
+                    legend=dict(title=None),
+                    title_font_color='#292F39',  
+                            font_color='#292F39',
+                            yaxis=dict(
+                                gridcolor='gray'
+                            ))
     st.plotly_chart(fig, use_container_width=True)
 
 
     st.markdown(f"<h3 style='{cor_estilizada}'>Análises segmentadas por ano</h3>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align: justify;'> A seguir, serão realizadas análises sobre as respostas de cada ano. Algumas informações podem estar ausentes no ano selecionado devido à sua inexistência na base de dados. Portanto, os gráficos só serão exibidos se os dados correspondentes estiverem presentes.</p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'> A seguir, serão realizadas análises sobre as respostas de cada ano. Algumas informações podem estar ausentes no ano selecionado devido à sua inexistência na base de dados. Portanto, os gráficos só serão exibidos se os dados correspondentes estiverem presentes.</p>", unsafe_allow_html = True)
     colunas_para_remover = ['DEFASAGEM_x', 'DEFASAGEM_y']
     dados_alunos_2020 = dados_alunos_2020.drop(colunas_para_remover, axis=1)
     dados_alunos_2021 = dados_alunos_2021.drop(colunas_para_remover, axis=1)
@@ -465,8 +504,8 @@ with aba3:
 
     ano_selecionado = st.selectbox('Selecione o ano:', sorted(agrupado_pedra_ponto_merge['ANO'].unique(),reverse=True))
 
-    st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'> A Classificação do aluno é baseado pelo número do INDE, sendo separado por nomes de Pedras:</span></p>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align: justify;''><span style='{fonte_negrito}'>Quartzo </span>- 2.405 a 5.506 <br> <span style='{fonte_negrito}'>Agata </span>- 5.506 a 6.868 <br><span style='{fonte_negrito}'>Ametista </span>-  6.868 a 8.230 <br><span style='{fonte_negrito}'>Topazio </span>- 8.230 a 9.294<br></p>", unsafe_allow_html = True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'><span style='{fonte_negrito}'> A Classificação do aluno é baseado pelo número do INDE, sendo separado por nomes de Pedras:</span></p>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align: justify;color:  #292F39;'><span style='{fonte_negrito}'>Quartzo </span>- 2.405 a 5.506 <br> <span style='{fonte_negrito}'>Agata </span>- 5.506 a 6.868 <br><span style='{fonte_negrito}'>Ametista </span>-  6.868 a 8.230 <br><span style='{fonte_negrito}'>Topazio </span>- 8.230 a 9.294<br></p>", unsafe_allow_html = True)
 
     dados_filtrados = agrupado_pedra_ponto_merge[agrupado_pedra_ponto_merge['ANO'] == ano_selecionado]
     dados_filtrados = dados_filtrados.sort_values(by='Alunos por pedra', ascending = False)
@@ -476,7 +515,15 @@ with aba3:
     fig.update_layout(
                     yaxis_title='Quantidade de alunos',
                     xaxis_title='Tipo de pedra',
-                    legend=dict(title=None))
+                    legend=dict(title=None),
+                    title_font_color='#292F39',  
+                            font_color='#292F39',
+                            xaxis=dict(
+                                gridcolor='gray'
+                            ),
+                            yaxis=dict(
+                                gridcolor='gray'
+                            ))
     st.plotly_chart(fig, use_container_width=True)
 
 
@@ -517,7 +564,15 @@ with aba3:
         fig.update_layout(
                         yaxis_title='Quantidade de alunos',
                         xaxis_title='Fase',
-                        legend=dict(title=None))
+                        legend=dict(title=None),
+                        title_font_color='#292F39',  
+                            font_color='#292F39',
+                            xaxis=dict(
+                                gridcolor='gray'
+                            ),
+                            yaxis=dict(
+                                gridcolor='gray'
+                            ))
         st.plotly_chart(fig, use_container_width=True)
 
     if (ano_selecionado == '2022'):
@@ -540,13 +595,21 @@ with aba3:
         fig = px.line(df_filtrado, x='FASE', y=['Inglês', 'Matemática', 'Português'], 
                     title=f'Média das notas na matérias por Fase - Ano {ano_selecionado}',
                     labels={'value': 'Nota', 'variable': 'Nota'},
-                    color_discrete_map={'Inglês': 'blue', 'Matemática': 'green', 'Português': 'red'})
+                    color_discrete_map={'Inglês': '#1A4A6A', 'Matemática': 'green', 'Português': 'red'})
         for trace in fig.data:
             trace.update(mode='lines+markers')
         fig.update_layout(
                         yaxis_title='Média das notas',
                         xaxis_title='Fase',
-                        legend=dict(title=None))
+                        legend=dict(title=None),
+                        title_font_color='#292F39',  
+                            font_color='#292F39',
+                            xaxis=dict(
+                                gridcolor='gray'
+                            ),
+                            yaxis=dict(
+                                gridcolor='gray'
+                            ))
 
         st.plotly_chart(fig, use_container_width=True)
 
@@ -571,7 +634,15 @@ with aba3:
             # Atualizar layout do gráfico
             fig.update_layout(title=titulo,
                             xaxis_title=xaxis,
-                            yaxis_title=yaxis)
+                            yaxis_title=yaxis,
+                            title_font_color='#292F39',  
+                            font_color='#292F39',
+                            xaxis=dict(
+                                gridcolor='gray'
+                            ),
+                            yaxis=dict(
+                                gridcolor='gray'
+                            ))
             return st.plotly_chart(fig,use_container_width=True)
         
         if destaque_selecionado == 'IDA':
@@ -584,19 +655,13 @@ with aba3:
             destaque_ipv.sort_values(by='Contagem',ascending = False, inplace = True)
             grafico_barra_um_valor(destaque_ipv[destaque_ipv['ANO']==ano_selecionado], 'DESTAQUE_IPV', 'Contagem', 'Destaques observados', 'Quantidade de alunos', 'Destaques qualitativos observados pelos mestres sobre os alunos  referente ao Indicador de Ponto de Virada')
 
-#  Destaques qualitativos observados pelos mestres sobre os alunos 
-
 # 1ª aba - História da Passos(Overview), Análise Dados Históricos e Resultado das ações na cidade - 
 # 2ª aba - Fatores-Chave de Sucesso - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers - Colocar descrições com cores destaques 
 # 3ª aba - Análise do Impacto Emocional e Social - Desempenho dos alUnos - (Análise do dataset - Notas com o passar dos anos , qual idade tem maior desempenho, notas por matéria, avaliação qualitativa (quantidade de comentários sobre os alunos),  tem desistência? ponto de virada PV) - colocar cursos que os alunos estão fazendo
 # 4ª aba - Aprimoramento de estratégias e operações Futuras (PIX, Potencias cidades para expansão(Modelo) e Previsão de aumento de alunos (Quantidade de alunos para os próximos anos))
 # 5ª aba - Sobre
 
-
-
-
 # Quantidade de população de Embu Guaçu, percentual de matriculados no ensino básico, PIB
-
 # Qual o impacto e potencial para a região?
 # Onde direcionar mais esforços e recursos?
 # O quanto a psicologia impacta a vida das crianças?
