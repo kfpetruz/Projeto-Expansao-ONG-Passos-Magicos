@@ -183,7 +183,7 @@ with aba2:
 
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<h5 style="{cor_estilizada}"> Banco de dados com informações cadastrais de doadores</h5>', unsafe_allow_html=True)
-    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Ao cadastrar as pessoas por meio de doações, podemos manter contato e alcançá-las enviando mensagens por e-mail e celular (de acordo com seu consentimento), engajando-as e mantendo-as informadas sobre as últimas novidades da ONG, além de possibilitar o compartilhamento de informações.</p>', unsafe_allow_html = True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Ao cadastrar as pessoas por meio de doações, além de explorar o perfil dos doadores, é possível viabilizar o contato e o envio de mensagens por e-mail e celular (de acordo com seu consentimento), engajando-os e mantendo-os informados sobre as últimas notícias. Isso possibilita ainda mais o compartilhamento de informações da ONG e o alcance de novas pessoas.</p>', unsafe_allow_html = True)
 
     st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
     st.markdown(f'<p style="text-align: justify; {fonte_negrito}{fonte_escura}"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG:</p>', unsafe_allow_html = True)
