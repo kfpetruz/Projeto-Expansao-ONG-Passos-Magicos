@@ -181,7 +181,12 @@ with aba2:
     st.markdown(f'<h5 style="{cor_estilizada}"> Inclusão de opção de valores pré-determinados</h5>', unsafe_allow_html=True)
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Inclusão de opção de valores pré-determinados, deixando a opção "Outros" habilitada também para caso a pessoa doadora queira doar um valor diferente e até pessoas que queiram doar de forma recorrente.</p>', unsafe_allow_html = True)
 
-    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG.</p>', unsafe_allow_html = True)
+    st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
+    st.markdown(f'<h5 style="{cor_estilizada}"> Banco de dados com informações cadastrais de doadores</h5>', unsafe_allow_html=True)
+    st.markdown(f'<p style="text-align: justify; {fonte_escura}"> Ao cadastrar as pessoas por meio de doações, podemos manter contato e alcançá-las enviando mensagens por e-mail e celular (de acordo com seu consentimento), engajando-as e mantendo-as informadas sobre as últimas novidades da ONG, além de possibilitar o compartilhamento de informações.</p>', unsafe_allow_html = True)
+
+    st.markdown('<p style="text-align: justify; padding: 2px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
+    st.markdown(f'<p style="text-align: justify; {fonte_negrito}{fonte_escura}"> Abaixo um exemplo gráfico de como poderia ser a página de doações no site da ONG:</p>', unsafe_allow_html = True)
     st.markdown("<hr style='border: 1px solid #1A4A6A;'>", unsafe_allow_html=True) #Linha cinza sólida
 
     #FORMULÁRIO DE DOAÇÃO
@@ -208,6 +213,7 @@ with aba2:
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
     nome = st.text_input("**:gray[Nome completo:]**")
     email = st.text_input("**:gray[Email:]**")
+    telefone = st.text_input("**:gray[Telefone / Celular:]**")
     endereco = st.text_input("**:gray[Endereço:]**")
     cidade = st.text_input("**:gray[Cidade:]**")
     estado = st.text_input("**:gray[Estado:]**")
@@ -217,7 +223,7 @@ with aba2:
         numero_cartao = st.text_input("**:gray[Número do cartão:]**")
         data_validade = st.text_input("**:gray[Data de validade (MM/AAAA):]**")
         cvv = st.text_input("**:gray[CVV:]**")
-
+    consentimento = st.radio("**:gray[Gostaria de receber nossas atualizações por e-mail ou mensagem de celular?]**", [':gray[Sim]', ':gray[Não]'], index = 0 )
     # Botão para confirmar doação
     if st.button(":gray[Confirmar Doação]"):
         if forma_pagamento == "Cartão de crédito" or forma_pagamento == "PIX":
