@@ -194,16 +194,12 @@ with aba2:
 
     # Formulário para preencher dados pessoais e de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
-    nome = st.text_input(":#292F39[Nome completo:]")
-    email = st.text_input(":#292F39[Email:]")
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Endereço:</p>", unsafe_allow_html=True)
-    endereco = st.text_input("")
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Cidade:</p>", unsafe_allow_html=True)
-    cidade = st.text_input("")
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Estado:</p>", unsafe_allow_html=True)
-    estado = st.text_input("")
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>CEP:</p>", unsafe_allow_html=True)
-    cep = st.text_input("")
+    nome = st.text_input(":gray[Nome completo:]")
+    email = st.text_input(":gray[Email:]")
+    endereco = st.text_input(":gray[Endereço:]")
+    cidade = st.text_input(":gray[Cidade:]")
+    estado = st.text_input(":gray[Estado:]")
+    cep = st.text_input(":gray[CEP:]")
 
     if forma_pagamento == "Cartão de crédito":
         st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Número do cartão:</p>", unsafe_allow_html=True)
