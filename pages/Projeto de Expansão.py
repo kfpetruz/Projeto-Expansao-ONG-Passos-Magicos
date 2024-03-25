@@ -180,28 +180,40 @@ with aba2:
     st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Escolha o valor:</p>", unsafe_allow_html=True)
     valor_doacao = st.radio("", valores_doacao, label_visibility='collapsed')
     if valor_doacao == "Outro":
-        valor_doacao = st.number_input("Digite o valor da doação:", step=10.0)
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Digite o valor da doação:</p>", unsafe_allow_html=True)
+        valor_doacao = st.number_input("", step=10.0, label_visibility='collapsed')
 
     # Opção de recorrência de doação
-    recorrencia = st.radio("Deseja fazer uma doação única ou recorrente?", ["Única", "Recorrente"])
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Deseja fazer uma doação única ou recorrente?</p>", unsafe_allow_html=True)
+    recorrencia = st.radio("", ["Única", "Recorrente"], label_visibility='collapsed')
 
     # Formas de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
-    forma_pagamento = st.selectbox("Forma de pagamento:", ["Cartão de crédito", "Boleto bancário", "PIX"])
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Forma de pagamento:</p>", unsafe_allow_html=True)
+    forma_pagamento = st.selectbox("", ["Cartão de crédito", "Boleto bancário", "PIX"], label_visibility='collapsed')
 
     # Formulário para preencher dados pessoais e de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
-    nome = st.text_input("Nome completo:")
-    email = st.text_input("Email:")
-    endereco = st.text_input("Endereço:")
-    cidade = st.text_input("Cidade:")
-    estado = st.text_input("Estado:")
-    cep = st.text_input("CEP:")
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Nome completo:</p>", unsafe_allow_html=True)
+    nome = st.text_input("", label_visibility='collapsed')
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Email:</p>", unsafe_allow_html=True)
+    email = st.text_input("", label_visibility='collapsed')
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Endereço:</p>", unsafe_allow_html=True)
+    endereco = st.text_input("", label_visibility='collapsed')
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Cidade:</p>", unsafe_allow_html=True)
+    cidade = st.text_input("", label_visibility='collapsed')
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Estado:</p>", unsafe_allow_html=True)
+    estado = st.text_input("", label_visibility='collapsed')
+    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>CEP:</p>", unsafe_allow_html=True)
+    cep = st.text_input("", label_visibility='collapsed')
 
     if forma_pagamento == "Cartão de crédito":
-        numero_cartao = st.text_input("Número do cartão:")
-        data_validade = st.text_input("Data de validade (MM/AAAA):")
-        cvv = st.text_input("CVV:")
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Número do cartão:</p>", unsafe_allow_html=True)
+        numero_cartao = st.text_input("", label_visibility='collapsed')
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Data de validade (MM/AAAA):</p>", unsafe_allow_html=True)
+        data_validade = st.text_input("", label_visibility='collapsed')
+        st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>CVV:</p>", unsafe_allow_html=True)
+        cvv = st.text_input("", label_visibility='collapsed')
 
     # Botão para confirmar doação
     if st.button("Confirmar Doação"):
@@ -217,5 +229,5 @@ with aba2:
                 st.success(f"Obrigado por sua doação única de R${valor_doacao}! Seu boleto será enviado para o email {email}.")
             else:
                 st.success(f"Obrigado por sua doação recorrente de R${valor_doacao}! Seu boleto será enviado para o email {email}.")
-    st.markdown("<hr style='border: 1px solid #1A4A6A;'>", unsafe_allow_html=True) #Linha cinza sólida
+    st.markdown("<hr style='border: 1px solid #1A4A6A;'>", unsafe_allow_html=True) #Linha sólida
 
