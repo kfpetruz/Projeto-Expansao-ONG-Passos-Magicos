@@ -198,7 +198,7 @@ with aba2:
         valor_doacao = st.number_input("**:gray[Digite o valor da doação:]**", step=10.0)
 
     # Opção de recorrência de doação
-    recorrencia = st.radio("**:gray[Deseja fazer uma doação única ou recorrente?]**", [':gray[Única]', ':gray[Recorrente]'])
+    recorrencia = st.radio("**:gray[Deseja fazer uma doação única ou recorrente?]**", [':gray[Única]', ':gray[Recorrente]'], index = 1)
 
     # Formas de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
