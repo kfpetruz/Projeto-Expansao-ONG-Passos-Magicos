@@ -114,7 +114,15 @@ with aba1:
     quantidade_cidades = st.number_input("", min_value=1, value=15, max_value=645, label_visibility='collapsed')
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são:</p>', unsafe_allow_html = True) 
     
-    st.dataframe(dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades))
+    def color_negative_red(val):
+        color = '#292F39'
+        return f'color: {color}'
+
+    # Aplicando o estilo usando applymap
+    df = dados_externos_model_math.reset_index(drop=True).head(quantidade_cidades)
+    styled_df = df.style.applymap(color_negative_red)
+
+    st.dataframe(styled_df)
 
     st.markdown('<p style="text-align: justify; padding: 10px;"></p>', unsafe_allow_html = True) #linha para aumentar o espaço
 
@@ -145,7 +153,15 @@ with aba1:
 
     st.markdown(f'<p style="text-align: justify; {fonte_escura}"> De acordo com os pesos escolhidos acima, as <strong> cidades mais indicadas </strong> são as <strong> {qtd_cidades_grupo_embu} </strong> listadas abaixo:</p>', unsafe_allow_html = True) 
 
-    st.dataframe(dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True))
+    def color_negative_red(val):
+        color = '#292F39'
+        return f'color: {color}'
+
+    # Aplicando o estilo usando applymap
+    df = dados_externos_model_kmeans[dados_externos_model_kmeans['grupos'] == grupo_embu[0]].reset_index(drop=True)
+    styled_df = df.style.applymap(color_negative_red)
+
+    st.dataframe(styled_df)
 
 
 with aba2:
@@ -176,13 +192,13 @@ with aba2:
 
     # Valores de doação em botões e opção de inserir outros valores
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione ou insira o valor da sua doação: </h4>", unsafe_allow_html=True)
-    valores_doacao = [':gray[10, 20, 50, 100, 200, "Outro"]']
+    valores_doacao = [':gray[10]', ':gray[20]', ':gray[50]', ':gray[100]', ':gray[200]', ':gray[Outro]']
     valor_doacao = st.radio("**:gray[Escolha o valor:]**", valores_doacao)
-    if valor_doacao == "Outro":
+    if valor_doacao == ":gray[Outro]":
         valor_doacao = st.number_input("**:gray[Digite o valor da doação:]**", step=10.0)
 
     # Opção de recorrência de doação
-    recorrencia = st.radio("**:gray[Deseja fazer uma doação única ou recorrente?]**", ["Única", "Recorrente"])
+    recorrencia = st.radio("**:gray[Deseja fazer uma doação única ou recorrente?]**", [':gray[Única]', ':gray[Recorrente]'])
 
     # Formas de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Selecione a forma de pagamento: </h4>", unsafe_allow_html=True)
@@ -203,16 +219,16 @@ with aba2:
         cvv = st.text_input("**:gray[CVV:]**")
 
     # Botão para confirmar doação
-    if st.button("Confirmar Doação"):
+    if st.button(":gray[Confirmar Doação]"):
         if forma_pagamento == "Cartão de crédito" or forma_pagamento == "PIX":
             # Aqui você pode adicionar a lógica para processar o pagamento com cartão de crédito
-            if recorrencia == "Única":
+            if recorrencia == ":gray[Única]":
                 st.success(f"Obrigado por sua doação única de R${valor_doacao}!")
             else:
                 st.success(f"Obrigado por sua doação recorrente de R${valor_doacao}!")
         else:
             # Aqui você pode adicionar a lógica para gerar o boleto bancário
-            if recorrencia == "Única":
+            if recorrencia == ":gray[Única]":
                 st.success(f"Obrigado por sua doação única de R${valor_doacao}! Seu boleto será enviado para o email {email}.")
             else:
                 st.success(f"Obrigado por sua doação recorrente de R${valor_doacao}! Seu boleto será enviado para o email {email}.")
