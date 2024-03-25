@@ -8,13 +8,16 @@ from utils import select_bq
 
 
 # Configuração da página
-st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= '🤝')
+st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= 'https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png')
+st.image('Passos-magicos-icon-cor.png',width=200) #width=50,use_column_width=True )
 
 cor_estilizada = 'color:  #1A4A6A;'
 fonte_negrito = 'font-weight: bold;color:  #292F39;'
 
 # Título da página
-st.markdown(f"<h1 style='font-weight: bold;color:  #1A4A6A;';>Projeto ONG Passos Mágicos 🤝</h1>", unsafe_allow_html=True)
+
+st.markdown(f"<h1 style='font-weight: bold;color:  #1A4A6A;';>Projeto Passos Mágicos <img width=40 height=40 src='https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png'/></h1>", unsafe_allow_html=True)
+
 
 
 cor_estilizada = 'color:  #1A4A6A;'

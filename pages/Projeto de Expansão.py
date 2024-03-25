@@ -10,13 +10,14 @@ from sklearn.cluster import KMeans # Algoritmo de Agrupamento
 from sklearn.metrics import adjusted_rand_score, silhouette_score
 
 # Configuração da página
-st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= '🤝')
+st.set_page_config(page_title= 'Projeto de Expansão', layout='wide', page_icon= 'https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png')
 cor_estilizada = 'color: #1A4A6A;'
 fonte_negrito = 'font-weight: bold;'
 fonte_escura = 'color: #292F39;'
 
 # Título da página
-st.markdown(f"<h1 style='{cor_estilizada} {fonte_negrito}'> Projeto de Expansão 🤝 </h1>", unsafe_allow_html=True)
+st.image('Passos-magicos-icon-cor.png',width=200)
+st.markdown(f"<h1 style='{cor_estilizada} {fonte_negrito}'> Projeto de Expansão <img width=40 height=40 src='https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png'/> </h1>", unsafe_allow_html=True)
 
 
 #PREPARAÇÃO DOS DADOS

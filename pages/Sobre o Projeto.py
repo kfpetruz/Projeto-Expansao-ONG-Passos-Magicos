@@ -2,13 +2,14 @@
 import streamlit as st
 
 # Configuração da página
-st.set_page_config(page_title= 'Sobre o Projeto', layout='wide', page_icon= '🤝')
+st.set_page_config(page_title= 'Sobre o Projeto', layout='wide', page_icon= 'https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png')
 cor_estilizada = 'color: #1A4A6A;'
 fonte_negrito = 'font-weight: bold;'
 fonte_escura = 'color: #292F39;'
 
 # Título da página
-st.markdown(f"<h1 style='{fonte_escura} {fonte_negrito} {cor_estilizada}'> Desenvolvimento do Projeto 🤝 </h1>", unsafe_allow_html=True)
+st.image('Passos-magicos-icon-cor.png',width=200)
+st.markdown(f"<h1 style='{fonte_escura} {fonte_negrito} {cor_estilizada}'> Desenvolvimento do Projeto <img width=40 height=40 src='https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png'/> </h1>", unsafe_allow_html=True)
 
 # Descrição do projeto
 st.markdown(f'<p style="text-align: justify; {fonte_escura}">Para além de um Tech Challenge, este projeto foi uma nobre proposta como trabalho de conclusão de Pós-graduação em Data Analytics da faculdade Fiap - Datathon. Nós alunos fomos instigados a analisar dados da ONG Passos Mágicos, uma ONG que tem mudado vidas de centenas de crianças e adolescentes na cidade de Embu-Guaçu.</p>', unsafe_allow_html = True)
