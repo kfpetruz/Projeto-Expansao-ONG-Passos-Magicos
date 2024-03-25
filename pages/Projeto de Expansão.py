@@ -8,7 +8,6 @@ from matplotlib import colors
 from sklearn.preprocessing import StandardScaler, MinMaxScaler #Feature Engineer
 from sklearn.cluster import KMeans # Algoritmo de Agrupamento
 from sklearn.metrics import adjusted_rand_score, silhouette_score
-from pandas import DataFrame, Styler
 
 # Configuração da página
 st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= '🤝')
