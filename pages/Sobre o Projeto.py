@@ -13,7 +13,7 @@ st.markdown(f"<h1 style='{fonte_escura} {fonte_negrito} {cor_estilizada}'> Desen
 # Descrição do projeto
 st.markdown(f'<p style="text-align: justify; {fonte_escura}">Para além de um Tech Challenge, este projeto foi uma nobre proposta como trabalho de conclusão de Pós-graduação em Data Analytics da faculdade Fiap - Datathon. Nós alunos fomos instigados a analisar dados da ONG Passos Mágicos, uma ONG que tem mudado vidas de centenas de crianças e adolescentes na cidade de Embu-Guaçu.</p>', unsafe_allow_html = True)
 st.markdown(f'<p style="text-align: justify; {fonte_escura}">Durante aproximadamente um mês nos debruçamos sobre os dados da ONG a fim de:</p>', unsafe_allow_html = True)
-st.markdown(f'- <p style="{fonte_escura}"> Extrair insights dos dados históricos de alunos;</p>', unsafe_allow_html = True)
+st.markdown(f'<p style="{fonte_escura}"> - Extrair insights dos dados históricos de alunos;</p>', unsafe_allow_html = True)
 st.markdown(f'<p style=" {fonte_escura}"> - Apresentar fatores de sucesso;</p>', unsafe_allow_html = True)
 st.markdown(f'<p style=" {fonte_escura}"> - Apresentar o impacto social da ONG na cidade onde atua;</p>', unsafe_allow_html = True)
 st.markdown(f'<p style=" {fonte_escura}"> - Criar visualizações impactantes para os dados;</p>', unsafe_allow_html = True)

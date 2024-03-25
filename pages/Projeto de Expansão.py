@@ -194,18 +194,16 @@ with aba2:
 
     # Formulário para preencher dados pessoais e de pagamento
     st.markdown(f"<h4 style='{fonte_negrito} {fonte_escura}'> Preencha seus dados: </h4>", unsafe_allow_html=True)
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Nome completo:</p>", unsafe_allow_html=True)
-    nome = st.text_input("", label_visibility='collapsed')
-    st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Email:</p>", unsafe_allow_html=True)
-    email = st.text_input("", label_visibility='collapsed')
+    nome = st.text_input(":red[Nome completo:]")
+    email = st.text_input(":red[Email:]")
     st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Endereço:</p>", unsafe_allow_html=True)
-    endereco = st.text_input("", label_visibility='collapsed')
+    endereco = st.text_input("")
     st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Cidade:</p>", unsafe_allow_html=True)
-    cidade = st.text_input("", label_visibility='collapsed')
+    cidade = st.text_input("")
     st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Estado:</p>", unsafe_allow_html=True)
-    estado = st.text_input("", label_visibility='collapsed')
+    estado = st.text_input("")
     st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>CEP:</p>", unsafe_allow_html=True)
-    cep = st.text_input("", label_visibility='collapsed')
+    cep = st.text_input("")
 
     if forma_pagamento == "Cartão de crédito":
         st.markdown(f"<p style='font-weight: bold; {fonte_escura}; font-size:14px; margin: 0; padding: 4px 0;'>Número do cartão:</p>", unsafe_allow_html=True)
