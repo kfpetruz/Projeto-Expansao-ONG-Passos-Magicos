@@ -1,51 +1,66 @@
 # Importação das bibliotecas
 import streamlit as st
 import pandas as pd
-import plotly.graph_objects as go
 import numpy as np
 import plotly.express as px
-from utils import select_bq
+from utils import select_bq, insert_bq, tratamento_base_estimativa_populacao,tratamento_base_passos,tratamento_base_idade, tratamento_base_economia, tratamento_base_coordenadas, tratamento_base_educacional,juncao_dados_externos, grafico_duas_linhas_ponto,grafico_tres_linhas_ponto,plotar_grafico,grafico_barra_um_valor
 
 
 # Configuração da página
 st.set_page_config(page_title= 'ONG Passos Mágicos', layout='wide', page_icon= 'https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png')
-st.image('Passos-magicos-icon-cor.png',width=200) #width=50,use_column_width=True )
-
-cor_estilizada = 'color:  #1A4A6A;'
-fonte_negrito = 'font-weight: bold;color:  #292F39;'
+st.image('Passos-magicos-icon-cor.png',width=200)
 
 # Título da página
-
 st.markdown(f"<h1 style='font-weight: bold;color:  #1A4A6A;';>Projeto Passos Mágicos <img width=40 height=40 src='https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png'/></h1>", unsafe_allow_html=True)
 
 
-
 cor_estilizada = 'color:  #1A4A6A;'
 fonte_negrito = 'font-weight: bold;color:  #292F39;'
 
-dados = [(2016, 70), (2017, 300), (2018, 550), (2019, 812), (2020, 841), (2021, 824), (2022, 970)]
+# Tratamento das bases da PEDE e dados externos
+dados = select_bq ('tb_pede_passos_dataset_fiap')
+# Dividir a coluna com base no delimitador ';' e expandir em várias colunas
+dados = dados[dados.columns[0]].str.split(';', expand=True)
+# Definir a primeira linha como o cabeçalho das colunas
+dados.columns = dados.iloc[0]
+# Excluir a primeira linha do DataFrame
+dados = dados[1:]
+# Reinicializar os índices do DataFrame
+dados.reset_index(drop=True, inplace=True)
+# Tratamento dos dados do dataset da Passos Mágicos
+colunas = dados.columns.str.replace('_2020', '')
+colunas = colunas.str.replace('_2021', '')
+colunas = colunas.str.replace('_2022', '')
+todas_colunas = colunas.drop_duplicates()
+# Palavras a serem excluídas
+palavras_a_excluir = ['REC_EQUIPE_1', 'REC_EQUIPE_2', 'REC_EQUIPE_3', 'REC_EQUIPE_4','FASE_TURMA']
+# Criar uma nova lista excluindo as palavras especificadas
+todas_colunas = [word for word in todas_colunas if word not in palavras_a_excluir]
 
+dados_tratados_2020 = tratamento_base_passos(dados, todas_colunas, '2020')
+dados_tratados_2021 = tratamento_base_passos(dados, todas_colunas, '2021')
+dados_tratados_2022 = tratamento_base_passos(dados, todas_colunas, '2022')
+df_concatenado = pd.concat([dados_tratados_2020, dados_tratados_2021, dados_tratados_2022], ignore_index=True)
+# Inserir base tratada no BQ   
+insert_bq(df_concatenado,'tb_pede_passos')
+
+
+dados_idade_total = tratamento_base_idade(select_bq('tb_populacao_total_idade'))
+dados_economicos = tratamento_base_economia(select_bq('tb_populacao_economia'))
+dados_coordenadas = tratamento_base_coordenadas(select_bq('tb_coordenada_municipio'))
+dados_educacionais = tratamento_base_educacional(select_bq('tb_sinopse_matricula_escolar_por_idade'))
+dados_estimados = tratamento_base_estimativa_populacao(select_bq ('tb_populacao_estimativa'))
+juncao_dados_externos(dados_idade_total,dados_economicos,dados_coordenadas,dados_educacionais)
+
+# Criação da linha do tempo dos dados da ONG
+dados = [(2016, 70), (2017, 300), (2018, 550), (2019, 812), (2020, 841), (2021, 824), (2022, 970)]
 # Criar um DataFrame a partir da lista de tuplas
 linha_do_tempo_ong = pd.DataFrame(dados, columns=['Ano', 'Quantidade de alunos'])
 
-# Tratamento da base do BQ
-dados_estimados = tabela = select_bq ('tb_populacao_estimativa')
-dados_estimados = dados_estimados[dados_estimados.columns[0]].str.split(';', expand=True)
-novos_nomes = dados_estimados.iloc[3]
-dados_estimados = dados_estimados.rename(columns=novos_nomes)
-dados_estimados.columns = [str(col).replace('.0', '') for col in dados_estimados.columns]
-dados_estimados['Município'].fillna('', inplace=True)
-dados_estimados = dados_estimados[dados_estimados['Município'].str.contains('(SP)')]
-dados_estimados.reset_index(drop=True, inplace=True)
-dados_estimados['Município'] = dados_estimados['Município'].str.replace('(', '')
-dados_estimados['Município'] = dados_estimados['Município'].str.replace(')', '')
-dados_estimados['Município'] = dados_estimados['Município'].str.replace('SP', '')
-dados_estimados['Município'] = dados_estimados['Município'].str.strip()
-dados_estimados= dados_estimados[dados_estimados['Município']=='Embu-Guaçu']
-
-dados_2022 = pd.read_excel('tb_populacao_economia_idade_distancia.xlsx')
-dados_2022 =  dados_2022[dados_2022['Município']=='Embu-Guaçu']
-dados_estimados['2022'] = dados_2022['População no último censo'].values
+# Seleção apenas do ano de 2022
+dados_2022 = select_bq('tb_dados_externos')
+dados_2022 =  dados_2022[dados_2022['municipio']=='Embu-Guaçu']
+dados_estimados['2022'] = dados_2022['populacao'].values
 
 dados_estimados_ultimos_anos = dados_estimados[dados_estimados.columns[-7:]].T.reset_index()
 dados_estimados_ultimos_anos = dados_estimados_ultimos_anos.rename(columns= {'index': 'Ano', 168: 'População do município'})
@@ -58,123 +73,6 @@ df_alunos_populacao['População do município'] = df_alunos_populacao['Populaç
 df_alunos_populacao['Alunos/População'] = df_alunos_populacao['Quantidade de alunos'] /df_alunos_populacao['População do município']*100
 df_alunos_populacao['Alunos/População'] = df_alunos_populacao['Alunos/População'].apply(lambda x: '{:.2f}'.format(x))
 
-
-def grafico_duas_linhas_ponto(x,y,y2,percentual):
-    # Criar o gráfico
-    fig = go.Figure()
-
-    # Adicionar a linha ao gráfico para y
-    fig.add_trace(go.Scatter(x=x, y=y, mode='lines', name='Quantidade de alunos', line=dict(color='#1A4A6A')))
-
-    # Adicionar os pontos ao gráfico com os percentuais
-    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', name='Quantidade de Alunos / População (%)',
-                            text=percentual.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#1A4A6A', size=10)))
-
-    # Adicionar a linha ao gráfico para y2
-    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='População de Embu-Guaçu', yaxis='y2', line=dict(color='#722f37')))
-
-    fig.update_layout(
-        title='Quantidade de alunos da ONG x População de Embu-Guaçu',
-        yaxis=dict(title='Quantidade de alunos da ONG', side='left',gridcolor='#B5C7D5'),
-        yaxis2=dict(
-            title='População de Embu-Guaçu', 
-            overlaying='y', 
-            side='right',
-            gridcolor='gray'
-        ),
-        legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
-        title_font_color='#292F39',
-        font_color='#292F39'              
-    )
-    return fig
-
-def grafico_tres_linhas_ponto(x,y1,y2,y3,percentual1,percentual2):
-
-    fig = go.Figure()
-
-    fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name='Quantidade de alunos', line=dict(color='#1A4A6A')))
-    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name='Bolsistas em escola parceira', line=dict(color='#722f37')))
-    fig.add_trace(go.Scatter(x=x, y=y3, mode='lines', name='Universitários', line=dict(color='#006400')))
-    fig.add_trace(go.Scatter(x=x, y=y2, mode='markers', name='Bolsistas / Quantidade de alunos (%)',
-                            text=percentual1.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#722f37', size=10)))
-    fig.add_trace(go.Scatter(x=x, y=y3, mode='markers', name='Universitários / Quantidade de alunos (%)',
-                            text=percentual2.astype(str)+'%', hoverinfo='text+x+y', marker=dict(color='#006400', size=10)))
-
-    
-    fig.update_layout(title='Quantidade de Alunos x Bolsistas x Universitários da ONG',
-                    xaxis_title='Ano',
-                    yaxis_title='Quantidade',
-                    legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
-                    title_font_color='#292F39',  
-                    font_color='#292F39',
-                    xaxis=dict(
-                        gridcolor='gray'
-                    ),
-                    yaxis=dict(
-                        gridcolor='gray'
-                    )
-                    )
-
-    return fig
-
-# Função para plotar o gráfico com base nas categorias selecionadas
-def plotar_grafico(categorias_selecionadas):
-    fig = go.Figure()
-    # Adicionar barras para cada categoria selecionada
-    for categoria in categorias_selecionadas:
-        if categoria == 'Professor':
-            fig.add_trace(go.Bar(
-                x=linha_do_tempo_completo['Ano'],
-                y=linha_do_tempo_completo['Professores'],
-                name='Professores',
-                marker_color='#1A4A6A'
-            ))
-
-        elif categoria == 'Psicóloga':
-            fig.add_trace(go.Bar(
-                x=linha_do_tempo_completo['Ano'],
-                y=linha_do_tempo_completo['Psicólogas'],
-                name='Psicólogas',
-                marker_color='#722f37'
-            ))
-
-        elif categoria == 'Psicopedagoga':
-            fig.add_trace(go.Bar(
-                x=linha_do_tempo_completo['Ano'],
-                y=linha_do_tempo_completo['Psicopedagoga'],
-                name='Psicopedagogas',
-                marker_color='#006400'
-            ))
-        
-        elif categoria == 'Psiquiatra':
-            fig.add_trace(go.Bar(
-                x=linha_do_tempo_completo['Ano'],
-                y=linha_do_tempo_completo['Psiquiatra'],
-                name='Psiquiatras',
-                marker_color='#F4A460'
-            ))
-
-        elif categoria == 'Assistente Social':
-            fig.add_trace(go.Bar(
-                x=linha_do_tempo_completo['Ano'],
-                y=linha_do_tempo_completo['Assistente Social'],
-                name='Assistente Social',
-                marker_color='#9B59B6'
-            ))
-
-    # Atualizar layout do gráfico
-    fig.update_layout(
-        #legend=dict(orientation='h', y=1.15, x=0.5, xanchor='center', yanchor='top'),
-        title='Formação da equipe ao longo dos anos',
-        xaxis=dict(title='Ano',gridcolor='gray'),
-        yaxis=dict(title='Quantidade',gridcolor='gray'),
-        barmode='stack',
-        title_font_color='#292F39',  
-        font_color='#292F39',
-
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
 
 ## VISUALIZAÇÃO NO STREAMLIT
 aba1, aba2, aba3 = st.tabs(['Sobre a ONG', 'Fatores de sucesso', 'Impacto Social'])
@@ -199,7 +97,6 @@ with aba1:
     
     st.markdown(f"<h3 style='{cor_estilizada}'>O que fazemos?</h3>", unsafe_allow_html=True)
 
-    
     st.markdown('<p style="text-align: justify;color:  #292F39;"><span style="font-weight: bold">Aceleração do Conhecimento:</span> Oferecer uma educação de qualidade, suporte psicológico e ampliar a visão de mundo de cada aluno impactado. Possui aulas de alfabetização, língua portuguesa e matemática para crianças e adolescentes. Os alunos são divididos por nível de conhecimento, determinado por meio de uma prova de sondagem que é realizada ao ingressarem na Passos Mágicos, e são inseridos em turmas que variam da alfabetização até o nível 8, sendo:</p>', unsafe_allow_html = True)
     aceleracao = {
     'Fase de alfabetização': ['Alunos que estejam em fase de alfabetização ou que apresentem dificuldade na leitura e na escrita'],
@@ -210,10 +107,6 @@ with aba1:
     }
     df_aceleracao = pd.DataFrame(aceleracao)
     html = df_aceleracao.to_html(index=False)
-    # Adicionar estilos CSS para centralizar os nomes das colunas e justificar o texto das células
-
-    # Adicionando estilos CSS para a cor da borda de todas as células
-    # html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; color: #1A4A6A; text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A; text-align: center;\'>')
     html_estilizado = html.replace('<th>', '<th style=\'border: 2px solid #1A4A6A; color:  #292F39;text-align: center;\'>').replace('<td>', '<td style=\'border: 2px solid #1A4A6A;color:  #292F39; text-align: center;\'>')
 
     # Exibir a tabela estilizada no Streamlit
@@ -297,7 +190,7 @@ with aba2:
     )
     
     # Plotar gráfico com base nas categorias selecionadas
-    plotar_grafico(categorias_selecionadas)
+    plotar_grafico(categorias_selecionadas,linha_do_tempo_completo)
 
     st.markdown(f"<p style='text-align: justify;color:  #292F39;'> Alunos graduados por instituição e curso (Base de dados de 2023):</p>", unsafe_allow_html = True)
 
@@ -628,33 +521,13 @@ with aba3:
         dados_totais_concat['DESTAQUE_IPV'].fillna(np.nan, inplace=True)
         dados_totais_concat['DESTAQUE_IPV'] = dados_totais_concat['DESTAQUE_IPV'].fillna('Indefinido')
         dados_totais_concat['DESTAQUE_IPV'] = dados_totais_concat['DESTAQUE_IPV'].replace('D302', 'Indefinido')
-        # dados_qualitativos = dados_totais_concat[['ANO', 'DESTAQUE_IDA', 'DESTAQUE_IEG', 'DESTAQUE_IPV']]
         destaque_ida = dados_totais_concat.groupby(['ANO', 'DESTAQUE_IDA']).size().reset_index(name='Contagem')
         destaque_ieg = dados_totais_concat.groupby(['ANO', 'DESTAQUE_IEG']).size().reset_index(name='Contagem')
         destaque_ipv = dados_totais_concat.groupby(['ANO', 'DESTAQUE_IPV']).size().reset_index(name='Contagem')
 
         st.markdown(f"<p style='font-weight: bold; color:  #292F39; font-size:14px; margin: 0; padding: 4px 0;'>Selecione o destaque observado sobre os alunos:</p>", unsafe_allow_html=True)
         destaque_selecionado = st.selectbox('Selecione o destaque observado sobre os alunos:', ['IDA','IEG','IPV'],label_visibility = 'collapsed')
-        def grafico_barra_um_valor(dados, x, y, xaxis, yaxis, titulo):
 
-            fig = px.bar(dados, x=x, y=y,color =x,color_discrete_sequence=['#1A4A6A', '#722f37', '#006400', '#D35400','#D98880', '#F1C40F', '#9B59B6','#7DCEA0'])
-
-            # Atualizar layout do gráfico
-            fig.update_layout(title=titulo,
-                            xaxis_title=None,
-                            yaxis_title=yaxis,
-                            title_font_color='#292F39',  
-                            font_color='#292F39',
-                            xaxis_showticklabels=False,
-                            xaxis=dict(
-                                gridcolor='gray'
-                            ),
-                            yaxis=dict(
-                                gridcolor='gray'
-                            ),
-                            legend=dict(title=None))
-            return st.plotly_chart(fig,use_container_width=True)
-        
         if destaque_selecionado == 'IDA':
             destaque_ida.sort_values(by='Contagem',ascending = False, inplace = True)
             grafico_barra_um_valor(destaque_ida[destaque_ida['ANO']==ano_selecionado], 'DESTAQUE_IDA', 'Contagem', 'Destaques observados', 'Quantidade de alunos', 'Destaques qualitativos observados pelos mestres sobre os alunos  referente ao Indicador de Aprendizagem')
@@ -665,22 +538,5 @@ with aba3:
             destaque_ipv.sort_values(by='Contagem',ascending = False, inplace = True)
             grafico_barra_um_valor(destaque_ipv[destaque_ipv['ANO']==ano_selecionado], 'DESTAQUE_IPV', 'Contagem', 'Destaques observados', 'Quantidade de alunos', 'Destaques qualitativos observados pelos mestres sobre os alunos  referente ao Indicador de Ponto de Virada')
 
-# 1ª aba - História da Passos(Overview)
-# 2ª aba - Fatores-Chave de Sucesso - Análise Dados Históricos e Resultado das ações na cidade - Colocar os big numbers, linha do tempo (Ver o que mais da para aproveitar dos documentos do site e acrescentar percentual por genero, raça, idade, quantidade de professores(possível bignumber), alunos formados no ensino superior(Relatório universitários completo), cursando ensino superior - colocar que é referente a 2022 os bignumbers - Colocar descrições com cores destaques 
-# 3ª aba - Análise do Impacto Emocional e Social - Desempenho dos alUnos - (Análise do dataset - Notas com o passar dos anos , qual idade tem maior desempenho, notas por matéria, avaliação qualitativa (quantidade de comentários sobre os alunos),  tem desistência? ponto de virada PV) - colocar cursos que os alunos estão fazendo
-# 4ª aba - Aprimoramento de estratégias e operações Futuras (PIX, Potencias cidades para expansão(Modelo) e Previsão de aumento de alunos (Quantidade de alunos para os próximos anos))
-# 5ª aba - Sobre
-
-# Quantidade de população de Embu Guaçu, percentual de matriculados no ensino básico, PIB
-# Qual o impacto e potencial para a região?
-# Onde direcionar mais esforços e recursos?
-# O quanto a psicologia impacta a vida das crianças?
-# Como medir o desempenho das crianças? Antes e depois
-# Como ter uma comunicação mais efetiva com todos os alunos?
-# Como administrar/monitorar o aluno? Sem perder o contato humanizado
-# Quantas pessoas conhecem a Passos? Como mudar o comportamento das pessoas? 
-# Qual a Previsão de receita e pessoas impactadas?
-# Em que momento o aluno começa a acreditar no futuro?
-# Como reproduzir em outras regiões as ações da Passos?
         
     

@@ -1,14 +1,10 @@
 # Importação das bibliotecas
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import colors
-from sklearn.preprocessing import StandardScaler, MinMaxScaler #Feature Engineer
+from sklearn.preprocessing import MinMaxScaler #Feature Engineer
 from sklearn.cluster import KMeans # Algoritmo de Agrupamento
-from sklearn.metrics import adjusted_rand_score, silhouette_score
 
+from utils import select_bq
 # Configuração da página
 st.set_page_config(page_title= 'Projeto de Expansão', layout='wide', page_icon= 'https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png')
 cor_estilizada = 'color: #1A4A6A;'
@@ -20,15 +16,8 @@ st.image('Passos-magicos-icon-cor.png',width=200)
 st.markdown(f"<h1 style='{cor_estilizada} {fonte_negrito}'> Projeto de Expansão <img width=40 height=40 src='https://img.icons8.com/ios/50/1A4A6A/handshake-heart.png'/> </h1>", unsafe_allow_html=True)
 
 
-#PREPARAÇÃO DOS DADOS
-dados_externos = pd.read_excel('tb_populacao_economia_idade_distancia.xlsx')
-
-dados_externos['percent_elegiveis_6a19a'] = dados_externos['Pessoas de 6 a 19 anos'] / dados_externos['População no último censo'] * 100
-dados_externos['Matriculados/População 6 a 19'] = dados_externos['Matriculados/População 6 a 19'] * 100
-
-dados_externos = dados_externos[['Município', 'Salário médio mensal dos trabalhadores formais', 'PIB per capita', 'População no último censo', 'Densidade demográfica habitante/km²', 'Distância', 'Matriculados/População 6 a 19', 'percent_elegiveis_6a19a']]
-dados_externos = dados_externos.rename(columns= {'Município': 'municipio', 'Salário médio mensal dos trabalhadores formais': 'salario_medio_trabalhadores', 'PIB per capita': 'pib_per_capita', 'Área da unidade territorial': 'area_territorial', 'População no último censo': 'populacao', 'Densidade demográfica habitante/km²': 'densidade_demografica_km2', 'Distância': 'distancia_de_embu_guacu', 'Matriculados/População 6 a 19': 'percent_matriculados_6a19a'})
-
+# Seleção do dados externos
+dados_externos = select_bq('tb_dados_externos')
 # Modelo matemático
 dados_model_math = dados_externos[['municipio', 'salario_medio_trabalhadores', 'pib_per_capita', 'densidade_demografica_km2', 'distancia_de_embu_guacu', 'percent_matriculados_6a19a', 'percent_elegiveis_6a19a']]
 
@@ -39,7 +28,7 @@ variaveis_normalizar_inversamente = ['salario_medio_trabalhadores','pib_per_capi
 scaler = MinMaxScaler()
 dados_model_math[variaveis_normalizar] = scaler.fit_transform(dados_model_math[variaveis_normalizar])
 
-    # Normalização inversa
+# Normalização inversa
 scaler = MinMaxScaler()
 dados_model_math[variaveis_normalizar_inversamente] = 1 - scaler.fit_transform(dados_model_math[variaveis_normalizar_inversamente])
 
